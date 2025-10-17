@@ -1,0 +1,402 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Verify OTP - CarHub{% endblock %}
+
+{% block content %}
+<style>
+body {
+    background: radial-gradient(ellipse at top left, #23235b 0%, #0a0a1a 100%);
+    color: #e0e6ff;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    filter: brightness(0.3);
+}
+
+.otp-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.otp-card {
+    background: rgba(35, 35, 91, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 18px;
+    border: 1.5px solid rgba(124, 77, 255, 0.3);
+    padding: 2rem;
+    max-width: 420px;
+    width: 100%;
+    z-index: 2;
+    position: relative;
+    box-shadow:
+        0 0 25px rgba(124, 77, 255, 0.25),
+        0 0 45px rgba(124, 77, 255, 0.12),
+        inset 0 0 10px rgba(124, 77, 255, 0.12),
+        0 1px 6px rgba(24, 24, 40, 0.5);
+    animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 25px rgba(124, 77, 255, 0.25), 0 0 45px rgba(124, 77, 255, 0.12);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(124, 77, 255, 0.35), 0 0 60px rgba(124, 77, 255, 0.18);
+    }
+    100% {
+        box-shadow: 0 0 25px rgba(124, 77, 255, 0.25), 0 0 45px rgba(124, 77, 255, 0.12);
+    }
+}
+
+.otp-card h1 {
+    color: #07b0b3;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 0 2px 18px #23235b80, 0 1px 0 #7c4dff44;
+}
+
+.otp-subtitle {
+    color: #a084ff;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.otp-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: #a084ff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 0.2rem;
+}
+
+.form-control {
+    background: rgba(24, 24, 40, 0.5);
+    border: 2px solid #7c4dff44;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: #e0e6ff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px #7c4dff11;
+}
+
+.form-control:focus {
+    border: 2px solid #a084ff;
+    background: rgba(35, 35, 91, 0.8);
+    box-shadow: 0 0 15px rgba(124, 77, 255, 0.3);
+}
+
+.otp-input {
+    letter-spacing: 8px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.btn-verify {
+    width: 100%;
+    background: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+    border: none;
+    padding: 0.9rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(124, 77, 255, 0.3);
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-verify:hover {
+    background: linear-gradient(90deg, #a084ff 80%, #23235b 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(124, 77, 255, 0.4);
+}
+
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+.auth-links a {
+    color: #a084ff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.auth-links a i {
+    margin-right: 5px;
+}
+
+.auth-links a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #ff5252;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+    display: block;
+}
+
+.password-strength {
+    height: 5px;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    background: #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.password-strength-meter {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+.password-feedback {
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    color: #a084ff;
+}
+
+.password-rules {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.password-rule {
+    margin-bottom: 0.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.password-rule i {
+    margin-right: 5px;
+}
+
+.rule-valid {
+    color: #4caf50;
+}
+
+.rule-invalid {
+    color: #9e9e9e;
+}
+</style>
+
+<div class="otp-container">
+    <div class="otp-card">
+        <h1>Password Reset</h1>
+        <p class="otp-subtitle">Please enter the OTP code sent to your email and create a new password.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.otp.label(class="form-label") }}
+                {{ form.otp(class="form-control otp-input", placeholder="• • • • • •", maxlength="6") }}
+                {% if form.otp.errors %}
+                    {% for error in form.otp.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.new_password.label(class="form-label") }}
+                {{ form.new_password(class="form-control", placeholder="Enter new password", id="new_password") }}
+                <div class="password-strength">
+                    <div class="password-strength-meter" id="passwordStrength"></div>
+                </div>
+                <div class="password-feedback" id="passwordFeedback"></div>
+                {% if form.new_password.errors %}
+                    {% for error in form.new_password.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+                <div class="password-rules" id="passwordRules">
+                    <div class="password-rule" id="lengthRule"><i class="fas fa-circle"></i> At least 8 characters</div>
+                    <div class="password-rule" id="upperRule"><i class="fas fa-circle"></i> Uppercase letter</div>
+                    <div class="password-rule" id="lowerRule"><i class="fas fa-circle"></i> Lowercase letter</div>
+                    <div class="password-rule" id="numberRule"><i class="fas fa-circle"></i> Number</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.confirm_password.label(class="form-label") }}
+                {{ form.confirm_password(class="form-control", placeholder="Confirm new password", id="confirm_password") }}
+                <div class="password-feedback" id="matchFeedback"></div>
+                {% if form.confirm_password.errors %}
+                    {% for error in form.confirm_password.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {{ form.submit(class="btn-verify", value="Reset Password") }}
+        </form>
+
+        <div class="auth-links">
+            <a href="{{ url_for('forgot_password') }}"><i class="fas fa-redo"></i> Resend OTP</a>
+            <a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Back to Login</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-format OTP input
+    const otpInput = document.getElementById('otp');
+    if (otpInput) {
+        otpInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '').substring(0, 6);
+        });
+    }
+    
+    // Password strength checker
+    const passwordInput = document.getElementById('new_password');
+    const confirmInput = document.getElementById('confirm_password');
+    const strengthMeter = document.getElementById('passwordStrength');
+    const feedback = document.getElementById('passwordFeedback');
+    const matchFeedback = document.getElementById('matchFeedback');
+    
+    // Password rule elements
+    const lengthRule = document.getElementById('lengthRule');
+    const upperRule = document.getElementById('upperRule');
+    const lowerRule = document.getElementById('lowerRule');
+    const numberRule = document.getElementById('numberRule');
+    
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            let feedback_text = '';
+            
+            // Update rule indicators
+            const hasLength = password.length >= 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            
+            // Update rule styling
+            updateRuleStatus(lengthRule, hasLength);
+            updateRuleStatus(upperRule, hasUpper);
+            updateRuleStatus(lowerRule, hasLower);
+            updateRuleStatus(numberRule, hasNumber);
+            
+            // Calculate strength
+            if (hasLength) strength += 25;
+            if (hasUpper) strength += 25;
+            if (hasLower) strength += 25;
+            if (hasNumber) strength += 25;
+            
+            // Update strength meter
+            strengthMeter.style.width = strength + '%';
+            
+            // Set color based on strength
+            if (strength <= 25) {
+                strengthMeter.style.background = '#ff4747';
+                feedback_text = 'Weak password';
+            } else if (strength <= 50) {
+                strengthMeter.style.background = '#ffa534';
+                feedback_text = 'Fair password';
+            } else if (strength <= 75) {
+                strengthMeter.style.background = '#23ccff';
+                feedback_text = 'Good password';
+            } else {
+                strengthMeter.style.background = '#15eb80';
+                feedback_text = 'Strong password';
+            }
+            
+            feedback.textContent = password ? feedback_text : '';
+        });
+    }
+    
+    function updateRuleStatus(ruleElement, isValid) {
+        if (isValid) {
+            ruleElement.classList.add('rule-valid');
+            ruleElement.classList.remove('rule-invalid');
+            ruleElement.querySelector('i').className = 'fas fa-check-circle';
+        } else {
+            ruleElement.classList.add('rule-invalid');
+            ruleElement.classList.remove('rule-valid');
+            ruleElement.querySelector('i').className = 'fas fa-circle';
+        }
+    }
+    
+    if (confirmInput && passwordInput) {
+        confirmInput.addEventListener('input', function() {
+            if (this.value && passwordInput.value) {
+                if (this.value === passwordInput.value) {
+                    matchFeedback.textContent = 'Passwords match';
+                    matchFeedback.style.color = '#15eb80';
+                } else {
+                    matchFeedback.textContent = 'Passwords do not match';
+                    matchFeedback.style.color = '#ff4747';
+                }
+            } else {
+                matchFeedback.textContent = '';
+            }
+        });
+    }
+});
+</script>
+
+<!-- Add video background for consistent look with login page -->
+<video autoplay muted loop class="bg-video">
+    <source src="{{ url_for('static', filename='car.mp4') }}" type="video/mp4">
+</video>
+{% endblock %}

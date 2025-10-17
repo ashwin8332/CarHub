@@ -1,0 +1,13 @@
+Sample Admin Account Created:
+  Email: admin@carhub.com
+  Password: admin123
+
+
+Email: test@example.com
+Password: password123
+Username: testuser
+
+
+first to run the code you should run 
+python test_chatbot.py
+python app.py

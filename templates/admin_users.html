@@ -1,0 +1,496 @@
+{% extends "base.html" %}
+
+{% block title %}User Management - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <!-- Header -->
+    <div class="admin-header">
+        <div class="header-content">
+            <h1>👥 User Management</h1>
+            <p>Manage and view all registered users</p>
+        </div>
+        <div class="admin-actions">
+            <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">← Admin Panel</a>
+        </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-section">
+        <form method="GET" class="search-form">
+            <div class="search-group">
+                <input type="text" name="search" value="{{ search }}" placeholder="Search users by name, username, or email..." class="search-input">
+                <button type="submit" class="search-btn">🔍 Search</button>
+                {% if search %}
+                <a href="{{ url_for('admin_users') }}" class="clear-btn">✕ Clear</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2>Users ({{ users.total }} total)</h2>
+            <div class="table-info">
+                Showing {{ users.per_page * (users.page - 1) + 1 }} - {{ users.per_page * users.page if users.page < users.pages else users.total }} of {{ users.total }}
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Contact Info</th>
+                        <th>Profile Status</th>
+                        <th>Registration</th>
+                        <th>Activity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users.items %}
+                    <tr>
+                        <td class="user-cell">
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    {% if user.profile_picture %}
+                                    <img src="{{ user.profile_picture }}" alt="Profile">
+                                    {% else %}
+                                    <div class="avatar-placeholder">{{ user.username[0].upper() }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="user-details">
+                                    <strong>{{ user.get_full_name() or user.username }}</strong>
+                                    <div class="user-username">@{{ user.username }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-info">
+                                <div class="email">{{ user.email }}</div>
+                                {% if user.phone %}
+                                <div class="phone">📞 {{ user.phone }}</div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="status-badges">
+                                {% if user.is_verified %}
+                                <span class="badge verified">✅ Verified</span>
+                                {% else %}
+                                <span class="badge unverified">❌ Unverified</span>
+                                {% endif %}
+                                
+                                {% if user.is_google_user() %}
+                                <span class="badge google">🔗 Google</span>
+                                {% endif %}
+                            </div>
+                            <div class="profile-completion">
+                                Profile: {{ user.get_profile_completion_percentage() }}% complete
+                            </div>
+                        </td>
+                        <td>
+                            <div class="date-info">
+                                <strong>{{ user.created_at.strftime('%m/%d/%Y') }}</strong>
+                                <div class="time">{{ user.created_at.strftime('%I:%M %p') }}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="activity-info">
+                                {% if user.last_login %}
+                                <div class="last-login">Last: {{ user.last_login.strftime('%m/%d %H:%M') }}</div>
+                                {% else %}
+                                <div class="never-logged">Never logged in</div>
+                                {% endif %}
+                                <div class="order-count">{{ user.orders|length }} orders</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('admin_user_detail', user_id=user.id) }}" class="btn btn-small btn-primary">View Details</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if users.pages > 1 %}
+        <div class="pagination">
+            <div class="pagination-controls">
+                {% if users.has_prev %}
+                <a href="{{ url_for('admin_users', page=users.prev_num, search=search) }}" class="page-btn">← Previous</a>
+                {% endif %}
+                
+                <span class="page-info">
+                    Page {{ users.page }} of {{ users.pages }}
+                </span>
+                
+                {% if users.has_next %}
+                <a href="{{ url_for('admin_users', page=users.next_num, search=search) }}" class="page-btn">Next →</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.admin-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--background-dark, #0a0a1a);
+    color: var(--text-light, #e0e6ff);
+    min-height: 100vh;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(124, 77, 255, 0.3);
+}
+
+.header-content h1 {
+    color: var(--accent-purple, #7c4dff);
+    font-size: 2.2rem;
+    margin: 0;
+}
+
+.header-content p {
+    color: var(--text-light, #b3baff);
+    margin: 0.5rem 0 0 0;
+}
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-secondary {
+    background: rgba(124, 77, 255, 0.2);
+    color: var(--accent-purple, #7c4dff);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--accent-purple, #7c4dff), var(--accent-cyan, #00bcd4));
+    color: white;
+}
+
+.btn-small {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(124, 77, 255, 0.3);
+}
+
+/* Search Section */
+.search-section {
+    background: rgba(35, 35, 91, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+}
+
+.search-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(35, 35, 91, 0.5);
+    color: var(--text-light, #e0e6ff);
+    font-size: 1rem;
+}
+
+.search-input::placeholder {
+    color: var(--text-light, #b3baff);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent-purple, #7c4dff);
+    box-shadow: 0 0 10px rgba(124, 77, 255, 0.3);
+}
+
+.search-btn, .clear-btn {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.search-btn {
+    background: linear-gradient(45deg, var(--accent-purple, #7c4dff), var(--accent-cyan, #00bcd4));
+    color: white;
+}
+
+.clear-btn {
+    background: rgba(255, 64, 129, 0.2);
+    color: #ff4081;
+    border: 1px solid rgba(255, 64, 129, 0.3);
+}
+
+/* Table Section */
+.table-section {
+    background: rgba(35, 35, 91, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    overflow: hidden;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+.table-header h2 {
+    color: var(--accent-purple, #7c4dff);
+    margin: 0;
+}
+
+.table-info {
+    color: var(--text-light, #b3baff);
+    font-size: 0.9rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(124, 77, 255, 0.1);
+}
+
+.admin-table th {
+    background: rgba(124, 77, 255, 0.1);
+    color: var(--accent-purple, #7c4dff);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.admin-table tr:hover {
+    background: rgba(124, 77, 255, 0.05);
+}
+
+/* User Cell */
+.user-cell {
+    min-width: 200px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--accent-purple, #7c4dff), var(--accent-cyan, #00bcd4));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.user-details strong {
+    display: block;
+    color: var(--text-light, #e0e6ff);
+}
+
+.user-username {
+    color: var(--text-light, #b3baff);
+    font-size: 0.9rem;
+}
+
+/* Contact Info */
+.contact-info .email {
+    color: var(--text-light, #e0e6ff);
+    margin-bottom: 0.3rem;
+}
+
+.contact-info .phone {
+    color: var(--text-light, #b3baff);
+    font-size: 0.9rem;
+}
+
+/* Status Badges */
+.status-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.badge.verified {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+}
+
+.badge.unverified {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+}
+
+.badge.google {
+    background: rgba(66, 165, 245, 0.2);
+    color: #42a5f5;
+}
+
+.profile-completion {
+    color: var(--text-light, #b3baff);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Date and Activity Info */
+.date-info, .activity-info {
+    color: var(--text-light, #e0e6ff);
+}
+
+.date-info .time, .activity-info .last-login, .activity-info .order-count {
+    color: var(--text-light, #b3baff);
+    font-size: 0.9rem;
+}
+
+.activity-info .never-logged {
+    color: #ff4081;
+    font-size: 0.9rem;
+}
+
+/* Pagination */
+.pagination {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.page-btn {
+    padding: 0.6rem 1.2rem;
+    background: rgba(124, 77, 255, 0.2);
+    color: var(--accent-purple, #7c4dff);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.page-btn:hover {
+    background: rgba(124, 77, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.page-info {
+    color: var(--text-light, #b3baff);
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 1rem;
+    }
+    
+    .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .search-group {
+        flex-direction: column;
+    }
+    
+    .table-container {
+        font-size: 0.9rem;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 0.5rem;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+}
+</style>
+{% endblock %}

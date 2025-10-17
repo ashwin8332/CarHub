@@ -1,0 +1,1632 @@
+{% extends "base.html" %}
+
+{% block title %}Car Parts Inventory - CarHub{% endblock %}
+
+{% block extra_head %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700;900&display=swap');
+    
+    :root {
+        --primary-purple: #7c4dff;
+        --primary-blue: #23235b;
+        --dark-blue: #181828;
+        --darker-blue: #0a0a1a;
+        --accent-cyan: #07b0b3;
+        --light-purple: #a084ff;
+        --text-light: #e0e6ff;
+        --text-muted: #b3baff;
+        --luxury-gold: #ffd700;
+        --deep-space: #0a0a1a;
+        --cosmic-purple: #7c4dff;
+        --silver: #c0c0c0;
+        --charcoal: #2E2E36;
+        --neon-green: #39ff14;
+        --electric-blue: #00d4ff;
+        
+        /* Enhanced gradients for car parts theme */
+        --gradient-primary: linear-gradient(135deg, #7c4dff 0%, #23235b 50%, #181828 100%);
+        --gradient-luxury: linear-gradient(135deg, #a084ff 0%, #7c4dff 50%, #23235b 100%);
+        --gradient-dark: linear-gradient(135deg, #23235b 0%, #181828 50%, #0a0a1a 100%);
+        --gradient-space: radial-gradient(ellipse at center, #23235b 0%, #181828 40%, #0a0a1a 100%);
+        --gradient-text: linear-gradient(135deg, #a084ff, #07b0b3, #ffd700, #39ff14);
+        --gradient-card: linear-gradient(145deg, #23235b 0%, #181828 70%, #0a0a1a 100%);
+        --gradient-glow: linear-gradient(45deg, rgba(124, 77, 255, 0.3), rgba(7, 176, 179, 0.3), rgba(57, 255, 20, 0.3));
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--gradient-space);
+        color: var(--text-light);
+        font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Enhanced animated particles background */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="0.8" fill="rgba(124,77,255,0.3)"/><circle cx="80" cy="40" r="0.6" fill="rgba(7,176,179,0.25)"/><circle cx="40" cy="80" r="0.7" fill="rgba(57,255,20,0.2)"/><circle cx="60" cy="15" r="0.5" fill="rgba(255,215,0,0.3)"/></svg>') repeat;
+        animation: floatSlow 25s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.7;
+    }
+
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 70%, rgba(124, 77, 255, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 30%, rgba(7, 176, 179, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 1;
+        animation: pulseSlow 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatSlow {
+        0% { transform: translateY(100vh) rotate(0deg); }
+        100% { transform: translateY(-100px) rotate(360deg); }
+    }
+
+    @keyframes pulseSlow {
+        0% { opacity: 0.3; }
+        100% { opacity: 0.7; }
+    }
+
+    .inventory-container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 2rem;
+        padding-top: 120px; /* Add space for navbar */
+        position: relative;
+        z-index: 2;
+        min-height: 100vh;
+    }
+
+    .inventory-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .inventory-header h1 {
+        font-family: 'Orbitron', monospace;
+        font-size: 4rem;
+        font-weight: 900;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        position: relative;
+        text-shadow: 0 0 30px rgba(124, 77, 255, 0.5);
+        animation: textGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+        0% { filter: drop-shadow(0 0 5px rgba(124, 77, 255, 0.5)); }
+        100% { filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.8)); }
+    }
+
+    .inventory-header h1::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 4px;
+        background: var(--gradient-glow);
+        border-radius: 2px;
+        animation: lineGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes lineGlow {
+        0% { box-shadow: 0 0 5px rgba(124, 77, 255, 0.5); }
+        100% { box-shadow: 0 0 20px rgba(124, 77, 255, 0.8); }
+    }
+
+    .inventory-header p {
+        font-size: 1.3rem;
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+        font-weight: 300;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Enhanced Search Bar Styles */
+    .search-bar-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 3rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .search-bar-wrapper {
+        position: relative;
+        width: 500px;
+    }
+
+    .search-bar {
+        width: 100%;
+        padding: 1.5rem 4rem 1.5rem 4rem;
+        border-radius: 25px;
+        border: 3px solid rgba(124, 77, 255, 0.4);
+        background: var(--gradient-card);
+        color: var(--text-light);
+        font-size: 1.1rem;
+        outline: none;
+        box-shadow: 0 8px 32px rgba(124, 77, 255, 0.3), 
+                    0 4px 16px rgba(24, 24, 40, 0.8),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 0.5px;
+        backdrop-filter: blur(10px);
+    }
+
+    .search-bar:focus {
+        border: 3px solid var(--light-purple);
+        background: linear-gradient(135deg, #2e2e6b 0%, #23235b 50%, #181828 100%);
+        box-shadow: 0 12px 40px rgba(124, 77, 255, 0.5), 
+                    0 6px 20px rgba(24, 24, 40, 0.9),
+                    inset 0 2px 8px rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .search-bar::placeholder {
+        color: var(--text-muted);
+        opacity: 1;
+        font-size: 1rem;
+        letter-spacing: 0.3px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 22px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 26px;
+        height: 26px;
+        filter: invert(0.7) drop-shadow(0 0 5px rgba(124, 77, 255, 0.6));
+        transition: all 0.3s ease;
+    }
+
+    .search-bar:focus + .search-icon {
+        filter: invert(0.8) drop-shadow(0 0 10px rgba(124, 77, 255, 0.8));
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .inventory-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2.5rem;
+        margin-bottom: 4rem;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 2;
+    }
+
+    .stat-card {
+        background: var(--gradient-card);
+        border-radius: 25px;
+        padding: 2.5rem;
+        text-align: center;
+        color: var(--text-light);
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        min-width: 200px;
+        box-shadow: 0 15px 50px rgba(124, 77, 255, 0.3), 
+                    0 8px 25px rgba(24, 24, 40, 0.8),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(15px);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 60px rgba(124, 77, 255, 0.4), 
+                    0 10px 30px rgba(24, 24, 40, 0.9),
+                    inset 0 4px 8px rgba(255, 255, 255, 0.15);
+        border-color: var(--light-purple);
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: var(--gradient-primary);
+        border-radius: 25px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .stat-card:hover::before {
+        opacity: 0.3;
+    }
+
+    .stat-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.15), transparent);
+        transition: left 0.6s;
+    }
+
+    .stat-card:hover::after {
+        left: 100%;
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 900;
+        display: block;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-family: 'Orbitron', monospace;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 10px rgba(124, 77, 255, 0.3);
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-family: 'Orbitron', monospace;
+    }
+
+    .inventory-filters {
+        background: var(--gradient-card);
+        border-radius: 25px;
+        padding: 2.5rem;
+        margin-bottom: 4rem;
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        box-shadow: 0 15px 50px rgba(124, 77, 255, 0.3), 
+                    0 8px 25px rgba(24, 24, 40, 0.8),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        position: relative;
+        z-index: 2;
+        backdrop-filter: blur(15px);
+    }
+
+    .filter-row {
+        display: flex;
+        gap: 2.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 220px;
+    }
+
+    .filter-group label {
+        color: var(--light-purple);
+        font-weight: 700;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-family: 'Orbitron', monospace;
+        text-shadow: 0 0 5px rgba(124, 77, 255, 0.3);
+    }
+
+    .filter-group select,
+    .filter-group input {
+        padding: 1.2rem 1.5rem;
+        border-radius: 15px;
+        border: 2px solid rgba(124, 77, 255, 0.4);
+        background: var(--gradient-dark);
+        color: var(--text-light);
+        font-size: 1rem;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 20px rgba(124, 77, 255, 0.2),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+        outline: none;
+        border-color: var(--light-purple);
+        box-shadow: 0 8px 30px rgba(124, 77, 255, 0.4),
+                    inset 0 2px 8px rgba(255, 255, 255, 0.1);
+        background: linear-gradient(135deg, #2e2e6b 0%, #23235b 70%, #181828 100%);
+        transform: translateY(-2px);
+    }
+
+    .filter-group select option {
+        background: var(--dark-blue);
+        color: var(--text-light);
+        padding: 0.8rem;
+        border: none;
+    }
+
+    .filter-group input::placeholder {
+        color: var(--text-muted);
+        opacity: 0.8;
+    }
+
+    .inventory-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+        gap: 3rem;
+        margin-top: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .inventory-card {
+        background: var(--gradient-card);
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 15px 50px rgba(124, 77, 255, 0.35), 
+                    0 8px 25px rgba(24, 24, 40, 0.8),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        z-index: 1;
+        backdrop-filter: blur(15px);
+    }
+
+    .inventory-card:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 25px 70px rgba(124, 77, 255, 0.5), 
+                    0 12px 35px rgba(24, 24, 40, 0.9),
+                    inset 0 4px 8px rgba(255, 255, 255, 0.15);
+        border-color: var(--light-purple);
+    }
+
+    .inventory-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: var(--gradient-primary);
+        border-radius: 25px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .inventory-card:hover::before {
+        opacity: 0.2;
+    }
+
+    .inventory-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+        transition: left 0.8s;
+        z-index: 0;
+    }
+
+    .inventory-card:hover::after {
+        left: 100%;
+    }
+
+    /* Enhanced loading animation */
+    .inventory-card {
+        animation: slideInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    @keyframes slideInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .inventory-card:nth-child(1) { animation-delay: 0.1s; }
+    .inventory-card:nth-child(2) { animation-delay: 0.2s; }
+    .inventory-card:nth-child(3) { animation-delay: 0.3s; }
+    .inventory-card:nth-child(4) { animation-delay: 0.4s; }
+    .inventory-card:nth-child(5) { animation-delay: 0.5s; }
+    .inventory-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .card-image {
+        height: 300px;
+        background: var(--gradient-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 2px solid rgba(124, 77, 255, 0.3);
+        border-radius: 10px 10px 0 0;
+    }
+
+    .part-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center; /* This is the property to change */
+    border-radius: 10px 10px 0 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    position: relative;
+    background: var(--gradient-dark);
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+    .part-image:hover {
+        transform: scale(1.05);
+    }
+
+    .placeholder-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        font-size: 4rem;
+        opacity: 0.6;
+        filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));
+        animation: partFloat 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes partFloat {
+        0% { transform: translateY(0px) rotate(0deg); }
+        100% { transform: translateY(-10px) rotate(5deg); }
+    }
+
+    .card-content {
+        padding: 2.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .part-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--light-purple);
+        margin-bottom: 1.2rem;
+        text-align: center;
+        font-family: 'Orbitron', monospace;
+        text-shadow: 0 0 10px rgba(124, 77, 255, 0.3);
+    }
+
+    .part-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        background: rgba(124, 77, 255, 0.15);
+        padding: 1.2rem;
+        border-radius: 12px;
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .detail-item:hover {
+        background: rgba(124, 77, 255, 0.25);
+        border-color: var(--light-purple);
+        transform: translateY(-2px);
+    }
+
+    .detail-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        margin-bottom: 0.5rem;
+        font-family: 'Orbitron', monospace;
+    }
+
+    .detail-value {
+        font-size: 1.1rem;
+        color: var(--text-light);
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .part-price {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent-cyan);
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-family: 'Orbitron', monospace;
+        text-shadow: 0 0 15px rgba(7, 176, 179, 0.5);
+        animation: priceGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes priceGlow {
+        0% { text-shadow: 0 0 15px rgba(7, 176, 179, 0.5); }
+        100% { text-shadow: 0 0 25px rgba(7, 176, 179, 0.8); }
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-family: 'Orbitron', monospace;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .status-in-stock {
+        background: linear-gradient(135deg, #27ae60, #2ecc71, #39ff14);
+        color: white;
+        box-shadow: 0 6px 25px rgba(46, 204, 113, 0.4);
+    }
+
+    .status-low-stock {
+        background: linear-gradient(135deg, #f39c12, #e67e22, #ff6b35);
+        color: white;
+        box-shadow: 0 6px 25px rgba(243, 156, 18, 0.4);
+    }
+
+    .status-out-of-stock {
+        background: linear-gradient(135deg, #e74c3c, #c0392b, #8b0000);
+        color: white;
+        box-shadow: 0 6px 25px rgba(231, 76, 60, 0.4);
+    }
+
+    .status-pre-order {
+        background: linear-gradient(135deg, #3498db, #2980b9, #00d4ff);
+        color: white;
+        box-shadow: 0 6px 25px rgba(52, 152, 219, 0.4);
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 1.2rem 2.5rem;
+        border-radius: 15px;
+        text-decoration: none;
+        font-weight: 700;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        flex: 1;
+        max-width: 160px;
+        font-family: 'Poppins', sans-serif;
+        position: relative;
+        overflow: hidden;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-primary {
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: 0 6px 25px rgba(124, 77, 255, 0.4);
+        border: 2px solid rgba(124, 77, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+        background: var(--gradient-luxury);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 35px rgba(124, 77, 255, 0.6);
+        border-color: var(--light-purple);
+    }
+
+    .btn-secondary {
+        background: var(--gradient-dark);
+        color: var(--accent-cyan);
+        border: 2px solid rgba(7, 176, 179, 0.4);
+        box-shadow: 0 6px 25px rgba(7, 176, 179, 0.3);
+    }
+
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #07b0b3 0%, #23235b 70%, #181828 100%);
+        color: white;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 35px rgba(7, 176, 179, 0.5);
+        border-color: var(--accent-cyan);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 8rem 2rem;
+        color: var(--text-light);
+        position: relative;
+        z-index: 2;
+    }
+
+    .empty-state h3 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--light-purple);
+        font-family: 'Orbitron', monospace;
+        text-shadow: 0 0 15px rgba(124, 77, 255, 0.5);
+    }
+
+    .empty-state p {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* Enhanced Responsive Design */
+    @media (max-width: 1024px) {
+        .inventory-grid {
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .inventory-container {
+            padding: 1.5rem;
+        }
+
+        .inventory-header h1 {
+            font-size: 3rem;
+        }
+
+        .search-bar-wrapper {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .inventory-stats {
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            min-width: 160px;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+        }
+
+        .filter-row {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1.5rem;
+        }
+
+        .filter-group {
+            min-width: auto;
+        }
+
+        .inventory-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .card-actions {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            max-width: none;
+        }
+
+        .part-details {
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .inventory-header h1 {
+            font-size: 2.5rem;
+        }
+
+        .inventory-header p {
+            font-size: 1.1rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+        }
+
+        .card-image {
+            height: 250px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .part-image {
+            border-radius: 20px 20px 0 0;
+            padding: 0px;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .part-name {
+            font-size: 1.3rem;
+        }
+
+        .part-price {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="inventory-container">
+    <div class="inventory-header">
+        <h1>CarHub Parts Inventory</h1>
+        <p>Discover premium automotive parts and accessories for your vehicle's peak performance</p>
+        
+        <!-- Search Bar Section -->
+        <div class="search-bar-container">
+            <div class="search-bar-wrapper">
+                <input type="text" id="searchBar" class="search-bar" placeholder="Search for parts,components...">
+                <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/search.svg" class="search-icon" alt="search">
+            </div>
+        </div>
+        
+        <div class="inventory-stats">
+            <div class="stat-card">
+                <span class="stat-number">{{ (parts|selectattr("status", "equalto", "In Stock")|list|length) + 6 }}</span>
+                <div class="stat-label">In Stock</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ (parts|selectattr("status", "equalto", "Low Stock")|list|length) + 2 }}</span>
+                <div class="stat-label">Low Stock</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ (parts|selectattr("status", "equalto", "Out of Stock")|list|length) + 2 }}</span>
+                <div class="stat-label">Out of Stock</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ parts|length + 12 }}</span>
+                <div class="stat-label">Total Parts</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="inventory-filters">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="status-filter">Stock Status</label>
+                <select id="status-filter">
+                    <option value="">All Status</option>
+                    <option value="In Stock">In Stock</option>
+                    <option value="Low Stock">Low Stock</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                    <option value="Pre-Order">Pre-Order</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="category-filter">Category</label>
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                    <option value="Engine Parts">Engine Parts</option>
+                    <option value="Brake System">Brake System</option>
+                    <option value="Suspension">Suspension</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Body Parts">Body Parts</option>
+                    <option value="Interior">Interior</option>
+                    <option value="Exhaust">Exhaust</option>
+                    <option value="Transmission">Transmission</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="brand-filter">Brand</label>
+                <select id="brand-filter">
+                    <option value="">All Brands</option>
+                    <option value="OEM">OEM</option>
+                    <option value="Bosch">Bosch</option>
+                    <option value="Brembo">Brembo</option>
+                    <option value="Bilstein">Bilstein</option>
+                    <option value="K&N">K&N</option>
+                    <option value="Michelin">Michelin</option>
+                    <option value="NGK">NGK</option>
+                    <option value="Denso">Denso</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="search-filter">Search Parts</label>
+                <input type="text" id="search-filter" placeholder="Search by part name or model...">
+            </div>
+        </div>
+    </div>
+
+    {% if parts %}
+    <div class="inventory-grid" id="inventory-grid">
+        {% for part in parts %}
+        <div class="inventory-card" data-status="{{ part.status }}" data-category="{{ part.category }}" data-brand="{{ part.brand }}" data-name="{{ part.name.lower() }}">
+            <div class="card-image">
+                <!-- Part image or 3D model would go here in a real implementation -->
+            </div>
+            <div class="card-content">
+                <h3 class="part-name">{{ part.name }}</h3>
+                
+                <div class="part-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Category</span>
+                        <span class="detail-value">{{ part.category }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Brand</span>
+                        <span class="detail-value">{{ part.brand }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Part Number</span>
+                        <span class="detail-value">{{ part.part_number }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Compatibility</span>
+                        <span class="detail-value">{{ part.compatibility }}</span>
+                    </div>
+                </div>
+
+                <div class="part-price">{{ part.price }}</div>
+                
+                <span class="status-badge status-{{ part.status.lower().replace(' ', '-').replace('_', '-') }}">
+                    {{ part.status }}
+                </span>
+
+                <div class="card-actions">
+                    <a href="{{ url_for('part_detail', part_id=part.id) }}" class="btn btn-primary">
+                        View Details
+                    </a>
+                    {% if part.status == 'In Stock' or part.status == 'Low Stock' %}
+                    <a href="#" class="btn btn-secondary" onclick="addToCart('{{ part.name }}', '{{ part.id }}')">
+                        Add to Cart
+                    </a>
+                    {% elif part.status == 'Pre-Order' %}
+                    <a href="#" class="btn btn-secondary" onclick="preOrderPart('{{ part.name }}', '{{ part.id }}')">
+                        Pre-Order
+                    </a>
+                    {% elif part.status == 'Out of Stock' %}
+                    <a href="#" class="btn btn-secondary" onclick="notifyWhenAvailable('{{ part.name }}', '{{ part.id }}')">
+                        Notify Me
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Static Car Mechanical Parts Inventory -->
+    <div class="inventory-section">
+        <div class="section-header">
+            <h2 style="font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 700; background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1rem; text-align: center;">Featured Car Mechanical Parts</h2>
+            <p style="font-size: 1.2rem; color: var(--text-muted); text-align: center; margin-bottom: 3rem;">Premium automotive components for optimal performance</p>
+        </div>
+        
+        <div class="inventory-grid" id="static-inventory-grid">
+            <!-- Engine Parts -->
+            <div class="inventory-card" data-status="in stock" data-category="engine parts" data-brand="bosch" data-name="turbocharger assembly">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/turbocharger.jpg') }}" alt="Turbocharger Assembly" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🔧</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Turbocharger Assembly</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Engine Parts</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Bosch</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">TC-2024-001</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">BMW, Mercedes, Audi</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$2,499.99</div>
+                    
+                    <span class="status-badge status-in-stock">In Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="addToCart('Turbocharger Assembly', 'TC001')">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brake System -->
+            <div class="inventory-card" data-status="in stock" data-category="brake system" data-brand="brembo" data-name="ceramic brake pads">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/brake-pads.jpg') }}" alt="Ceramic Brake Pads" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🛑</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Ceramic Brake Pads</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Brake System</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Brembo</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">BP-2024-002</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">Ferrari, Porsche, Lamborghini</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$899.99</div>
+                    
+                    <span class="status-badge status-in-stock">In Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="addToCart('Ceramic Brake Pads', 'BP002')">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suspension -->
+            <div class="inventory-card" data-status="low stock" data-category="suspension" data-brand="bilstein" data-name="coilover suspension kit">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/coilover.jpg') }}" alt="Coilover Suspension Kit" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🔧</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Coilover Suspension Kit</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Suspension</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Bilstein</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">CO-2024-003</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">Honda Civic, Toyota Camry</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$1,299.99</div>
+                    
+                    <span class="status-badge status-low-stock">Low Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="addToCart('Coilover Suspension Kit', 'CO003')">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Engine Air Filter -->
+            <div class="inventory-card" data-status="in stock" data-category="engine parts" data-brand="k&n" data-name="performance air filter">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/air-filter.jpg') }}" alt="Performance Air Filter" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🌪️</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Performance Air Filter</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Engine Parts</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">K&N</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">AF-2024-004</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">Universal Fit</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$79.99</div>
+                    
+                    <span class="status-badge status-in-stock">In Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="addToCart('Performance Air Filter', 'AF004')">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exhaust System -->
+            <div class="inventory-card" data-status="pre-order" data-category="exhaust" data-brand="akrapovic" data-name="titanium exhaust system">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/exhaust-system.jpg') }}" alt="Titanium Exhaust System" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" >
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🔥</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Titanium Exhaust System</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Exhaust</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Akrapovic</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">EX-2024-005</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">Porsche 911, Audi R8</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$4,999.99</div>
+                    
+                    <span class="status-badge status-pre-order">Pre-Order</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="preOrderPart('Titanium Exhaust System', 'EX005')">Pre-Order</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transmission -->
+            <div class="inventory-card" data-status="out of stock" data-category="transmission" data-brand="zf" data-name="8-speed automatic transmission">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/transmission.jpg') }}" alt="8-Speed Automatic Transmission" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" >
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">⚙️</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">8-Speed Automatic Transmission</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Transmission</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">ZF</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">TR-2024-006</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">BMW M Series</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$8,999.99</div>
+                    
+                    <span class="status-badge status-out-of-stock">Out of Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="notifyWhenAvailable('8-Speed Automatic Transmission', 'TR006')">Notify Me</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Electrical Parts -->
+            <div class="inventory-card" data-status="in stock" data-category="electrical" data-brand="denso" data-name="ignition coils set">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/ignition-coils.jpg') }}" alt="Ignition Coils Set" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" >
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">⚡</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Ignition Coils Set</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Electrical</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Denso</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">IC-2024-007</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">Toyota, Lexus, Honda</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$249.99</div>
+                    
+                    <span class="status-badge status-in-stock">In Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="addToCart('Ignition Coils Set', 'IC007')">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body Parts -->
+            <div class="inventory-card" data-status="low stock" data-category="body parts" data-brand="oem" data-name="carbon fiber hood">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/carbon-hood.jpg') }}" alt="Carbon Fiber Hood" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" >
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🚗</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Carbon Fiber Hood</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Body Parts</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">OEM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">CF-2024-008</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">BMW M3, M4</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$3,299.99</div>
+                    
+                    <span class="status-badge status-low-stock">Low Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="addToCart('Carbon Fiber Hood', 'CF008')">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interior Parts -->
+            <div class="inventory-card" data-status="in stock" data-category="interior" data-brand="recaro" data-name="racing seats pair">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/racing-seats.jpg') }}" alt="Racing Seats Pair" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" >
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🪑</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Racing Seats Pair</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Interior</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Recaro</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">RS-2024-009</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">Universal Fit</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$1,899.99</div>
+                    
+                    <span class="status-badge status-in-stock">In Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="addToCart('Racing Seats Pair', 'RS009')">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Engine Oil -->
+            <div class="inventory-card" data-status="in stock" data-category="engine parts" data-brand="mobil1" data-name="synthetic engine oil">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/engine-oil.jpg') }}" alt="Synthetic Engine Oil" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" >
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🛢️</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Synthetic Engine Oil</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Engine Parts</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Mobil1</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">EO-2024-010</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">5W-30, 5 Quart</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$39.99</div>
+                    
+                    <span class="status-badge status-in-stock">In Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="addToCart('Synthetic Engine Oil', 'EO010')">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tires -->
+            <div class="inventory-card" data-status="pre-order" data-category="wheels-tires" data-brand="michelin" data-name="pilot sport tires">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/tires.jpg') }}" alt="Pilot Sport Tires" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" >
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🛞</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Pilot Sport Tires</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Wheels & Tires</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Michelin</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">PS-2024-011</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">245/40ZR18 Set of 4</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$1,199.99</div>
+                    
+                    <span class="status-badge status-pre-order">Pre-Order</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="preOrderPart('Pilot Sport Tires', 'PS011')">Pre-Order</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fuel Injectors -->
+            <div class="inventory-card" data-status="out of stock" data-category="engine parts" data-brand="bosch" data-name="fuel injectors set">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='parts/fuel-injectors.jpg') }}" alt="Fuel Injectors Set" class="part-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" >
+                    <div class="placeholder-icon" style="display: none; font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4));">🔧</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="part-name">Fuel Injectors Set</h3>
+                    
+                    <div class="part-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">Engine Parts</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Brand</span>
+                            <span class="detail-value">Bosch</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Part Number</span>
+                            <span class="detail-value">FI-2024-012</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Compatibility</span>
+                            <span class="detail-value">VW, Audi 2.0T</span>
+                        </div>
+                    </div>
+
+                    <div class="part-price">$599.99</div>
+                    
+                    <span class="status-badge status-out-of-stock">Out of Stock</span>
+
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">View Details</a>
+                        <a href="#" class="btn btn-secondary" onclick="notifyWhenAvailable('Fuel Injectors Set', 'FI012')">Notify Me</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Enhanced filter functionality for car parts
+document.addEventListener('DOMContentLoaded', function() {
+    const statusFilter = document.getElementById('status-filter');
+    const categoryFilter = document.getElementById('category-filter');
+    const brandFilter = document.getElementById('brand-filter');
+    const searchFilter = document.getElementById('search-filter');
+    const mainSearchBar = document.getElementById('searchBar');
+    const inventoryGrid = document.getElementById('inventory-grid');
+    const staticInventoryGrid = document.getElementById('static-inventory-grid');
+    
+    // Get cards from both grids
+    const dynamicCards = inventoryGrid ? inventoryGrid.getElementsByClassName('inventory-card') : [];
+    const staticCards = staticInventoryGrid ? staticInventoryGrid.getElementsByClassName('inventory-card') : [];
+    const allCards = [...dynamicCards, ...staticCards];
+
+    function filterCards() {
+        const statusValue = statusFilter.value.toLowerCase();
+        const categoryValue = categoryFilter.value.toLowerCase();
+        const brandValue = brandFilter.value.toLowerCase();
+        const searchValue = searchFilter.value.toLowerCase();
+        const mainSearchValue = mainSearchBar.value.toLowerCase();
+        
+        // Combine search values from both search inputs
+        const combinedSearch = searchValue || mainSearchValue;
+
+        allCards.forEach(card => {
+            const cardStatus = card.dataset.status.toLowerCase();
+            const cardCategory = card.dataset.category.toLowerCase();
+            const cardBrand = card.dataset.brand.toLowerCase();
+            const cardName = card.dataset.name.toLowerCase();
+
+            const statusMatch = !statusValue || cardStatus === statusValue;
+            const categoryMatch = !categoryValue || cardCategory === categoryValue;
+            const brandMatch = !brandValue || cardBrand === brandValue;
+            const searchMatch = !combinedSearch || 
+                              cardName.includes(combinedSearch) || 
+                              cardCategory.includes(combinedSearch) ||
+                              cardBrand.includes(combinedSearch);
+
+            if (statusMatch && categoryMatch && brandMatch && searchMatch) {
+                card.style.display = 'block';
+                card.style.animation = 'fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Update results count
+        updateResultsCount();
+    }
+
+    function updateResultsCount() {
+        const visibleCards = allCards.filter(card => card.style.display !== 'none');
+        const resultsCount = visibleCards.length;
+        
+        // Update page title or add results indicator
+        console.log(`Showing ${resultsCount} automotive parts`);
+    }
+
+    // Sync search bars
+    function syncSearchBars(activeInput, inactiveInput) {
+        if (activeInput.value.trim() !== '') {
+            inactiveInput.value = '';
+        }
+    }
+
+    // Event listeners
+    if (statusFilter) statusFilter.addEventListener('change', filterCards);
+    if (categoryFilter) categoryFilter.addEventListener('change', filterCards);
+    if (brandFilter) brandFilter.addEventListener('change', filterCards);
+    if (searchFilter) {
+        searchFilter.addEventListener('input', function() {
+            syncSearchBars(searchFilter, mainSearchBar);
+            filterCards();
+        });
+    }
+    if (mainSearchBar) {
+        mainSearchBar.addEventListener('input', function() {
+            syncSearchBars(mainSearchBar, searchFilter);
+            filterCards();
+        });
+    }
+
+    // Enhanced animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeInScale {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        @keyframes partPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .inventory-card:hover .part-name {
+            animation: partPulse 0.8s ease-in-out;
+            background: linear-gradient(90deg, #a084ff, #07b0b3, #ffd700);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 2s linear infinite;
+        }
+        
+        .status-badge {
+            animation: statusGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes statusGlow {
+            0% { box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3); }
+            100% { box-shadow: 0 8px 35px rgba(124, 77, 255, 0.4); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Add loading effect for cards
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+            }
+        });
+    });
+
+    Array.from(cards).forEach(card => {
+        observer.observe(card);
+    });
+});
+
+// Enhanced part interaction functions
+function addToCart(partName, partId) {
+    // Add cart animation effect
+    const button = event.target;
+    button.style.transform = 'scale(0.95)';
+    button.innerHTML = '✓ Added!';
+    button.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+    
+    setTimeout(() => {
+        button.innerHTML = 'Add to Cart';
+        button.style.background = '';
+        button.style.transform = '';
+    }, 2000);
+    
+    console.log(`Added ${partName} (ID: ${partId}) to cart`);
+    // Here you would integrate with your cart system
+}
+
+function preOrderPart(partName, partId) {
+    const confirmation = confirm(`Would you like to pre-order ${partName}? You will be notified when it becomes available.`);
+    if (confirmation) {
+        alert(`Pre-order confirmed for ${partName}! You will receive an email confirmation shortly.`);
+        console.log(`Pre-ordered ${partName} (ID: ${partId})`);
+    }
+}
+
+function notifyWhenAvailable(partName, partId) {
+    const email = prompt(`Enter your email to be notified when ${partName} is back in stock:`);
+    if (email && email.includes('@')) {
+        alert(`Thank you! We'll notify you at ${email} when ${partName} is available.`);
+        console.log(`Notification set for ${partName} (ID: ${partId}) to email: ${email}`);
+    } else if (email) {
+        alert('Please enter a valid email address.');
+    }
+}
+
+// Enhanced search suggestions
+function addSearchSuggestions() {
+    const searchInputs = [document.getElementById('searchBar'), document.getElementById('search-filter')];
+    const suggestions = [
+        'brake pads', 'oil filter', 'spark plugs', 'air filter', 'battery',
+        'headlights', 'tires', 'suspension', 'exhaust system', 'alternator',
+        'starter motor', 'fuel pump', 'timing belt', 'radiator', 'clutch'
+    ];
+    
+    searchInputs.forEach(input => {
+        if (input) {
+            input.addEventListener('focus', function() {
+                // Add search suggestions dropdown in a real implementation
+                console.log('Search suggestions:', suggestions);
+            });
+        }
+    });
+}
+
+// Initialize enhanced features
+addSearchSuggestions();
+</script>
+{% endblock %}

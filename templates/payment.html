@@ -1,0 +1,742 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - CarHub{% endblock %}
+
+{% block extra_head %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700;900&display=swap');
+    
+    :root {
+        --primary-purple: #7c4dff;
+        --primary-blue: #23235b;
+        --dark-blue: #181828;
+        --darker-blue: #0a0a1a;
+        --accent-cyan: #07b0b3;
+        --light-purple: #a084ff;
+        --text-light: #e0e6ff;
+        --text-muted: #b3baff;
+        --luxury-gold: #ffd700;
+        --deep-space: #0a0a1a;
+        --cosmic-purple: #7c4dff;
+        --silver: #c0c0c0;
+        --charcoal: #2E2E36;
+        --premium-gold: #d4af37;
+        --neon-blue: #00d4ff;
+        --electric-purple: #8b5cf6;
+        
+        /* Updated gradients to match cars.html */
+        --gradient-primary: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+        --gradient-luxury: linear-gradient(90deg, #a084ff 80%, #23235b 100%);
+        --gradient-dark: linear-gradient(120deg, #23235b 60%, #181828 100%);
+        --gradient-space: radial-gradient(ellipse at top left, #23235b 0%, #0a0a1a 100%);
+        --gradient-text: linear-gradient(45deg, #a084ff, #07b0b3, #ffd700);
+        
+        --dark-bg: #0a0a1a;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --border-color: rgba(124, 77, 255, 0.2);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--gradient-space);
+        color: var(--text-light);
+        font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Background overlay matching cars.html */
+    .background-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            135deg,
+            rgba(35, 35, 91, 0.4) 0%,
+            rgba(24, 24, 40, 0.6) 50%,
+            rgba(10, 10, 26, 0.7) 100%
+        );
+        z-index: -1;
+    }
+
+    .payment-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        margin-top: 120px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .payment-header h1 {
+        font-family: 'Orbitron', 'Arial Black', monospace;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 900;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        text-shadow: 0 4px 20px rgba(124, 77, 255, 0.3);
+        animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+        0% { filter: brightness(1); }
+        100% { filter: brightness(1.2); }
+    }
+
+    .payment-header p {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        font-weight: 300;
+    }
+
+    .payment-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 3rem;
+        align-items: start;
+    }
+
+    /* Enhanced payment form matching cars.html card styling */
+    .payment-form {
+        background: var(--gradient-dark);
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        border-radius: 20px;
+        padding: 3rem;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(124, 77, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .payment-form::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.05) 0%, rgba(7, 176, 179, 0.05) 100%);
+        z-index: -1;
+    }
+
+    /* Enhanced car summary matching cars.html */
+    .car-summary {
+        background: var(--gradient-dark);
+        border: 2px solid rgba(7, 176, 179, 0.3);
+        border-radius: 20px;
+        padding: 3rem;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(7, 176, 179, 0.2);
+        position: sticky;
+        top: 140px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .car-summary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(7, 176, 179, 0.05) 0%, rgba(124, 77, 255, 0.05) 100%);
+        z-index: -1;
+    }
+
+    .form-section {
+        margin-bottom: 3rem;
+    }
+
+    .form-section h3 {
+        font-family: 'Orbitron', 'Arial Black', monospace;
+        color: var(--light-purple);
+        margin-bottom: 2rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        border-bottom: 3px solid rgba(124, 77, 255, 0.4);
+        padding-bottom: 1rem;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .form-group {
+        margin-bottom: 1.8rem;
+    }
+
+    .form-group label {
+        display: block;
+        color: var(--text-muted);
+        margin-bottom: 0.8rem;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    /* Enhanced form controls */
+    .form-control {
+        width: 100%;
+        padding: 1.2rem;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        border-radius: 12px;
+        color: var(--text-light);
+        font-size: 1rem;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-purple);
+        box-shadow: 0 0 25px rgba(124, 77, 255, 0.4);
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-2px);
+    }
+
+    .form-control::placeholder {
+        color: var(--text-muted);
+        opacity: 0.7;
+    }
+
+    /* Enhanced payment methods grid */
+    .payment-methods {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .payment-method {
+        position: relative;
+    }
+
+    .payment-method input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    /* Enhanced payment method labels matching cars.html card style */
+    .payment-method label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1.5rem;
+        background: var(--gradient-dark);
+        border: 2px solid rgba(124, 77, 255, 0.2);
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .payment-method label::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.05) 0%, rgba(7, 176, 179, 0.05) 100%);
+        z-index: -1;
+    }
+
+    .payment-method input[type="radio"]:checked + label {
+        border-color: var(--primary-purple);
+        background: var(--gradient-primary);
+        box-shadow: 0 8px 25px rgba(124, 77, 255, 0.4);
+        transform: translateY(-3px);
+    }
+
+    .payment-method-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.8rem;
+        filter: drop-shadow(0 2px 8px rgba(124, 77, 255, 0.3));
+    }
+
+    .payment-method label span {
+        font-weight: 600;
+        color: var(--text-light);
+        font-size: 1rem;
+    }
+
+    /* Enhanced card details section */
+    .card-details {
+        display: none;
+        margin-top: 2rem;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(124, 77, 255, 0.15);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .card-details.active {
+        display: block;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Enhanced car info section */
+    .car-info h3 {
+        font-family: 'Orbitron', 'Arial Black', monospace;
+        color: var(--accent-cyan);
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, #07b0b3, #a084ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .car-details {
+        margin-bottom: 2.5rem;
+    }
+
+    .car-details p {
+        color: var(--text-muted);
+        margin-bottom: 0.8rem;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .car-details p strong {
+        color: var(--text-light);
+        font-weight: 600;
+    }
+
+    /* Enhanced price breakdown */
+    .price-breakdown {
+        border-top: 3px solid rgba(7, 176, 179, 0.4);
+        padding-top: 2rem;
+    }
+
+    .price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.2rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(7, 176, 179, 0.15);
+        border-radius: 10px;
+        color: var(--text-light);
+        transition: all 0.3s ease;
+    }
+
+    .price-row:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(7, 176, 179, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .price-row.total {
+        font-size: 1.4rem;
+        font-weight: 900;
+        border: 3px solid rgba(7, 176, 179, 0.4);
+        background: var(--gradient-primary);
+        color: #ffffff;
+        margin-top: 1.5rem;
+        box-shadow: 0 8px 25px rgba(7, 176, 179, 0.3);
+    }
+
+    .price-row.total span {
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Enhanced payment button matching cars.html */
+    .btn-payment {
+        width: 100%;
+        padding: 1.5rem;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);
+    }
+
+    .btn-payment:hover {
+        background: var(--gradient-luxury);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(124, 77, 255, 0.5);
+    }
+
+    .btn-payment:active {
+        transform: translateY(0);
+    }
+
+    .btn-payment:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Enhanced security notice */
+    .security-notice {
+        background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(46, 204, 113, 0.05));
+        border: 2px solid rgba(46, 204, 113, 0.3);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        text-align: center;
+        color: var(--text-light);
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+    }
+
+    .security-notice i {
+        color: #2ecc71;
+        margin-right: 0.8rem;
+        font-size: 1.2rem;
+        filter: drop-shadow(0 2px 4px rgba(46, 204, 113, 0.3));
+    }
+
+    /* Enhanced error message */
+    .error-message {
+        background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(231, 76, 60, 0.05));
+        border: 2px solid rgba(231, 76, 60, 0.3);
+        color: #ff6b6b;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.1);
+    }
+
+    /* Enhanced responsive design matching cars.html */
+    @media (max-width: 768px) {
+        .payment-container {
+            padding: 1rem;
+            margin-top: 100px;
+        }
+        
+        .payment-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .car-summary {
+            position: static;
+            order: -1;
+        }
+
+        .payment-methods {
+            grid-template-columns: 1fr;
+        }
+
+        .card-row {
+            grid-template-columns: 1fr;
+        }
+        
+        .payment-form, .car-summary {
+            padding: 2rem;
+        }
+        
+        .payment-header h1 {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .payment-header h1 {
+            font-size: 2rem;
+        }
+        
+        .form-section h3 {
+            font-size: 1.3rem;
+        }
+        
+        .btn-payment {
+            padding: 1.2rem;
+            font-size: 1rem;
+        }
+        
+        .payment-form, .car-summary {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Background overlay matching cars.html -->
+<div class="background-overlay"></div>
+
+<div class="payment-container">
+    <div class="payment-header">
+        <h1>Complete Your Purchase</h1>
+        <p>Secure payment processing with advanced encryption</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="error-message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="payment-grid">
+        <div class="payment-form">
+            <form method="POST" id="paymentForm">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-section">
+                    <h3>Billing Information</h3>
+                    <div class="form-group">
+                        {{ form.billing_name.label(class="form-label") }}
+                        {{ form.billing_name(class="form-control", placeholder="Enter your full name") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.billing_email.label(class="form-label") }}
+                        {{ form.billing_email(class="form-control", placeholder="Enter your email address") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.billing_phone.label(class="form-label") }}
+                        {{ form.billing_phone(class="form-control", placeholder="Enter your phone number") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.billing_address.label(class="form-label") }}
+                        {{ form.billing_address(class="form-control", placeholder="Enter your complete address") }}
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Payment Method</h3>
+                    <div class="payment-methods">
+                        <div class="payment-method">
+                            <input type="radio" id="credit_card" name="payment_method" value="credit_card" checked>
+                            <label for="credit_card">
+                                <div class="payment-method-icon">💳</div>
+                                <span>Credit Card</span>
+                            </label>
+                        </div>
+                        <div class="payment-method">
+                            <input type="radio" id="paypal" name="payment_method" value="paypal">
+                            <label for="paypal">
+                                <div class="payment-method-icon">🅿️</div>
+                                <span>PayPal</span>
+                            </label>
+                        </div>
+                        <div class="payment-method">
+                            <input type="radio" id="bank_transfer" name="payment_method" value="bank_transfer">
+                            <label for="bank_transfer">
+                                <div class="payment-method-icon">🏦</div>
+                                <span>Bank Transfer</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="card-details active" id="card-details">
+                        <div class="form-group">
+                            {{ form.card_number.label(class="form-label") }}
+                            {{ form.card_number(class="form-control", placeholder="1234 5678 9012 3456") }}
+                        </div>
+                        <div class="card-row">
+                            <div class="form-group">
+                                {{ form.card_expiry.label(class="form-label") }}
+                                {{ form.card_expiry(class="form-control", placeholder="MM/YY") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.card_cvv.label(class="form-label") }}
+                                {{ form.card_cvv(class="form-control", placeholder="123") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{ form.submit(class="btn-payment") }}
+
+                <div class="security-notice">
+                    <i>🔒</i>
+                    Your payment information is encrypted and secure
+                </div>
+            </form>
+        </div>
+
+        <div class="car-summary">
+            <div class="car-info">
+                <h3>Order Summary</h3>
+                <div class="car-details">
+                    <p><strong>Vehicle:</strong> {{ car.name }}</p>
+                    <p><strong>Model Year:</strong> 2024</p>
+                    <p><strong>Condition:</strong> New</p>
+                </div>
+                
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Vehicle Price:</span>
+                        <span>${{ "{:,.0f}".format(car.price) }}</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Processing Fee:</span>
+                        <span>${{ "{:,.0f}".format(car.price * 0.02) }}</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Tax:</span>
+                        <span>${{ "{:,.0f}".format(car.price * 0.08) }}</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total Amount:</span>
+                        <span>${{ "{:,.0f}".format(car.price * 1.1) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        const cardDetails = document.getElementById('card-details');
+        const cardInputs = cardDetails.querySelectorAll('input');
+
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', function() {
+                if (this.value === 'credit_card') {
+                    cardDetails.classList.add('active');
+                    cardInputs.forEach(input => input.required = true);
+                } else {
+                    cardDetails.classList.remove('active');
+                    cardInputs.forEach(input => input.required = false);
+                }
+            });
+        });
+
+        // Form validation
+        // Set the payment_method field in the form
+        const paymentMethodField = document.createElement('input');
+        paymentMethodField.type = 'hidden';
+        paymentMethodField.name = 'payment_method';
+        paymentMethodField.value = 'credit_card'; // Default value
+        document.getElementById('paymentForm').appendChild(paymentMethodField);
+        
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', function() {
+                // Update the hidden field value when payment method changes
+                paymentMethodField.value = this.value;
+            });
+        });
+        
+        const form = document.getElementById('paymentForm');
+        form.addEventListener('submit', function(e) {
+            // Get basic billing info fields
+            const billingName = document.getElementById('billing_name').value;
+            const billingEmail = document.getElementById('billing_email').value;
+            const billingPhone = document.getElementById('billing_phone').value;
+            const billingAddress = document.getElementById('billing_address').value;
+            
+            // Check required billing info
+            if (!billingName || !billingEmail || !billingPhone || !billingAddress) {
+                e.preventDefault();
+                alert('Please complete all required billing information fields.');
+                return;
+            }
+            
+            const selectedMethod = paymentMethodField.value;
+            
+            if (selectedMethod === 'credit_card') {
+                const cardNumber = document.getElementById('card_number').value;
+                const cardExpiry = document.getElementById('card_expiry').value;
+                const cardCvv = document.getElementById('card_cvv').value;
+                
+                if (!cardNumber || !cardExpiry || !cardCvv) {
+                    e.preventDefault();
+                    alert('Please fill in all card details.');
+                    return;
+                }
+                
+                // Simple card validation
+                if (!/^\d{12,19}$/.test(cardNumber.replace(/\s/g, ''))) {
+                    e.preventDefault();
+                    alert('Please enter a valid card number (12-19 digits)');
+                    return;
+                }
+                
+                if (!/^\d{3,4}$/.test(cardCvv)) {
+                    e.preventDefault();
+                    alert('Please enter a valid CVV (3-4 digits)');
+                    return;
+                }
+                
+                if (!/^\d{1,2}\/\d{2}$/.test(cardExpiry)) {
+                    e.preventDefault();
+                    alert('Please enter expiry date in MM/YY format');
+                    return;
+                }
+            }
+            
+            // Show loading state
+            const submitBtn = form.querySelector('.btn-payment');
+            submitBtn.innerHTML = '<span>Processing Payment...</span> <span style="display:inline-block;animation:spin 2s linear infinite;">⏳</span>';
+            submitBtn.disabled = true;
+            
+            // Add loading overlay
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.style = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;justify-content:center;align-items:center;color:white;font-size:24px;';
+            loadingOverlay.innerHTML = '<div><div style="text-align:center;margin-bottom:20px;font-size:36px;">⏳</div><div>Processing your payment...</div><div style="font-size:16px;margin-top:10px;">Please do not refresh the page.</div></div>';
+            document.body.appendChild(loadingOverlay);
+        });
+    });
+    
+    // Add keyup formatting for card number (spaces every 4 digits)
+    document.getElementById('card_number').addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, ''); // Remove non-digits
+        // Add space after every 4 chars
+        value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        this.value = value;
+    });
+    
+    // Add keyup formatting for expiry date
+    document.getElementById('card_expiry').addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, ''); // Remove non-digits
+        if (value.length > 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        this.value = value;
+    });
+</script>
+{% endblock %}

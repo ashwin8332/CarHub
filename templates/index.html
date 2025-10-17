@@ -1,0 +1,1435 @@
+{% extends "base.html" %}
+
+{% block title %}CarHub - Your Automotive Destination{% endblock %}
+
+{% block extra_head %}
+<style>
+/* Enhanced Global Animations and Effects */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --premium-gold: #d4af37;
+    --neon-blue: #00d4ff;
+    --electric-purple: #8b5cf6;
+    --space-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --hero-gradient: linear-gradient(135deg, rgba(26, 26, 46, 0.3) 0%, rgba(22, 33, 62, 0.3) 100%);
+}
+
+/* Advanced Scroll Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes videoEnhance {
+    0% {
+        filter: brightness(5.0) contrast(5.0) saturate(4.0);
+    }
+    100% {
+        filter: brightness(5.0) contrast(5.0) saturate(4.0);
+    }
+}
+
+@keyframes heroVideoEnhance {
+    0% {
+        filter: brightness(1.1) contrast(1.6) saturate(1.4);
+    }
+    100% {
+        filter: brightness(1.1) contrast(1.6) saturate(1.4);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(0px); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(124, 77, 255, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(124, 77, 255, 0.3); }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(0%); }
+}
+
+/* Intersection Observer Animation Classes */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-on-scroll.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animate-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-left.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-right.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-zoom {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-zoom.animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Enhanced Hero Section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(124, 77, 255, 0.1) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.background-media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.background-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(1.1) contrast(1.6) saturate(1.4);
+    transition: all 0.5s ease;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--hero-gradient);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    color: white;
+    max-width: 900px;
+    padding: 0 2rem;
+}
+
+.hero-content h1 {
+    font-family: 'Orbitron', 'Arial Black', monospace;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, #ffffff, #e0e0ff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    letter-spacing: 3px;
+    line-height: 1.1;
+}
+
+.hero-content .tagline {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 300;
+    letter-spacing: 8px;
+    margin-bottom: 3rem;
+    opacity: 0.95;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    position: relative;
+    padding: 1.2rem 2.5rem;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    color: white;
+    box-shadow: 0 8px 32px rgba(124, 77, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 50px rgba(124, 77, 255, 0.6);
+    background: linear-gradient(45deg, #6a3de8, #9c6fff);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px) scale(1.05);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 15px 50px rgba(255, 255, 255, 0.2);
+}
+
+
+/* Enhanced USP Showcase Section */
+.usp-showcase {
+    padding: 8rem 2rem;
+    background: var(--space-gradient);
+    position: relative;
+    overflow: hidden;
+}
+
+.usp-showcase::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="0.7" fill="rgba(255,255,255,0.08)"/><circle cx="40" cy="80" r="0.5" fill="rgba(255,255,255,0.12)"/></svg>') repeat;
+    pointer-events: none;
+}
+
+.usp-text-block {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.usp-text-block h2 {
+    font-family: 'Orbitron', 'Arial Black', monospace;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    background: linear-gradient(45deg, #ffffff, #b084ff, #7c4dff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+}
+
+.usp-text-block p {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    font-weight: 300;
+}
+
+/* Enhanced Customer Reviews Section */
+.customer-reviews-section {
+    padding: 8rem 2rem;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0d1117 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.customer-reviews-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(124, 77, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(7, 176, 179, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.reviews-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.reviews-container h2 {
+    font-family: 'Orbitron', 'Arial Black', monospace;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #7c4dff, #b084ff, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+}
+
+.reviews-subtitle {
+    font-size: 1.3rem;
+    color: #b3baff;
+    margin-bottom: 4rem;
+    font-weight: 300;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 5rem;
+}
+
+.review-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(124, 77, 255, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    backdrop-filter: blur(15px);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.review-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.review-card:hover::before {
+    left: 100%;
+}
+
+.review-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(124, 77, 255, 0.6);
+    box-shadow: 0 20px 60px rgba(124, 77, 255, 0.3);
+}
+
+.review-stars {
+    margin-bottom: 1.5rem;
+}
+
+.review-stars span {
+    color: #ffd700;
+    font-size: 1.4rem;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.review-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    font-style: italic;
+    font-weight: 300;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reviewer-avatar {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.reviewer-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(124, 77, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.review-card:hover .reviewer-avatar img {
+    border-color: rgba(124, 77, 255, 0.8);
+    box-shadow: 0 0 20px rgba(124, 77, 255, 0.4);
+}
+
+.avatar-placeholder {
+    display: flex;
+    opacity: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    color: white;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border: 3px solid rgba(124, 77, 255, 0.3);
+    transition: opacity 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.reviewer-details h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+.reviewer-details span {
+    color: #b3baff;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.reviews-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    padding: 3rem 0;
+    border-top: 2px solid rgba(124, 77, 255, 0.2);
+    margin-top: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(124, 77, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(124, 77, 255, 0.3);
+}
+
+.stat-item h3 {
+    font-family: 'Orbitron', 'Arial Black', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 0;
+    background: linear-gradient(45deg, #7c4dff, #b084ff, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(124, 77, 255, 0.3);
+}
+
+.stat-item p {
+    color: #b3baff;
+    margin: 0.5rem 0 0 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Enhanced Video Background Cards */
+.usp-showcase-merged {
+    margin: 4rem 2rem;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    position: relative;
+}
+
+.usp-showcase-merged::before {
+    display: none;
+}
+
+.merged-content-block {
+    position: relative;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 25px;
+}
+
+.merged-content-block::before {
+    display: none;
+}
+
+.merged-background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 10;
+    filter: brightness(5.0) contrast(5.0) saturate(4.0);
+    transition: all 0.6s ease;
+    opacity: 1.0;
+}
+
+.merged-overlay {
+    display: none;
+}
+
+.merged-text-container {
+    position: relative;
+    z-index: 15;
+    text-align: center;
+    color: white;
+    padding: 4rem 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    transition: all 0.4s ease;
+}
+
+.merged-text-container h2 {
+    font-family: 'Orbitron', 'Arial Black', monospace;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    margin-bottom: 2rem;
+    text-shadow: 
+        3px 3px 6px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(124, 77, 255, 0.6);
+    background: linear-gradient(45deg, #ffffff, #e0e0ff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.merged-text-container p {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.95),
+        0 0 20px rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 0.98);
+    font-weight: 400;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.merged-text-container .btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.merged-text-container .btn-dark {
+    background: linear-gradient(45deg, #7c4dff, #b084ff, #9c6fff);
+    color: white;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.4);
+}
+
+.merged-text-container .btn-dark:hover {
+    background: linear-gradient(45deg, #6a3de8, #9c6fff, #b084ff);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 50px rgba(124, 77, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Enhanced hover effects for better video visibility */
+.merged-content-block:hover .merged-background-video {
+    filter: brightness(6.0) contrast(6.0) saturate(5.0);
+    transform: scale(1.02);
+    transition: all 0.4s ease;
+    opacity: 1.0;
+}
+
+.merged-content-block:hover .merged-overlay {
+    background: transparent;
+    transition: all 0.4s ease;
+}
+
+.merged-content-block:hover .merged-text-container {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+    backdrop-filter: none;
+    transition: all 0.4s ease;
+}
+
+/* Force video visibility */
+video.merged-background-video {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Enhanced Service USP Section */
+.service-usp-section {
+    padding: 8rem 2rem;
+    background: linear-gradient(135deg, #23235b 0%, #181828 50%, #0a0a1a 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-usp-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(7, 176, 179, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.service-usp-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.service-usp-content h3 {
+    font-family: 'Orbitron', 'Arial Black', monospace;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    color: white;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, #07b0b3, #ffffff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+}
+
+.service-usp-content p.large {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 3rem;
+    font-weight: 300;
+}
+
+.large-btn {
+    padding: 1.5rem 3rem;
+    font-size: 1.2rem;
+}
+
+/* Final CTA Section */
+.final-cta {
+    padding: 8rem 2rem;
+    background: var(--space-gradient);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.final-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(124, 77, 255, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.final-cta h3 {
+    font-family: 'Orbitron', 'Arial Black', monospace;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    color: white;
+    margin-bottom: 3rem;
+    background: linear-gradient(45deg, #ffd700, #ffffff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 3px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Footer =
+footer {
+    background: #0a0a1a;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 2px solid rgba(124, 77, 255, 0.2);
+    font-size: 1rem;
+}*/
+
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+    .reviews-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+    }
+    
+    .reviews-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+    
+    .merged-content-block {
+        height: 550px;
+    }
+    
+    .merged-text-container {
+        padding: 3rem 2rem;
+        max-width: 700px;
+    }
+}
+
+    /* Disable heavy animations on all screen sizes for performance */
+    .hero-content h1, 
+    .cta-buttons, 
+    .merged-text-container,
+    .merged-background-video,
+    .background-media video,
+    .hero-section::before,
+    .usp-showcase::before,
+    .review-stars span {
+        animation: none !important;
+    }
+    
+    .merged-background-video {
+        transform: none !important;
+        filter: brightness(1.8) contrast(1.0) saturate(0.5) !important;
+    }
+
+@media (max-width: 768px) {
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .reviews-stats {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .merged-content-block {
+        height: 500px;
+    }
+    
+    .merged-text-container {
+        padding: 2.5rem 1.5rem;
+        margin: 0 1rem;
+    }
+    
+    .usp-showcase-merged {
+        margin: 2rem 1rem;
+    }
+
+    /* Additional mobile optimizations */
+    .merged-background-video {
+        filter: brightness(2.0) contrast(2.0) saturate(1.5) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content {
+        padding: 0 1rem;
+    }
+    
+    .merged-content-block {
+        height: 450px;
+    }
+    
+    .merged-text-container {
+        padding: 2rem 1rem;
+        margin: 0 0.5rem;
+    }
+    
+    .stat-item h3 {
+        font-size: 2.5rem;
+    }
+}
+
+/* Our Partners Section */
+.partners-section {
+    margin: 80px auto 60px auto;
+    padding: 48px 0 0 0;
+    background: linear-gradient(135deg, #23235b 0%, #181828 50%, #0a0a1a 100%);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(60, 72, 120, 0.10);
+    max-width: 1400px;
+    text-align: center;
+    position: relative;
+}
+.partners-title {
+    font-size: 2.6em;
+    font-weight: 900;
+    color: #ebeaed;
+    margin-bottom: 10px;
+    letter-spacing: 1.5px;
+}
+.partners-subtitle {
+    font-size: 1.25em;
+    color: #f6f2f2;
+    margin-bottom: 36px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+}
+.partners-slider-glass {
+    position: relative;
+    width: 92%;
+    margin: 0 auto;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.35);
+    box-shadow: 0 4px 32px rgba(102,126,234,0.10);
+    overflow: visible;
+    padding: 32px 0 18px 0;
+    backdrop-filter: blur(8px) saturate(1.2);
+    z-index: 1;
+}
+.partners-slider-glow {
+    position: absolute;
+    top: -8px; left: -8px; right: -8px; bottom: -8px;
+    border-radius: 22px;
+    background: linear-gradient(90deg, #62269e 0%, #4b4f8e 100%);
+    filter: blur(18px) brightness(1.2) opacity(0.18);
+    z-index: 0;
+    pointer-events: none;
+    animation: partners-glow 6s linear infinite alternate;
+}
+@keyframes partners-glow {
+    0% { filter: blur(18px) brightness(1.2) opacity(0.18); }
+    100% { filter: blur(24px) brightness(1.4) opacity(0.28); }
+}
+.partners-slider {
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 14px;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+}
+.partners-slides {
+    display: flex;
+    width: max-content;
+    animation: partners-slide 30s linear infinite;
+    align-items: center;
+    gap: 0;
+}
+.partner-logo {
+    flex: 0 0 auto;
+    width: 170px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 22px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 12px;
+    transition: transform 0.22s, box-shadow 0.22s;
+    box-shadow: 0 2px 12px rgba(102,126,234,0.06);
+    position: relative;
+    border: 1.5px solid #e9eafc;
+    overflow: hidden;
+}
+.partner-logo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    pointer-events: none;
+    box-shadow: 0 0 0 0 #764ba2;
+    transition: box-shadow 0.22s;
+}
+.partner-logo:hover {
+    transform: scale(1.08) translateY(-4px);
+    box-shadow: 0 6px 24px rgba(102,126,234,0.18);
+    z-index: 2;
+}
+.partner-logo:hover::after {
+    box-shadow: 0 0 0 4px #764ba2;
+}
+.partner-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(0.15) brightness(0.98) drop-shadow(0 2px 8px rgba(102,126,234,0.08));
+    transition: filter 0.2s, transform 0.2s;
+}
+.partner-logo:hover img {
+    filter: none;
+    transform: scale(1.10);
+}
+@keyframes partners-slide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+@media (max-width: 900px) {
+    .partners-slider-glass { width: 99%; padding: 18px 0 10px 0; }
+    .partner-logo { width: 100px; height: 50px; margin: 0 8px; }
+    .partners-title { font-size: 1.5em; }
+    .partners-subtitle { font-size: 1em; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="hero-section animate-on-scroll">
+        <div class="background-media">
+            <video autoplay loop muted playsinline loading="lazy" src="{{ url_for('static', filename='intropagevd.mp4') }}" poster="{{ url_for('static', filename='hero-poster.jpg') }}"></video>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>WHERE EVERY JOURNEY BEGINS</h1>
+            <p class="tagline">DISCOVER, ACQUIRE, EXCEL.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('inventory') }}" class="btn btn-primary" aria-label="Explore our car inventory">EXPLORE INVENTORY</a>
+                <a href="{{ url_for('cars') }}" class="btn btn-secondary" aria-label="Sell your car with us">BUY YOUR CAR</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Welcome Message for Logged In Users -->
+    {% if session.user_id %}
+    <section class="animate-on-scroll" style="background: var(--background-dark); padding: 40px; text-align: center;">
+        <h2 style="color: var(--accent-cyan); margin-bottom: 20px;">Welcome back, {{ session.username }}!</h2>
+        <p style="color: var(--text-light); font-size: 1.2rem;">Ready to explore our premium car collection?</p>
+    </section>
+    {% endif %}
+
+    <!-- Our Partners Section -->
+    <section class="partners-section animate-on-scroll">
+        <h2 class="partners-title">Our Partners</h2>
+        <p class="partners-subtitle">Trusted by the world’s most iconic automotive brands</p>
+        <div class="partners-slider-glass">
+            <div class="partners-slider-glow"></div>
+            <div class="partners-slider">
+                <div class="partners-slides">
+                    {% set partner_logos = [
+                        'audi.png', 'BMW.png', 'bugatti.png', 'Ferrari.png', 'honda.png',
+                        'konggessai agerra.png', 'Lamborghini.png', 'Mahindra.png', 'Mercedes-Benz.png',
+                        'Porsche.png', 'renault.png', 'rolls_royce.png', 'tesla.png', 'Toyota.png'
+                    ] %}
+                    {% for logo in partner_logos %}
+                        <div class="partner-logo">
+                            <img src="{{ url_for('static', filename='partners/' ~ logo) }}" alt="{{ logo.split('.')[0]|capitalize }} logo">
+                        </div>
+                    {% endfor %}
+                    {% for logo in partner_logos %}
+                        <div class="partner-logo">
+                            <img src="{{ url_for('static', filename='partners/' ~ logo) }}" alt="{{ logo.split('.')[0]|capitalize }} logo">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="usp-showcase animate-on-scroll" id="buy">
+        <div class="usp-text-block centered-text">
+            <h2>YOUR NEXT DRIVING EXPERIENCE.</h2>
+            <p class="padded-bottom">Curated selection of new and pre-owned vehicles. Unbeatable prices, unmatched quality.</p>
+            <a href="{{ url_for('cars') }}" class="btn btn-dark" aria-label="View all available cars">VIEW ALL CARS</a>
+        </div>
+    </section>
+
+   <section class="usp-showcase-merged animate-zoom" id="sell">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline loading="lazy" src="{{ url_for('static', filename='Sellingintropage.mp4') }}" class="merged-background-video" poster="{{ url_for('static', filename='selling-poster.jpg') }}"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>SEAMLESS SELLING. MAXIMIZED VALUE.</h2>
+                <p>Effortlessly sell your vehicle. Best market prices guaranteed, smooth transactions.</p>
+                <a href="{{ url_for('about') }}" class="btn btn-dark" aria-label="Get an offer for your car">GET AN OFFER</a>
+            </div>
+        </div>
+    </section>
+
+   <section class="usp-showcase-merged animate-zoom" id="service">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline loading="lazy" src="{{ url_for('static', filename='Moderncarsintropage.mp4') }}" class="merged-background-video" poster="{{ url_for('static', filename='service-poster.jpg') }}"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>PRECISION SERVICE. PEAK PERFORMANCE.</h2>
+                <p>Expert service scheduling for optimal vehicle health. Convenience, reliability, excellence.</p>
+                <a href="{{ url_for('services') }}" class="btn btn-dark" aria-label="Book a service appointment">BOOK SERVICE</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="usp-showcase-merged animate-zoom" id="vintage">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline loading="lazy" src="{{ url_for('static', filename='Classicintropage.mp4') }}" class="merged-background-video" poster="{{ url_for('static', filename='vintage-poster.jpg') }}"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>TIMELESS BEAUTY. RARE FINDS.</h2>
+                <p>Step back in time with our exquisite collection of vintage automobiles. Each classic car is a piece of history, meticulously inspected and ready for a new legacy.</p>
+                <a href="{{ url_for('cars') }}" class="btn btn-dark" aria-label="Explore vintage car collection">EXPLORE COLLECTION</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="service-usp-section animate-on-scroll">
+        <div class="service-usp-content">
+            <h3>THE BEST CARE FOR YOUR VEHICLE</h3>
+            <p class="large">Our certified technicians provide top-notch maintenance and repair services using state-of-the-art equipment. Trust us to keep your car running smoothly.</p>
+            <a href="{{ url_for('services') }}" class="btn btn-primary large-btn" aria-label="Schedule a service appointment for your vehicle">SCHEDULE YOUR SERVICE</a>
+        </div>
+    </section>
+
+    <!-- Customer Reviews Section -->
+    <section class="customer-reviews-section animate-on-scroll">
+        <div class="reviews-container">
+            <h2>WHAT OUR CUSTOMERS SAY</h2>
+            <p class="reviews-subtitle">Real experiences from satisfied customers</p>
+            
+            <div class="reviews-grid">
+                <div class="review-card animate-left">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Exceptional service and quality vehicles. The team at CarHub made my car buying experience seamless and enjoyable. Highly recommend!"</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer1.jpg') }}" alt="Sarah Johnson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">SJ</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Sarah Johnson</h4>
+                            <span>Tesla Model 3 Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-on-scroll">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Found my dream Lamborghini here! The 3D model viewing feature is incredible - I could examine every detail before visiting. Outstanding customer service."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer2.jpg') }}" alt="Michael Chen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">MC</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Michael Chen</h4>
+                            <span>Lamborghini Revuelto Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-right">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Professional, transparent, and trustworthy. They helped me sell my old car and find the perfect upgrade. The entire process was smooth and fair."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer3.jpg') }}" alt="Emily Rodriguez" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">ER</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Emily Rodriguez</h4>
+                            <span>BMW M2 Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-left">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"The vintage car collection is extraordinary! Purchased a classic Rolls Royce and the restoration quality is museum-grade. Truly passionate team."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer4.jpg') }}" alt="James Wilson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">JW</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>James Wilson</h4>
+                            <span>Rolls Royce Ghost Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-on-scroll">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Best automotive experience ever! The staff is knowledgeable, prices are competitive, and the after-sales service is exceptional. Will definitely return."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer5.jpg') }}" alt="Lisa Thompson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">LT</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Lisa Thompson</h4>
+                            <span>Mercedes Maybach Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-right">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Innovative technology meets traditional service excellence. The virtual car tours saved me time, and the financing options were flexible and fair."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer6.jpg') }}" alt="David Kumar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">DK</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>David Kumar</h4>
+                            <span>Aston Martin Owner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reviews-stats animate-on-scroll">
+                <div class="stat-item">
+                    <h3>4.9/5</h3>
+                    <p>Average Rating</p>
+                </div>
+                <div class="stat-item">
+                    <h3>2,500+</h3>
+                    <p>Happy Customers</p>
+                </div>
+                <div class="stat-item">
+                    <h3>98%</h3>
+                    <p>Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta animate-on-scroll">
+        <h3>THE FUTURE OF AUTOMOTIVE AWAITS.</h3>
+        {% if not session.user_id %}
+            <a href="{{ url_for('sign_up') }}" class="btn btn-primary" aria-label="Sign up for CarHub membership">JOIN CARHUB TODAY</a>
+        {% else %}
+            <a href="{{ url_for('cars') }}" class="btn btn-primary" aria-label="Browse our car inventory">EXPLORE CARS</a>
+        {% endif %}
+    </section>
+</main>
+
+<!--<footer>
+    <p>&copy; 2025 CarHub. All Rights Reserved.</p>
+</footer>
+-->
+<script>
+    // Enhanced Intersection Observer for animations
+    document.addEventListener("DOMContentLoaded", function () {
+        const mainObserverOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const mainObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    
+                    // Add staggered animation for child elements
+                    const children = entry.target.querySelectorAll('.review-card, .stat-item');
+                    children.forEach((child, index) => {
+                        setTimeout(() => {
+                            child.style.animationDelay = `${index * 0.1}s`;
+                            child.classList.add('animate');
+                        }, index * 100);
+                    });
+                    
+                    // Unobserve element after animation triggers to improve performance
+                    mainObserver.unobserve(entry.target);
+                }
+            });
+        }, mainObserverOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right, .animate-zoom').forEach(el => {
+            mainObserver.observe(el);
+        });
+    });
+
+    // Enhanced video visibility on load (simplified for performance)
+    document.addEventListener('DOMContentLoaded', function() {
+        const allVideos = document.querySelectorAll('video');
+        allVideos.forEach(video => {
+            // Force video to be visible
+            video.style.opacity = '1';
+            video.style.display = 'block';
+            video.style.visibility = 'visible';
+            
+            video.addEventListener('loadeddata', function() {
+                // Ensure video is playing smoothly with static filters
+                this.style.opacity = '1';
+                if (this.classList.contains('merged-background-video')) {
+                    this.style.filter = 'brightness(5.0) contrast(5.0) saturate(4.0)';
+                } else {
+                    this.style.filter = 'brightness(1.1) contrast(1.6) saturate(1.4)';
+                }
+                console.log('Video loaded:', this.src);
+            });
+            
+            video.addEventListener('error', function() {
+                console.error('Video failed to load:', this.src);
+            });
+            
+            // Force video to play
+            video.play().catch(e => console.log('Video autoplay prevented:', e));
+        });
+
+        // Enhanced avatar fallback handling
+        const reviewerImages = document.querySelectorAll('.reviewer-avatar img');
+        reviewerImages.forEach(img => {
+            img.addEventListener('error', function() {
+                this.style.opacity = '0';
+                const placeholder = this.nextElementSibling;
+                if (placeholder && placeholder.classList.contains('avatar-placeholder')) {
+                    placeholder.style.opacity = '1';
+                }
+            });
+            
+            img.addEventListener('load', function() {
+                this.style.opacity = '1';
+                const placeholder = this.nextElementSibling;
+                if (placeholder && placeholder.classList.contains('avatar-placeholder')) {
+                    placeholder.style.opacity = '0';
+                }
+            });
+        });
+    });
+
+    // Enhanced scroll effect (disabled for performance)
+    window.addEventListener('scroll', function() {
+        const scrolled = window.scrollY;
+        
+        // Disable parallax effects for performance
+        // const parallaxElements = document.querySelectorAll('.merged-background-video');
+        // parallaxElements.forEach(element => {
+        //     const speed = 0.5;
+        //     element.style.transform = `translateY(${scrolled * speed}px) scale(1.1)`;
+        // });
+
+        // Header scroll effect
+        if (scrolled > 50) {
+            document.body.classList.add('scrolled');
+        } else {
+            document.body.classList.remove('scrolled');
+        }
+    });
+
+    // Enhanced button interactions
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+        
+        btn.addEventListener('mousedown', function() {
+            this.style.transform = 'translateY(-1px) scale(1.02)';
+        });
+        
+        btn.addEventListener('mouseup', function() {
+            this.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Dynamic stats counter animation
+    function animateCounters() {
+        const counters = document.querySelectorAll('.stat-item h3');
+        
+        counters.forEach(counter => {
+            const target = counter.textContent;
+            const numericValue = parseFloat(target.replace(/[^\d.]/g, ''));
+            
+            if (!isNaN(numericValue)) {
+                let current = 0;
+                const increment = numericValue / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= numericValue) {
+                        current = numericValue;
+                        clearInterval(timer);
+                    }
+                    
+                    if (target.includes('/')) {
+                        counter.textContent = current.toFixed(1) + '/5';
+                    } else if (target.includes('+')) {
+                        counter.textContent = Math.floor(current).toLocaleString() + '+';
+                    } else if (target.includes('%')) {
+                        counter.textContent = Math.floor(current) + '%';
+                    }
+                }, 20);
+            }
+        });
+    }
+
+    // Trigger counter animation when stats section is visible
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    });
+
+    const statsSection = document.querySelector('.reviews-stats');
+    if (statsSection) {
+        counterObserver.observe(statsSection);
+    }
+</script>
+{% endblock %}

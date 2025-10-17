@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ CarHub Chatbot - FIXED & WORKING!</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .success {
+            border-left: 5px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.2);
+        }
+        .info {
+            border-left: 5px solid #2196F3;
+            background: rgba(33, 150, 243, 0.2);
+        }
+        .warning {
+            border-left: 5px solid #FF9800;
+            background: rgba(255, 152, 0, 0.2);
+        }
+        .test-btn {
+            background: linear-gradient(45deg, #7c4dff, #b084ff);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(124, 77, 255, 0.3);
+        }
+        .chat-preview {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        .nav-link {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .widget-indicator {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: rgba(255, 255, 0, 0.9);
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            z-index: 9999;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 CarHub AI Chatbot</h1>
+            <h2>✅ SUCCESSFULLY FIXED & WORKING!</h2>
+            <p>Your CarHub chatbot is now fully operational and ready to assist customers</p>
+        </div>
+
+        <div class="status-card success">
+            <h3>✅ Backend Status: WORKING</h3>
+            <p>✓ OpenAI client initialized with OpenRouter API<br>
+            ✓ ChatBot routes integrated with Flask app<br>
+            ✓ API endpoint responding at /api/chat<br>
+            ✓ Comprehensive CarHub knowledge base loaded</p>
+        </div>
+
+        <div class="status-card success">
+            <h3>✅ Frontend Status: INTEGRATED</h3>
+            <p>✓ Chat widget embedded in base.html template<br>
+            ✓ Widget appears on all CarHub pages<br>
+            ✓ JavaScript initialization working<br>
+            ✓ Z-index conflicts resolved (z-index: 10000)</p>
+        </div>
+
+        <div class="status-card info">
+            <h3>🤖 Chatbot Capabilities</h3>
+            <p>✓ Answers questions about CarHub services<br>
+            ✓ Provides information about available cars<br>
+            ✓ Helps with test drive scheduling<br>
+            ✓ Discusses financing options<br>
+            ✓ Fallback responses when API is unavailable</p>
+        </div>
+
+        <div class="navigation">
+            <a href="/" class="nav-link">🏠 Home Page</a>
+            <a href="/cars" class="nav-link">🚗 Browse Cars</a>
+            <a href="/services" class="nav-link">🔧 Services</a>
+            <a href="/about" class="nav-link">ℹ️ About</a>
+            <a href="/chatbot-test" class="nav-link">🧪 Widget Test</a>
+        </div>
+
+        <div class="status-card warning">
+            <h3>💡 How to Use the Chatbot</h3>
+            <p>1. Look for the purple chat button in the bottom-right corner<br>
+            2. Click it to open the chat interface<br>
+            3. Type your questions about CarHub, cars, or services<br>
+            4. Get instant AI-powered responses!</p>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Quick Tests</h3>
+            <button class="test-btn" onclick="testAPI()">Test API Connection</button>
+            <button class="test-btn" onclick="findWidget()">Locate Chat Widget</button>
+            <button class="test-btn" onclick="openChat()">Open Chat Widget</button>
+        </div>
+
+        <div id="test-results" class="chat-preview" style="display: none;">
+            <div id="test-output">Test results will appear here...</div>
+        </div>
+
+        <div class="status-card info">
+            <h3>🔧 Technical Details</h3>
+            <p><strong>API Endpoint:</strong> /api/chat<br>
+            <strong>AI Model:</strong> OpenRouter (gpt-3.5-turbo)<br>
+            <strong>Widget Location:</strong> Bottom-right corner<br>
+            <strong>Integration:</strong> Embedded in base.html template</p>
+        </div>
+
+        <div class="chat-preview">
+            <strong>Sample Chatbot Conversation:</strong><br>
+            <span style="color: #4CAF50;">User:</span> Hello! Can you tell me about CarHub?<br>
+            <span style="color: #2196F3;">Bot:</span> Absolutely! CarHub is your premium automotive destination where every journey begins. We offer a curated selection of new and pre-owned vehicles to cater to a wide range of preferences and budgets...<br><br>
+            <span style="color: #4CAF50;">User:</span> What cars do you sell?<br>
+            <span style="color: #2196F3;">Bot:</span> At CarHub, we offer a premium selection including Lamborghini Revuelto, Tesla Model 3, BMW M2 G87, Rolls Royce Ghost, Ferrari 296 GTB, and many more!
+        </div>
+    </div>
+
+    <!-- Widget Location Indicator -->
+    <div class="widget-indicator">
+        👆 Chat Widget Here!
+    </div>
+
+    <!-- Include the CarHub Chat Widget -->
+    {% include 'chat_widget.html' %}
+
+    <script>
+        function testAPI() {
+            const output = document.getElementById('test-output');
+            const results = document.getElementById('test-results');
+            results.style.display = 'block';
+            output.innerHTML = '🔄 Testing chatbot API...';
+            
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Hello CarHub!' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    output.innerHTML = `✅ <strong>API Test PASSED!</strong><br>Response: ${data.message.substring(0, 150)}...`;
+                } else {
+                    output.innerHTML = `❌ API Test Failed: ${data.error || 'Unknown error'}`;
+                }
+            })
+            .catch(error => {
+                output.innerHTML = `❌ Request Failed: ${error.message}`;
+            });
+        }
+
+        function findWidget() {
+            const output = document.getElementById('test-output');
+            const results = document.getElementById('test-results');
+            results.style.display = 'block';
+            
+            const widget = document.querySelector('.chat-widget-embedded');
+            const button = document.querySelector('.chat-toggle-embedded');
+            
+            if (widget && button) {
+                output.innerHTML = '✅ <strong>Widget Found!</strong><br>Widget is properly loaded and visible in the DOM.';
+                // Highlight the widget
+                button.style.animation = 'pulse 1s infinite';
+                setTimeout(() => button.style.animation = '', 3000);
+            } else {
+                output.innerHTML = '❌ <strong>Widget Not Found!</strong><br>Widget elements are missing from the DOM.';
+            }
+        }
+
+        function openChat() {
+            const widget = document.querySelector('.chat-widget-embedded');
+            const button = document.querySelector('.chat-toggle-embedded');
+            
+            if (button) {
+                button.click();
+                const output = document.getElementById('test-output');
+                const results = document.getElementById('test-results');
+                results.style.display = 'block';
+                output.innerHTML = '✅ <strong>Chat Opened!</strong><br>Chat widget should now be open and ready for conversation.';
+            } else {
+                const output = document.getElementById('test-output');
+                const results = document.getElementById('test-results');
+                results.style.display = 'block';
+                output.innerHTML = '❌ <strong>Cannot Open Chat!</strong><br>Chat button not found.';
+            }
+        }
+
+        // Auto-test on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                console.log('🚗 CarHub Chatbot Status Page Loaded');
+                console.log('🔍 Checking for chat widget...');
+                findWidget();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!-- CarHub Chat Widget - Embedded on all pages -->
+<div id="carhubChatWidget" class="carhub-chat-widget">
+    <!-- Chat Toggle Button -->
+    <div id="carhubChatToggle" class="carhub-chat-toggle">
+        <span class="carhub-chat-icon">💬</span>
+        <span class="carhub-notification-badge" id="carhubNotificationBadge" style="display: none;">1</span>
+    </div>
+    
+    <!-- Chat Container -->
+    <div id="carhubChatContainer" class="carhub-chat-container" style="display: none;">
+        <!-- Chat Header -->
+        <div class="carhub-chat-header">
+            <div class="carhub-header-info">
+                <div class="carhub-avatar">car</div>
+                <div class="carhub-title">
+                    <div class="carhub-bot-name">CarHub Assistant</div>
+                    <div class="carhub-status">Online</div>
+                </div>
+            </div>
+            <button id="carhubCloseChat" class="carhub-close-btn">×</button>
+        </div>
+        
+        <!-- Chat Messages -->
+        <div id="carhubChatMessages" class="carhub-chat-messages">
+            <div class="carhub-message carhub-bot-message">
+                <div class="carhub-message-content">
+                    🚀 Welcome to CarHub - Your Gateway to Automotive Excellence! I'm your AI assistant, ready to help you navigate our cosmic collection of vehicles. Whether you're seeking luxury, performance, or eco-friendly options, I'm here to guide your journey. ✨
+                </div>
+            </div>
+            
+            <!-- Quick Recommendations -->
+            <div class="carhub-recommendations">
+                <div class="carhub-recommendations-title">✨ Popular Actions</div>
+                <div class="carhub-recommendation-buttons">
+                    <button class="carhub-rec-btn" data-message="Show me luxury cars">🏎️ Luxury Cars</button>
+                    <button class="carhub-rec-btn" data-message="What financing options do you have?">💳 Financing</button>
+                    <button class="carhub-rec-btn" data-message="I want to sell my car">💰 Planning</button>
+                    <button class="carhub-rec-btn" data-message="Show me electric vehicles">⚡ Electric Cars</button>
+                    <button class="carhub-rec-btn" data-message="What services do you offer?">🔧 Services</button>
+                    <button class="carhub-rec-btn" data-message="Book a test drive">🚗 Test Drive</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Input -->
+        <div class="carhub-chat-input-container">
+            <input type="text" id="carhubChatInput" class="carhub-chat-input" placeholder="Type your message..." maxlength="500">
+            <button id="carhubSendMessage" class="carhub-send-btn" disabled>
+                <span class="carhub-send-icon">📤</span>
+            </button>
+        </div>
+        
+        <!-- Status Indicator -->
+        <div id="carhubChatStatus" class="carhub-chat-status" style="display: none;"></div>
+    </div>
+</div>
+
+<!-- Chat Widget Styles -->
+<style>
+.carhub-chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.carhub-chat-toggle {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #7c4dff 0%, #23235b 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 32px 0 rgba(124, 77, 255, 0.4), 0 2px 12px rgba(35, 35, 91, 0.3);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 2px solid rgba(124, 77, 255, 0.3);
+}
+
+.carhub-chat-toggle:hover {
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 12px 40px 0 rgba(124, 77, 255, 0.5), 0 4px 16px rgba(35, 35, 91, 0.4);
+    border-color: rgba(160, 132, 255, 0.5);
+}
+
+.carhub-chat-icon {
+    font-size: 24px;
+    color: #e0e6ff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.carhub-notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.carhub-chat-container {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    height: 550px;
+    background: linear-gradient(145deg, #23235b 0%, #181828 100%);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px 0 rgba(124, 77, 255, 0.3), 0 4px 16px rgba(10, 10, 26, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: carhubSlideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+@keyframes carhubSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.carhub-chat-header {
+    background: linear-gradient(135deg, #7c4dff 0%, #a084ff 50%, #23235b 100%);
+    color: #e0e6ff;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.carhub-header-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.carhub-avatar {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(124, 77, 255, 0.1));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carhub-bot-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #e0e6ff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.carhub-status {
+    font-size: 12px;
+    color: #b3baff;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.carhub-status::before {
+    content: "●";
+    color: #07b0b3;
+    font-size: 10px;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.5; }
+}
+
+.carhub-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #e0e6ff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.carhub-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.carhub-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: linear-gradient(180deg, #181828 0%, #0a0a1a 100%);
+}
+
+.carhub-message {
+    margin-bottom: 16px;
+    animation: carhubFadeIn 0.4s ease-out;
+}
+
+@keyframes carhubFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carhub-message-content {
+    max-width: 85%;
+    padding: 14px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carhub-bot-message .carhub-message-content {
+    background: linear-gradient(135deg, #23235b, #2a2d47);
+    color: #e0e6ff;
+    border-bottom-left-radius: 8px;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+.carhub-user-message {
+    text-align: right;
+}
+
+.carhub-user-message .carhub-message-content {
+    background: linear-gradient(135deg, #7c4dff 0%, #a084ff 100%);
+    color: #ffffff;
+    margin-left: auto;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 4px 12px rgba(124, 77, 255, 0.3);
+}
+
+.carhub-recommendations {
+    margin: 20px 0;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(35, 35, 91, 0.8), rgba(24, 24, 40, 0.8));
+    border-radius: 12px;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.carhub-recommendations-title {
+    color: #ffd700;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 12px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.carhub-recommendation-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.carhub-rec-btn {
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.2), rgba(160, 132, 255, 0.1));
+    border: 1px solid rgba(124, 77, 255, 0.4);
+    color: #b3baff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.carhub-rec-btn:hover {
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.4), rgba(160, 132, 255, 0.2));
+    color: #e0e6ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124, 77, 255, 0.3);
+}
+
+.carhub-chat-input-container {
+    padding: 18px;
+    background: linear-gradient(135deg, #23235b, #181828);
+    border-top: 1px solid rgba(124, 77, 255, 0.3);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.carhub-chat-input {
+    flex: 1;
+    border: 1px solid rgba(124, 77, 255, 0.4);
+    border-radius: 25px;
+    padding: 12px 18px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: rgba(24, 24, 40, 0.8);
+    color: #e0e6ff;
+    font-family: 'Poppins', sans-serif;
+}
+
+.carhub-chat-input::placeholder {
+    color: #b3baff;
+}
+
+.carhub-chat-input:focus {
+    border-color: #7c4dff;
+    background: rgba(35, 35, 91, 0.8);
+    box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
+}
+
+.carhub-send-btn {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #7c4dff 0%, #a084ff 100%);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(124, 77, 255, 0.4);
+}
+
+.carhub-send-btn:hover:not(:disabled) {
+    transform: scale(1.1) translateY(-1px);
+    box-shadow: 0 6px 16px rgba(124, 77, 255, 0.5);
+}
+
+.carhub-send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.carhub-send-icon {
+    font-size: 16px;
+}
+
+.carhub-chat-status {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, rgba(7, 176, 179, 0.2), rgba(124, 77, 255, 0.1));
+    color: #07b0b3;
+    font-size: 12px;
+    text-align: center;
+    border-top: 1px solid rgba(7, 176, 179, 0.3);
+    font-weight: 500;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+    .carhub-chat-container {
+        width: calc(100vw - 40px);
+        height: calc(100vh - 140px);
+        bottom: 80px;
+        right: 20px;
+    }
+    
+    .carhub-chat-toggle {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .carhub-chat-icon {
+        font-size: 22px;
+    }
+    
+    .carhub-recommendation-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Scrollbar Styling - Space Theme */
+.carhub-chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.carhub-chat-messages::-webkit-scrollbar-track {
+    background: rgba(24, 24, 40, 0.5);
+    border-radius: 4px;
+}
+
+.carhub-chat-messages::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #7c4dff, #a084ff);
+    border-radius: 4px;
+}
+
+.carhub-chat-messages::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #a084ff, #7c4dff);
+}
+</style>
+
+<!-- Chat Widget JavaScript -->
+<script>
+class CarHubChatbot {
+    constructor() {
+        this.isOpen = false;
+        this.isLoading = false;
+        this.messageCount = 0;
+        
+        this.initializeElements();
+        this.bindEvents();
+        this.showWelcomeNotification();
+        
+        console.log('🚗 CarHub Chatbot initialized successfully!');
+    }
+    
+    initializeElements() {
+        this.widget = document.getElementById('carhubChatWidget');
+        this.toggle = document.getElementById('carhubChatToggle');
+        this.container = document.getElementById('carhubChatContainer');
+        this.closeBtn = document.getElementById('carhubCloseChat');
+        this.messagesContainer = document.getElementById('carhubChatMessages');
+        this.input = document.getElementById('carhubChatInput');
+        this.sendBtn = document.getElementById('carhubSendMessage');
+        this.status = document.getElementById('carhubChatStatus');
+        this.badge = document.getElementById('carhubNotificationBadge');
+    }
+    
+    bindEvents() {
+        this.toggle.addEventListener('click', () => this.toggleChat());
+        this.closeBtn.addEventListener('click', () => this.closeChat());
+        this.sendBtn.addEventListener('click', () => this.sendMessage());
+        
+        this.input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !this.isLoading) {
+                this.sendMessage();
+            }
+        });
+        
+        this.input.addEventListener('input', () => {
+            this.updateSendButton();
+        });
+        
+        // Handle recommendation button clicks
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('carhub-rec-btn')) {
+                const message = e.target.getAttribute('data-message');
+                this.input.value = message;
+                this.sendMessage();
+            }
+        });
+        
+        // Close chat when clicking outside
+        document.addEventListener('click', (e) => {
+            if (this.isOpen && !this.widget.contains(e.target)) {
+                this.closeChat();
+            }
+        });
+    }
+    
+    toggleChat() {
+        if (this.isOpen) {
+            this.closeChat();
+        } else {
+            this.openChat();
+        }
+    }
+    
+    openChat() {
+        this.container.style.display = 'flex';
+        this.isOpen = true;
+        this.input.focus();
+        this.hideNotificationBadge();
+        console.log('💬 Chat opened');
+    }
+    
+    closeChat() {
+        this.container.style.display = 'none';
+        this.isOpen = false;
+        console.log('💬 Chat closed');
+    }
+    
+    updateSendButton() {
+        const hasText = this.input.value.trim().length > 0;
+        this.sendBtn.disabled = !hasText || this.isLoading;
+    }
+    
+    async sendMessage() {
+        const message = this.input.value.trim();
+        if (!message || this.isLoading) return;
+        
+        console.log('📤 Sending message:', message);
+        
+        // Add user message to chat
+        this.addMessage(message, 'user');
+        this.input.value = '';
+        this.updateSendButton();
+        
+        // Show loading state
+        this.setLoading(true);
+        this.showStatus('Sending message...');
+        
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            });
+            
+            console.log('📥 Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            console.log('📊 Response data:', data);
+            
+            if (data.success && data.message) {
+                this.addMessage(data.message, 'bot');
+                this.showStatus('Message sent successfully!', 'success');
+                setTimeout(() => this.hideStatus(), 2000);
+            } else {
+                throw new Error(data.error || 'No response received');
+            }
+            
+        } catch (error) {
+            console.error('❌ Chat error:', error);
+            this.addMessage(`Sorry, I'm having trouble connecting right now. Please try again in a moment. (Error: ${error.message})`, 'bot');
+            this.showStatus(`Error: ${error.message}`, 'error');
+            setTimeout(() => this.hideStatus(), 5000);
+        } finally {
+            this.setLoading(false);
+        }
+    }
+    
+    addMessage(text, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `carhub-message carhub-${type}-message`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'carhub-message-content';
+        contentDiv.textContent = text;
+        
+        messageDiv.appendChild(contentDiv);
+        this.messagesContainer.appendChild(messageDiv);
+        
+        // Hide recommendations after first user message
+        if (type === 'user' && this.messageCount === 0) {
+            const recommendations = document.querySelector('.carhub-recommendations');
+            if (recommendations) {
+                recommendations.style.display = 'none';
+            }
+        }
+        
+        // Scroll to bottom
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        
+        this.messageCount++;
+        console.log(`💬 Added ${type} message:`, text);
+    }
+    
+    setLoading(loading) {
+        this.isLoading = loading;
+        this.sendBtn.disabled = loading || this.input.value.trim().length === 0;
+        
+        if (loading) {
+            this.sendBtn.innerHTML = '<div style="width: 16px; height: 16px; border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>';
+        } else {
+            this.sendBtn.innerHTML = '<span class="carhub-send-icon">📤</span>';
+        }
+    }
+    
+    showStatus(message, type = 'info') {
+        this.status.textContent = message;
+        this.status.className = `carhub-chat-status carhub-status-${type}`;
+        this.status.style.display = 'block';
+    }
+    
+    hideStatus() {
+        this.status.style.display = 'none';
+    }
+    
+    showWelcomeNotification() {
+        setTimeout(() => {
+            if (!this.isOpen) {
+                this.showNotificationBadge();
+            }
+        }, 3000);
+    }
+    
+    showNotificationBadge() {
+        this.badge.style.display = 'flex';
+    }
+    
+    hideNotificationBadge() {
+        this.badge.style.display = 'none';
+    }
+}
+
+// Add spinning animation for loading state
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+
+// Initialize the chatbot when the DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        window.carHubChatbot = new CarHubChatbot();
+    });
+} else {
+    window.carHubChatbot = new CarHubChatbot();
+}
+</script>

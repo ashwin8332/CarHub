@@ -1,0 +1,649 @@
+{% extends "base.html" %}
+
+{% block title %}CarHub - Your Automotive Destination{% endblock %}
+
+{% block extra_head %}
+<style>
+/* Customer Reviews Section */
+.customer-reviews-section {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+}
+
+.reviews-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.reviews-container h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.reviews-subtitle {
+    font-size: 1.2rem;
+    color: #b3baff;
+    margin-bottom: 50px;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.review-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    border-radius: 15px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(124, 77, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.2);
+}
+
+.review-stars {
+    margin-bottom: 20px;
+}
+
+.review-stars span {
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+.review-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.reviewer-avatar {
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+.reviewer-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    color: white;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.reviewer-details h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+}
+
+.reviewer-details span {
+    color: #b3baff;
+    font-size: 0.9rem;
+}
+
+.reviews-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-item p {
+    color: #b3baff;
+    margin: 5px 0 0 0;
+    font-size: 1rem;
+}
+
+/* Video Background Cards */
+.usp-showcase-merged {
+    margin: 60px 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.merged-content-block {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.merged-background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    filter: brightness(0.7) contrast(1.1);
+}
+
+.merged-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg, 
+        rgba(0, 0, 0, 0.6) 0%, 
+        rgba(26, 26, 46, 0.8) 30%, 
+        rgba(22, 33, 62, 0.7) 70%, 
+        rgba(124, 77, 255, 0.4) 100%
+    );
+    z-index: 2;
+}
+
+.merged-text-container {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: white;
+    padding: 50px 40px;
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.merged-text-container h2 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(124, 77, 255, 0.5);
+    background: linear-gradient(45deg, #ffffff, #e0e0ff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.merged-text-container p {
+    font-size: 1.3rem;
+    line-height: 1.7;
+    margin-bottom: 35px;
+    text-shadow: 
+        1px 1px 3px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(0, 0, 0, 0.5);
+    color: #f0f0f0;
+    font-weight: 400;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.merged-text-container .btn {
+    padding: 18px 35px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 3px solid transparent;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.merged-text-container .btn-dark {
+    background: linear-gradient(45deg, #7c4dff, #b084ff, #9c6fff);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.merged-text-container .btn-dark:hover {
+    background: linear-gradient(45deg, #6a3de8, #9c6fff, #b084ff);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        0 12px 35px rgba(124, 77, 255, 0.5),
+        inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.merged-text-container .btn-dark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.merged-text-container .btn-dark:hover::before {
+    left: 100%;
+}
+
+/* Enhanced hover effects */
+.merged-content-block:hover .merged-background-video {
+    transform: scale(1.03);
+    filter: brightness(0.8) contrast(1.2);
+    transition: all 0.4s ease;
+}
+
+.merged-content-block:hover .merged-overlay {
+    background: linear-gradient(
+        135deg, 
+        rgba(0, 0, 0, 0.5) 0%, 
+        rgba(26, 26, 46, 0.7) 30%, 
+        rgba(22, 33, 62, 0.6) 70%, 
+        rgba(124, 77, 255, 0.5) 100%
+    );
+    transition: background 0.4s ease;
+}
+
+.merged-content-block:hover .merged-text-container {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+    transition: all 0.4s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .merged-text-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    
+    .merged-text-container h2 {
+        font-size: 2.8rem;
+    }
+    
+    .reviews-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    
+    .reviews-stats {
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .usp-showcase-merged {
+        margin: 40px 15px;
+    }
+    
+    .merged-content-block {
+        height: 450px;
+    }
+    
+    .merged-text-container {
+        padding: 35px 25px;
+        max-width: 500px;
+    }
+    
+    .merged-text-container h2 {
+        font-size: 2.3rem;
+        letter-spacing: 1px;
+    }
+    
+    .merged-text-container p {
+        font-size: 1.1rem;
+    }
+    
+    .merged-text-container .btn {
+        padding: 15px 28px;
+        font-size: 1rem;
+    }
+    
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .reviews-stats {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .merged-content-block {
+        height: 400px;
+    }
+    
+    .merged-text-container {
+        padding: 25px 20px;
+        margin: 0 15px;
+    }
+    
+    .merged-text-container h2 {
+        font-size: 1.9rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .merged-text-container p {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
+    .merged-text-container .btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+}
+
+/* Animation for text appearance */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.merged-text-container h2,
+.merged-text-container p,
+.merged-text-container .btn {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.merged-text-container p {
+    animation-delay: 0.2s;
+}
+
+.merged-text-container .btn {
+    animation-delay: 0.4s;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="hero-section">
+        <div class="background-media">
+            <video autoplay loop muted playsinline src="{{ url_for('static', filename='intropagevd.mp4') }}"></video>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>WHERE EVERY JOURNEY BEGINS</h1>
+            <p class="tagline">DISCOVER, ACQUIRE, EXCEL.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('cars') }}" class="btn btn-primary">EXPLORE INVENTORY</a>
+                <a href="#sell" class="btn btn-secondary">SELL YOUR CAR</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Welcome Message for Logged In Users -->
+    {% if session.user_id %}
+    <section style="background: var(--background-dark); padding: 40px; text-align: center;">
+        <h2 style="color: var(--accent-cyan); margin-bottom: 20px;">Welcome back, {{ session.username }}!</h2>
+        <p style="color: var(--text-light); font-size: 1.2rem;">Ready to explore our premium car collection?</p>
+    </section>
+    {% endif %}
+
+    <section class="usp-showcase" id="buy">
+        <div class="usp-text-block centered-text">
+            <h2>YOUR NEXT DRIVING EXPERIENCE.</h2>
+            <p class="padded-bottom">Curated selection of new and pre-owned vehicles. Unbeatable prices, unmatched quality.</p>
+            <a href="{{ url_for('cars') }}" class="btn btn-dark">VIEW ALL CARS</a>
+        </div>
+    </section>
+
+   <section class="usp-showcase-merged" id="sell">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline src="{{ url_for('static', filename='Sellingintropage.mp4') }}" class="merged-background-video"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>SEAMLESS SELLING. MAXIMIZED VALUE.</h2>
+                <p>Effortlessly sell your vehicle. Best market prices guaranteed, smooth transactions.</p>
+                <a href="{{ url_for('about') }}" class="btn btn-dark">GET AN OFFER</a>
+            </div>
+        </div>
+    </section>
+
+   <section class="usp-showcase-merged" id="service">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline src="{{ url_for('static', filename='Moderncarsintropage.mp4') }}" class="merged-background-video"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>PRECISION SERVICE. PEAK PERFORMANCE.</h2>
+                <p>Expert service scheduling for optimal vehicle health. Convenience, reliability, excellence.</p>
+                <a href="{{ url_for('about') }}" class="btn btn-dark">BOOK SERVICE</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="usp-showcase-merged" id="vintage">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline src="{{ url_for('static', filename='Classicintropage.mp4') }}" class="merged-background-video"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>TIMELESS BEAUTY. RARE FINDS.</h2>
+                <p>Step back in time with our exquisite collection of vintage automobiles. Each classic car is a piece of history, meticulously inspected and ready for a new legacy.</p>
+                <a href="{{ url_for('cars') }}" class="btn btn-dark">EXPLORE VINTAGE COLLECTION</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="service-usp-section">
+        <div class="service-usp-content">
+            <h3>THE BEST CARE FOR YOUR VEHICLE</h3>
+            <p class="large">Our certified technicians provide top-notch maintenance and repair services using state-of-the-art equipment. Trust us to keep your car running smoothly.</p>
+            <a href="{{ url_for('about') }}" class="btn btn-primary large-btn">SCHEDULE YOUR SERVICE</a>
+        </div>
+    </section>
+
+    <!-- Customer Reviews Section -->
+    <section class="customer-reviews-section">
+        <div class="reviews-container">
+            <h2>WHAT OUR CUSTOMERS SAY</h2>
+            <p class="reviews-subtitle">Real experiences from satisfied customers</p>
+            
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Exceptional service and quality vehicles. The team at CarHub made my car buying experience seamless and enjoyable. Highly recommend!"</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer1.jpg') }}" alt="Sarah Johnson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">SJ</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Sarah Johnson</h4>
+                            <span>Tesla Model 3 Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Found my dream Lamborghini here! The 3D model viewing feature is incredible - I could examine every detail before visiting. Outstanding customer service."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer2.jpg') }}" alt="Michael Chen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">MC</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Michael Chen</h4>
+                            <span>Lamborghini Revuelto Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Professional, transparent, and trustworthy. They helped me sell my old car and find the perfect upgrade. The entire process was smooth and fair."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer3.jpg') }}" alt="Emily Rodriguez" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">ER</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Emily Rodriguez</h4>
+                            <span>BMW M2 Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"The vintage car collection is extraordinary! Purchased a classic Rolls Royce and the restoration quality is museum-grade. Truly passionate team."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer4.jpg') }}" alt="James Wilson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">JW</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>James Wilson</h4>
+                            <span>Rolls Royce Ghost Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Best automotive experience ever! The staff is knowledgeable, prices are competitive, and the after-sales service is exceptional. Will definitely return."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer5.jpg') }}" alt="Lisa Thompson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">LT</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Lisa Thompson</h4>
+                            <span>Mercedes Maybach Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Innovative technology meets traditional service excellence. The virtual car tours saved me time, and the financing options were flexible and fair."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer6.jpg') }}" alt="David Kumar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">DK</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>David Kumar</h4>
+                            <span>Aston Martin Owner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reviews-stats">
+                <div class="stat-item">
+                    <h3>4.9/5</h3>
+                    <p>Average Rating</p>
+                </div>
+                <div class="stat-item">
+                    <h3>2,500+</h3>
+                    <p>Happy Customers</p>
+                </div>
+                <div class="stat-item">
+                    <h3>98%</h3>
+                    <p>Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <h3>THE FUTURE OF AUTOMOTIVE AWAITS.</h3>
+        {% if not session.user_id %}
+            <a href="{{ url_for('sign_up') }}" class="btn btn-primary">JOIN CARHUB TODAY</a>
+        {% else %}
+            <a href="{{ url_for('cars') }}" class="btn btn-primary">EXPLORE CARS</a>
+        {% endif %}
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 CarHub. All Rights Reserved.</p>
+</footer>
+
+<script>
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            document.body.classList.add('scrolled');
+        } else {
+            document.body.classList.remove('scrolled');
+        }
+    });
+</script>
+{% endblock %}

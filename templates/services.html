@@ -1,0 +1,1056 @@
+{% extends "base.html" %}
+
+{% block title %}Services & Inventory - CarHub{% endblock %}
+
+{% block content %}
+<div class="services-container">
+    <!-- Page Header -->
+    <div class="services-header">
+        <h1>Our Services & Inventory</h1>
+        <p>Comprehensive automotive solutions and premium vehicle inventory management</p>
+    </div>
+
+    <!-- Services Overview -->
+    <div class="services-overview">
+        <div class="overview-card featured">
+            <div class="overview-icon">🏆</div>
+            <div class="overview-content">
+                <h3>Premium Service Excellence</h3>
+                <p>Experience world-class automotive services with our certified professionals</p>
+            </div>
+        </div>
+        <div class="overview-stats">
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Cars in Inventory</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Premium Brands</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Customer Support</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="services-section">
+        <h2>
+            <span class="section-icon">🔧</span>
+            Our Premium Services
+        </h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🚗</div>
+                <h3>Vehicle Sales</h3>
+                <p>Premium luxury and sports car sales with comprehensive warranties and financing options.</p>
+                <div class="service-features">
+                    <span class="feature">✓ Certified Pre-owned</span>
+                    <span class="feature">✓ Warranty Included</span>
+                    <span class="feature">✓ Trade-in Options</span>
+                    <span class="feature">✓ Financing Available</span>
+                </div>
+                <button class="service-btn">Learn More</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🔍</div>
+                <h3>Vehicle Inspection</h3>
+                <p>Comprehensive pre-purchase inspections and condition assessments by certified technicians.</p>
+                <div class="service-features">
+                    <span class="feature">✓ 150-Point Inspection</span>
+                    <span class="feature">✓ Digital Reports</span>
+                    <span class="feature">✓ Expert Analysis</span>
+                    <span class="feature">✓ Same-day Service</span>
+                </div>
+                <button class="service-btn">Book Inspection</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">⚙️</div>
+                <h3>Maintenance & Repair</h3>
+                <p>Expert maintenance and repair services for luxury and high-performance vehicles.</p>
+                <div class="service-features">
+                    <span class="feature">✓ Factory-trained Technicians</span>
+                    <span class="feature">✓ Genuine Parts</span>
+                    <span class="feature">✓ Service History</span>
+                    <span class="feature">✓ Pickup & Delivery</span>
+                </div>
+                <button class="service-btn">Schedule Service</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">💰</div>
+                <h3>Financing Solutions</h3>
+                <p>Flexible financing options and leasing programs tailored to your needs.</p>
+                <div class="service-features">
+                    <span class="feature">✓ Competitive Rates</span>
+                    <span class="feature">✓ Quick Approval</span>
+                    <span class="feature">✓ Lease Options</span>
+                    <span class="feature">✓ Trade-in Credit</span>
+                </div>
+                <button class="service-btn">Get Quote</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🛡️</div>
+                <h3>Extended Warranties</h3>
+                <p>Comprehensive warranty packages to protect your investment and peace of mind.</p>
+                <div class="service-features">
+                    <span class="feature">✓ Bumper-to-bumper Coverage</span>
+                    <span class="feature">✓ Roadside Assistance</span>
+                    <span class="feature">✓ Nationwide Service</span>
+                    <span class="feature">✓ Transferable Coverage</span>
+                </div>
+                <button class="service-btn">View Plans</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🚛</div>
+                <h3>Vehicle Transport</h3>
+                <p>Professional vehicle transportation and delivery services nationwide.</p>
+                <div class="service-features">
+                    <span class="feature">✓ Enclosed Transport</span>
+                    <span class="feature">✓ GPS Tracking</span>
+                    <span class="feature">✓ Insurance Coverage</span>
+                    <span class="feature">✓ White-glove Service</span>
+                </div>
+                <button class="service-btn">Get Shipping Quote</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Section -->
+    <div class="inventory-section">
+        <h2>
+            <span class="section-icon">📊</span>
+            Current Inventory Overview
+        </h2>
+        
+        <!-- Inventory Stats -->
+        <div class="inventory-stats">
+            <div class="inventory-category">
+                <div class="category-header">
+                    <h3>Luxury Vehicles</h3>
+                    <span class="count">245 Units</span>
+                </div>
+                <div class="category-brands">
+                    <span class="brand-tag">Rolls-Royce</span>
+                    <span class="brand-tag">Bentley</span>
+                    <span class="brand-tag">Mercedes-Maybach</span>
+                    <span class="brand-tag">BMW 7 Series</span>
+                </div>
+            </div>
+
+            <div class="inventory-category">
+                <div class="category-header">
+                    <h3>Sports Cars</h3>
+                    <span class="count">186 Units</span>
+                </div>
+                <div class="category-brands">
+                    <span class="brand-tag">Ferrari</span>
+                    <span class="brand-tag">Lamborghini</span>
+                    <span class="brand-tag">Porsche</span>
+                    <span class="brand-tag">McLaren</span>
+                </div>
+            </div>
+
+            <div class="inventory-category">
+                <div class="category-header">
+                    <h3>Hypercars</h3>
+                    <span class="count">42 Units</span>
+                </div>
+                <div class="category-brands">
+                    <span class="brand-tag">Bugatti</span>
+                    <span class="brand-tag">Koenigsegg</span>
+                    <span class="brand-tag">Pagani</span>
+                    <span class="brand-tag">SSC</span>
+                </div>
+            </div>
+
+            <div class="inventory-category">
+                <div class="category-header">
+                    <h3>Electric Vehicles</h3>
+                    <span class="count">27 Units</span>
+                </div>
+                <div class="category-brands">
+                    <span class="brand-tag">Tesla</span>
+                    <span class="brand-tag">Lucid Air</span>
+                    <span class="brand-tag">Porsche Taycan</span>
+                    <span class="brand-tag">BMW iX</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Inventory -->
+        <div class="featured-inventory">
+            <h3>Featured Vehicles</h3>
+            <div class="featured-cars-grid">
+                <div class="featured-car-card">
+                    <div class="car-status new">NEW ARRIVAL</div>
+                    <div class="car-details">
+                        <h4>2024 Lamborghini Revuelto</h4>
+                        <p class="car-specs">V12 Hybrid • 1015 HP • AWD</p>
+                        <p class="car-price">$542,000</p>
+                    </div>
+                    <div class="car-actions">
+                        <button class="action-btn primary">View Details</button>
+                        <button class="action-btn secondary">Schedule Test Drive</button>
+                    </div>
+                </div>
+
+                <div class="featured-car-card">
+                    <div class="car-status exclusive">EXCLUSIVE</div>
+                    <div class="car-details">
+                        <h4>2024 Ferrari 296 GTB</h4>
+                        <p class="car-specs">V6 Hybrid • 819 HP • RWD</p>
+                        <p class="car-price">$321,400</p>
+                    </div>
+                    <div class="car-actions">
+                        <button class="action-btn primary">View Details</button>
+                        <button class="action-btn secondary">Schedule Test Drive</button>
+                    </div>
+                </div>
+
+                <div class="featured-car-card">
+                    <div class="car-status sold">RESERVED</div>
+                    <div class="car-details">
+                        <h4>2023 Porsche 911 GT3 RS</h4>
+                        <p class="car-specs">4.0L Flat-6 • 518 HP • RWD</p>
+                        <p class="car-price">$241,300</p>
+                    </div>
+                    <div class="car-actions">
+                        <button class="action-btn disabled">Reserved</button>
+                        <button class="action-btn secondary">Join Waitlist</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Process -->
+    <div class="process-section">
+        <h2>
+            <span class="section-icon">⚡</span>
+            Our Service Process
+        </h2>
+        <div class="process-steps">
+            <div class="process-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Consultation</h4>
+                    <p>Initial consultation to understand your needs and preferences</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Vehicle Selection</h4>
+                    <p>Curated selection of vehicles matching your requirements</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Inspection & Testing</h4>
+                    <p>Comprehensive inspection and test drive arrangement</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Finalization</h4>
+                    <p>Financing, paperwork, and delivery coordination</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-section">
+        <div class="contact-card">
+            <h3>Ready to Get Started?</h3>
+            <p>Contact our expert team to discuss your automotive needs</p>
+            <div class="contact-buttons">
+                <a href="#" class="contact-btn primary">
+                    <span class="btn-icon">📞</span>
+                    Call Now: (555) 123-CARS
+                </a>
+                <a href="#" class="contact-btn secondary">
+                    <span class="btn-icon">💬</span>
+                    Live Chat Support
+                </a>
+                <a href="{{ url_for('cars') }}" class="contact-btn tertiary">
+                    <span class="btn-icon">🚗</span>
+                    Browse Inventory
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+:root {
+    --primary-purple: #7c4dff;
+    --light-purple: #a084ff;
+    --dark-purple: #5a39cc;
+    --gradient-primary: linear-gradient(135deg, #7c4dff, #5a39cc);
+    --gradient-secondary: linear-gradient(45deg, #6a4dcf, #7c4dff);
+    --gradient-dark: linear-gradient(135deg, rgba(20, 20, 35, 0.95), rgba(35, 35, 91, 0.9));
+    --glass-bg: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(35, 35, 91, 0.2));
+    --shadow-purple: 0 8px 32px rgba(124, 77, 255, 0.3);
+    --shadow-dark: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.services-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-top: 120px;
+    min-height: calc(100vh - 100px);
+    position: relative;
+}
+
+.services-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(124, 77, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(90, 57, 204, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(106, 77, 207, 0.1) 0%, transparent 50%);
+    z-index: -1;
+    animation: backgroundPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+/* Enhanced Header */
+.services-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+}
+
+.services-header::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+    0% { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+    100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.services-header h1 {
+    font-size: 3.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    animation: titleSlide 1s ease-out 0.3s both;
+}
+
+@keyframes titleSlide {
+    0% { transform: translateY(30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.services-header p {
+    font-size: 1.4rem;
+    color: var(--light-purple);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+@keyframes fadeInUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Enhanced Services Overview */
+.services-overview {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    margin-bottom: 5rem;
+    align-items: center;
+}
+
+.overview-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    border-radius: 25px;
+    padding: 3rem;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-purple);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.overview-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+    transition: left 0.8s;
+}
+
+.overview-card:hover::before {
+    left: 100%;
+}
+
+.overview-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(124, 77, 255, 0.4);
+    border-color: var(--primary-purple);
+}
+
+.overview-icon {
+    font-size: 4rem;
+    padding: 1.5rem;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.4);
+    animation: iconFloat 3s ease-in-out infinite alternate;
+}
+
+@keyframes iconFloat {
+    0% { transform: translateY(0px) rotate(0deg); }
+    100% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.overview-content h3 {
+    color: var(--primary-purple);
+    font-size: 2.2rem;
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.overview-content p {
+    color: #e0e6ff;
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.overview-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.stat-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-primary);
+    transition: height 0.3s ease;
+}
+
+.stat-item:hover::before {
+    height: 100%;
+    opacity: 0.1;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-purple);
+    box-shadow: 0 15px 40px rgba(124, 77, 255, 0.3);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.stat-label {
+    color: var(--light-purple);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Enhanced Services Section */
+.services-section {
+    margin-bottom: 5rem;
+}
+
+.services-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    color: var(--primary-purple);
+    font-size: 2.8rem;
+    font-weight: 700;
+    justify-content: center;
+}
+
+.section-icon {
+    font-size: 3rem;
+    padding: 0.8rem;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 3rem;
+}
+
+.service-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    border-radius: 25px;
+    padding: 3rem;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-dark);
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--gradient-primary);
+    border-radius: 25px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.service-card:hover::before {
+    opacity: 0.1;
+}
+
+.service-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(124, 77, 255, 0.4);
+    border-color: var(--primary-purple);
+}
+
+.service-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.4);
+    animation: serviceIconFloat 3s ease-in-out infinite alternate;
+}
+
+@keyframes serviceIconFloat {
+    0% { transform: translateY(0px) rotate(0deg); }
+    100% { transform: translateY(-8px) rotate(3deg); }
+}
+
+.service-card h3 {
+    color: var(--primary-purple);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
+}
+
+.service-card p {
+    color: #e0e6ff;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.service-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 2.5rem;
+    text-align: left;
+    position: relative;
+    z-index: 2;
+}
+
+.feature {
+    color: var(--light-purple);
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.feature::before {
+    content: '✓';
+    color: var(--primary-purple);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.service-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(124, 77, 255, 0.3);
+}
+
+.service-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(124, 77, 255, 0.5);
+}
+
+/* Inventory Section */
+.inventory-section {
+    margin-bottom: 4rem;
+}
+
+.inventory-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #7c4dff;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.inventory-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.inventory-category {
+    background: rgba(35, 35, 91, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.category-header h3 {
+    color: #a084ff;
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.count {
+    color: #7c4dff;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.category-brands {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.brand-tag {
+    background: linear-gradient(90deg, #7c4dff, #a084ff);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Featured Inventory */
+.featured-inventory {
+    background: rgba(35, 35, 91, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.featured-inventory h3 {
+    color: #7c4dff;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.featured-cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.featured-car-card {
+    background: rgba(124, 77, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.featured-car-card:hover {
+    transform: translateY(-3px);
+}
+
+.car-status {
+    position: absolute;
+    top: -8px;
+    right: 15px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: white;
+}
+
+.car-status.new {
+    background: linear-gradient(90deg, #00ff88, #00bcd4);
+}
+
+.car-status.exclusive {
+    background: linear-gradient(90deg, #ff4081, #7c4dff);
+}
+
+.car-status.sold {
+    background: linear-gradient(90deg, #ff9800, #ff5722);
+}
+
+.car-details h4 {
+    color: #a084ff;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.car-specs {
+    color: #b3baff;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.car-price {
+    color: #00ff88;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin: 0 0 1rem 0;
+}
+
+.car-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.action-btn.primary {
+    background: linear-gradient(90deg, #7c4dff, #a084ff);
+    color: white;
+}
+
+.action-btn.secondary {
+    background: rgba(124, 77, 255, 0.2);
+    color: #a084ff;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.action-btn.disabled {
+    background: rgba(124, 77, 255, 0.1);
+    color: #8892ff;
+    cursor: not-allowed;
+}
+
+.action-btn:not(.disabled):hover {
+    transform: translateY(-1px);
+}
+
+/* Process Section */
+.process-section {
+    margin-bottom: 4rem;
+}
+
+.process-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #7c4dff;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.process-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(35, 35, 91, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.process-step:hover {
+    transform: translateY(-3px);
+}
+
+.step-number {
+    background: linear-gradient(135deg, #7c4dff, #a084ff);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    color: #a084ff;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.step-content p {
+    color: #b3baff;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Contact Section */
+.contact-section {
+    text-align: center;
+}
+
+.contact-card {
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.3), rgba(35, 35, 91, 0.5));
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 3rem 2rem;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+}
+
+.contact-card h3 {
+    color: #7c4dff;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.contact-card p {
+    color: #a084ff;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.contact-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.contact-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-btn.primary {
+    background: linear-gradient(90deg, #7c4dff, #a084ff);
+    color: white;
+}
+
+.contact-btn.secondary {
+    background: rgba(0, 200, 83, 0.8);
+    color: white;
+}
+
+.contact-btn.tertiary {
+    background: rgba(255, 152, 0, 0.8);
+    color: white;
+}
+
+.contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(124, 77, 255, 0.3);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .services-container {
+        padding: 1rem;
+        padding-top: 100px;
+    }
+    
+    .services-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .services-overview {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .overview-stats {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .inventory-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-cars-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .process-steps {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .services-header h1 {
+        font-size: 2rem;
+    }
+    
+    .overview-stats {
+        flex-direction: column;
+    }
+    
+    .car-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

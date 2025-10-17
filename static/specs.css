@@ -1,0 +1,83 @@
+/* Technical Specifications Styles */
+.specs-card {
+    background: linear-gradient(145deg, var(--background-light) 0%, var(--background-dark) 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: var(--shadow-luxury);
+}
+
+.specs-title {
+    color: var(--text-light);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    background: rgba(42, 45, 71, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: var(--transition-smooth);
+}
+
+.spec-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-subtle);
+    background: rgba(42, 45, 71, 0.5);
+}
+
+.spec-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.spec-value {
+    color: var(--text-light);
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .specs-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .specs-card {
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+
+    .specs-title {
+        font-size: 1.75rem;
+    }
+
+    .spec-value {
+        font-size: 1.1rem;
+    }
+}

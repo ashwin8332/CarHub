@@ -1,0 +1,1162 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - CarHub{% endblock %}
+
+{% block content %}
+<div class="contact-container">
+    <!-- Page Header -->
+    <div class="contact-header">
+        <h1>Get In Touch</h1>
+        <p>Ready to find your dream car? We're here to help you every step of the way</p>
+    </div>
+
+    <!-- Main Contact Section -->
+    <div class="contact-main">
+        <!-- Contact Information -->
+        <div class="contact-info">
+            <div class="info-card">
+                <div class="info-icon">📍</div>
+                <div class="info-content">
+                    <h3>Visit Our Showroom</h3>
+                    <p>123 Luxury Auto Boulevard<br>
+                    Downtown Financial District<br>
+                    New York, NY 10001</p>
+                    <a href="https://maps.google.com" target="_blank" class="location-btn">Get Directions</a>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">📞</div>
+                <div class="info-content">
+                    <h3>Call Us</h3>
+                    <p class="phone-number">+1 (555) 123-CARS</p>
+                    <p class="phone-subtitle">Available 24/7</p>
+                    <div class="phone-options">
+                        <span class="phone-tag">Sales: Ext. 1</span>
+                        <span class="phone-tag">Service: Ext. 2</span>
+                        <span class="phone-tag">Parts: Ext. 3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">✉️</div>
+                <div class="info-content">
+                    <h3>Email Us</h3>
+                    <div class="email-list">
+                        <div class="email-item">
+                            <span class="email-label">General Inquiries</span>
+                            <a href="mailto:info@carhub.com" class="email-link">info@carhub.com</a>
+                        </div>
+                        <div class="email-item">
+                            <span class="email-label">Sales Department</span>
+                            <a href="mailto:sales@carhub.com" class="email-link">sales@carhub.com</a>
+                        </div>
+                        <div class="email-item">
+                            <span class="email-label">Service Center</span>
+                            <a href="mailto:service@carhub.com" class="email-link">service@carhub.com</a>
+                        </div>
+                        <div class="email-item">
+                            <span class="email-label">Parts Department</span>
+                            <a href="mailto:parts@carhub.com" class="email-link">parts@carhub.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-section">
+            <div class="form-header">
+                <h2>Send Us a Message</h2>
+                <p>Fill out the form below and we'll get back to you within 24 hours</p>
+            </div>
+
+            <form class="contact-form" action="/contact" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="sales">Vehicle Sales</option>
+                        <option value="service">Service Appointment</option>
+                        <option value="parts">Parts Inquiry</option>
+                        <option value="financing">Financing Options</option>
+                        <option value="test-drive">Schedule Test Drive</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="6" placeholder="Tell us how we can help you..." required></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="newsletter" name="newsletter">
+                    <label for="newsletter">I'd like to receive updates about new arrivals and special offers</label>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span>Send Message</span>
+                    <div class="btn-icon">📤</div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Business Hours & Additional Info -->
+    <div class="additional-info">
+        <div class="hours-card">
+            <h3>Business Hours</h3>
+            <div class="hours-list">
+                <div class="hours-item">
+                    <span class="day">Monday - Friday</span>
+                    <span class="time">9:00 AM - 8:00 PM</span>
+                </div>
+                <div class="hours-item">
+                    <span class="day">Saturday</span>
+                    <span class="time">9:00 AM - 6:00 PM</span>
+                </div>
+                <div class="hours-item">
+                    <span class="day">Sunday</span>
+                    <span class="time">11:00 AM - 5:00 PM</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="services-quick">
+            <h3>Quick Services</h3>
+            <div class="quick-services-grid">
+                <div class="quick-service-item">
+                    <div class="qs-icon">🚗</div>
+                    <span>Vehicle Appraisal</span>
+                </div>
+                <div class="quick-service-item">
+                    <div class="qs-icon">🔧</div>
+                    <span>Express Service</span>
+                </div>
+                <div class="quick-service-item">
+                    <div class="qs-icon">💰</div>
+                    <span>Financing</span>
+                </div>
+                <div class="quick-service-item">
+                    <div class="qs-icon">🛡️</div>
+                    <span>Warranty</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="emergency-contact">
+            <h3>Emergency Support</h3>
+            <p>24/7 Roadside Assistance</p>
+            <a href="tel:+15551234567" class="emergency-btn">
+                <span>🚨</span>
+                Call Emergency: +1 (555) 123-4567
+            </a>
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section">
+        <h2>Find Us</h2>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830921846!2d-74.11976373946229!3d40.69766374857892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1641234567890!5m2!1sen!2s"
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade"
+                class="google-map">
+            </iframe>
+            <!--<div class="map-overlay">
+                <div class="map-info">
+                    <h3>CarHub Showroom</h3>
+                    <p>📍 123 Auto Street, New York, NY 10001</p>
+                    <div class="map-actions">
+                        <a href="https://maps.google.com/directions" target="_blank" class="direction-btn">
+                            <span>🧭</span> Get Directions
+                        </a>
+                        <a href="tel:+15551234567" class="call-btn">
+                            <span>📞</span> Call Us
+                        </a>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+:root {
+    --primary-purple: #7c4dff;
+    --light-purple: #a084ff;
+    --dark-purple: #5a39cc;
+    --gradient-primary: linear-gradient(135deg, #7c4dff, #5a39cc);
+    --gradient-secondary: linear-gradient(45deg, #6a4dcf, #7c4dff);
+    --gradient-dark: linear-gradient(135deg, rgba(20, 20, 35, 0.95), rgba(35, 35, 91, 0.9));
+    --glass-bg: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(35, 35, 91, 0.2));
+    --shadow-purple: 0 8px 32px rgba(124, 77, 255, 0.3);
+    --shadow-dark: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.contact-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-top: 120px;
+    min-height: calc(100vh - 100px);
+    position: relative;
+}
+
+.contact-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(124, 77, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(90, 57, 204, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(106, 77, 207, 0.1) 0%, transparent 50%);
+    z-index: -1;
+    animation: backgroundFlow 10s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundFlow {
+    0% { opacity: 0.6; filter: hue-rotate(0deg); }
+    100% { opacity: 1; filter: hue-rotate(15deg); }
+}
+
+/* Header Section */
+.contact-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+}
+
+.contact-header::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+    0% { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+    100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.contact-header h1 {
+    font-size: 3.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    animation: titleSlide 1s ease-out 0.3s both;
+}
+
+@keyframes titleSlide {
+    0% { transform: translateY(30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.contact-header p {
+    font-size: 1.4rem;
+    color: var(--light-purple);
+    max-width: 600px;
+    margin: 0 auto;
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+@keyframes fadeInUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Main Contact Section */
+.contact-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 5rem;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.info-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-dark);
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+    transition: left 0.8s;
+}
+
+.info-card:hover::before {
+    left: 100%;
+}
+
+.info-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(124, 77, 255, 0.4);
+    border-color: var(--primary-purple);
+}
+
+.info-icon {
+    font-size: 3rem;
+    padding: 1rem;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.4);
+    animation: infoIconFloat 3s ease-in-out infinite alternate;
+}
+
+@keyframes infoIconFloat {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+
+.info-content h3 {
+    color: var(--primary-purple);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.info-content p {
+    color: #e0e6ff;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.phone-number {
+    font-size: 1.3rem !important;
+    font-weight: 700;
+    color: var(--light-purple) !important;
+}
+
+.phone-subtitle {
+    font-size: 0.9rem !important;
+    opacity: 0.8;
+    margin-bottom: 1.5rem !important;
+}
+
+.phone-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.phone-tag {
+    background: rgba(124, 77, 255, 0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    color: var(--light-purple);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.location-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(124, 77, 255, 0.3);
+}
+
+.location-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(124, 77, 255, 0.5);
+}
+
+.email-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.email-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.email-label {
+    font-size: 0.9rem;
+    color: var(--light-purple);
+    font-weight: 600;
+}
+
+.email-link {
+    color: #e0e6ff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.email-link:hover {
+    color: var(--primary-purple);
+}
+
+/* Contact Form Section */
+.contact-form-section {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    border-radius: 25px;
+    padding: 3rem;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    box-shadow: var(--shadow-dark);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.form-header h2 {
+    color: var(--primary-purple);
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.form-header p {
+    color: var(--light-purple);
+    font-size: 1rem;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: var(--light-purple);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    background: rgba(124, 77, 255, 0.1);
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    color: #e0e6ff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
+}
+
+.checkbox-group {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.8rem !important;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.submit-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 1.2rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(124, 77, 255, 0.3);
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(124, 77, 255, 0.5);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+    animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+}
+
+/* Additional Info Section */
+.additional-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 5rem;
+}
+
+.hours-card,
+.services-quick,
+.emergency-contact {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    box-shadow: var(--shadow-dark);
+    transition: all 0.3s ease;
+}
+
+.hours-card:hover,
+.services-quick:hover,
+.emergency-contact:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(124, 77, 255, 0.3);
+}
+
+.hours-card h3,
+.services-quick h3,
+.emergency-contact h3 {
+    color: var(--primary-purple);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.hours-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(124, 77, 255, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+.day {
+    color: var(--light-purple);
+    font-weight: 600;
+}
+
+.time {
+    color: #e0e6ff;
+    font-weight: 500;
+}
+
+.quick-services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.quick-service-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(124, 77, 255, 0.1);
+    border-radius: 15px;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.quick-service-item:hover {
+    background: rgba(124, 77, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.qs-icon {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-service-item span {
+    color: #e0e6ff;
+    font-weight: 500;
+}
+
+.emergency-contact p {
+    color: #e0e6ff;
+    margin-bottom: 1.5rem;
+}
+
+.emergency-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, #ff4444, #cc2222);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(255, 68, 68, 0.3);
+}
+
+.emergency-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(255, 68, 68, 0.5);
+}
+
+/* Map Section */
+.map-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.map-section h2 {
+    color: var(--primary-purple);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.map-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    border-radius: 20px;
+    padding: 0;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    box-shadow: var(--shadow-dark);
+    overflow: hidden;
+    position: relative;
+}
+
+.google-map {
+    border-radius: 20px;
+    display: block;
+}
+
+.map-overlay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    z-index: 10;
+}
+
+.map-info h3 {
+    color: var(--primary-purple);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.map-info p {
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.map-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.direction-btn, .call-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.direction-btn {
+    background: linear-gradient(135deg, var(--primary-purple), var(--light-purple));
+    color: white;
+    box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);
+}
+
+.call-btn {
+    background: linear-gradient(135deg, #00bcd4, #0097a7);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+}
+
+.direction-btn:hover, .call-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(124, 77, 255, 0.4);
+}
+
+/* Map Responsive Design */
+@media (max-width: 768px) {
+    .map-overlay {
+        position: static;
+        margin: 20px;
+        background: rgba(0, 0, 0, 0.9);
+    }
+    
+    .map-actions {
+        justify-content: center;
+    }
+    
+    .direction-btn, .call-btn {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .contact-main {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-services-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-container {
+        padding: 1rem;
+        padding-top: 120px;
+    }
+    
+    .contact-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .info-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .additional-info {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-title {
+        font-size: 2rem;
+    }
+
+    .faq-question {
+        font-size: 1rem;
+    }
+}
+
+/* FAQ Section Styles */
+.faq-section {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, rgba(10, 10, 26, 0.95) 0%, rgba(26, 26, 51, 0.95) 100%);
+    margin: 2rem 0;
+    border-radius: 20px;
+    box-shadow: var(--shadow-luxury);
+}
+
+.faq-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+}
+
+.section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+}
+
+.faq-title {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.2;
+}
+
+.faq-subtitle {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.faq-answer ul {
+    list-style-type: none;
+    padding-left: 1.5rem;
+    margin-top: 1rem;
+}
+
+.faq-answer ul li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.faq-answer ul li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-cyan);
+    font-weight: bold;
+}
+
+.faq-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.faq-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.faq-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-luxury);
+    border-color: var(--accent-cyan);
+}
+
+.faq-item:hover::before {
+    opacity: 1;
+}
+
+.faq-question {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}
+
+.faq-answer {
+    color: var(--text-muted);
+    margin-top: 1rem;
+    display: none;
+    line-height: 1.8;
+    padding-left: 1rem;
+    border-left: 2px solid var(--accent-cyan);
+}
+
+.faq-item.active {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+</style>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="faq-container">
+        <div class="section-header">
+            <h2 class="faq-title">Have Questions? We've Got Answers</h2>
+            <p class="faq-subtitle">Everything you need to know about our services, purchasing process, and vehicle options</p>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                What makes CarHub different from other car dealerships?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                CarHub offers a unique blend of luxury and technology, providing an immersive 3D car viewing experience, personalized service, and a curated selection of premium vehicles. Our platform combines traditional car dealership values with cutting-edge digital innovation, ensuring a seamless car buying experience from start to finish.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                How can I schedule a test drive?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                Scheduling a test drive is easy! You can:
+                <ul>
+                    <li>Book directly through our website by selecting your desired vehicle and clicking the "Schedule Test Drive" button</li>
+                    <li>Call our dedicated test drive hotline at +1 (555) 123-CARS ext. 1</li>
+                    <li>Visit our showroom during business hours</li>
+                </ul>
+                Our team will contact you within 24 hours to confirm your appointment and provide further details.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                What financing and payment options do you offer?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                We offer comprehensive financing solutions including:
+                <ul>
+                    <li>Traditional auto loans with competitive rates</li>
+                    <li>Flexible lease options with customizable terms</li>
+                    <li>Special financing for first-time buyers</li>
+                    <li>Trade-in options for your current vehicle</li>
+                    <li>0% APR financing on select models</li>
+                </ul>
+                Our financial experts work with multiple lenders to ensure you get the best possible rates and terms tailored to your needs.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                What warranty coverage do you provide?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                Our warranty coverage includes:
+                <ul>
+                    <li>Manufacturer warranty for all new vehicles</li>
+                    <li>CarHub Protection Plan for pre-owned vehicles</li>
+                    <li>Extended warranty options up to 7 years/100,000 miles</li>
+                    <li>24/7 roadside assistance</li>
+                    <li>Complimentary maintenance for the first year</li>
+                </ul>
+                All warranties are transferable and backed by our satisfaction guarantee.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                How does your virtual showroom and 3D viewing feature work?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                Our cutting-edge virtual showroom features:
+                <ul>
+                    <li>360-degree exterior and interior views</li>
+                    <li>Interactive hotspots highlighting key features</li>
+                    <li>Real-time color and option customization</li>
+                    <li>Detailed specifications and performance data</li>
+                    <li>Virtual test drive simulation</li>
+                </ul>
+                The feature works best on modern browsers and devices, providing an immersive experience from the comfort of your home.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                What after-sales services do you provide?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                Our comprehensive after-sales services include:
+                <ul>
+                    <li>Regular maintenance and service checks</li>
+                    <li>Genuine parts replacement</li>
+                    <li>Custom modifications and upgrades</li>
+                    <li>Detailing and ceramic coating</li>
+                    <li>Pick-up and drop-off service</li>
+                    <li>Loaner vehicles during extended service periods</li>
+                </ul>
+                We're committed to maintaining your vehicle's performance and value long after purchase.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                How do I track my vehicle order or service status?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                Tracking your vehicle or service status is simple:
+                <ul>
+                    <li>Log in to your CarHub account dashboard</li>
+                    <li>Use our mobile app for real-time updates</li>
+                    <li>Receive automated email and SMS notifications</li>
+                    <li>Contact your dedicated service advisor</li>
+                    <li>Use our 24/7 customer service hotline</li>
+                </ul>
+                We provide complete transparency throughout the entire process.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                What is your return and exchange policy?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                Our customer-friendly policies include:
+                <ul>
+                    <li>7-day/500-mile money-back guarantee</li>
+                    <li>30-day exchange policy</li>
+                    <li>No questions asked returns for new vehicles</li>
+                    <li>Full refund of deposit if financing falls through</li>
+                    <li>Transparent documentation process</li>
+                </ul>
+                Terms and conditions apply, but we prioritize customer satisfaction above all.
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+        item.classList.toggle('active');
+        const toggleIcon = item.querySelector('.toggle-icon');
+        toggleIcon.textContent = item.classList.contains('active') ? '−' : '+';
+    });
+});
+</script>
+{% endblock %}

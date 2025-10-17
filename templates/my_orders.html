@@ -1,0 +1,709 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders - CarHub{% endblock %}
+
+{% block extra_head %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700;900&display=swap');
+    
+    :root {
+        --primary-purple: #7c4dff;
+        --primary-blue: #23235b;
+        --dark-blue: #181828;
+        --darker-blue: #0a0a1a;
+        --accent-cyan: #07b0b3;
+        --light-purple: #a084ff;
+        --text-light: #e0e6ff;
+        --text-muted: #b3baff;
+        --luxury-gold: #ffd700;
+        --deep-space: #0a0a1a;
+        --cosmic-purple: #7c4dff;
+        --silver: #c0c0c0;
+        --charcoal: #2E2E36;
+        --success-green: #2ecc71;
+        --warning-yellow: #f39c12;
+        --danger-red: #e74c3c;
+        
+        /* Updated gradients to match cars page */
+        --gradient-primary: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+        --gradient-luxury: linear-gradient(90deg, #a084ff 80%, #23235b 100%);
+        --gradient-dark: linear-gradient(120deg, #23235b 60%, #181828 100%);
+        --gradient-space: radial-gradient(ellipse at top left, #23235b 0%, #0a0a1a 100%);
+        --gradient-text: linear-gradient(45deg, #a084ff, #07b0b3, #ffd700);
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --border-color: rgba(124, 77, 255, 0.2);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--gradient-space);
+        color: var(--text-light);
+        font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Background Video */
+    .background-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+        opacity: 0.15;
+        filter: blur(2px);
+    }
+
+    .orders-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem 3rem 1rem;
+        margin-top: 100px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .orders-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .orders-header h1 {
+        font-family: 'Orbitron', 'Arial Black', monospace;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 900;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        text-shadow: 0 0 30px rgba(124, 77, 255, 0.5);
+    }
+
+    .orders-header p {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        font-weight: 300;
+        margin-bottom: 2rem;
+    }
+
+    .orders-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 2.5rem;
+    }
+
+    .order-card {
+        background: var(--gradient-dark);
+        border-radius: 22px;
+        box-shadow: 0 12px 40px 0 rgba(124, 77, 255, 0.33), 0 1.5px 8px rgba(24, 24, 40, 0.6);
+        border: 2px solid rgba(124, 77, 255, 0.2);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .order-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-primary);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .order-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px 0 rgba(124, 77, 255, 0.4), 0 2px 12px rgba(24, 24, 40, 0.8);
+        border-color: rgba(124, 77, 255, 0.4);
+    }
+
+    .order-card:hover::before {
+        opacity: 1;
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid rgba(124, 77, 255, 0.2);
+    }
+
+    .order-info {
+        flex: 1;
+    }
+
+    .order-id {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--light-purple);
+        margin-bottom: 0.5rem;
+        font-family: 'Orbitron', monospace;
+    }
+
+    .order-date {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        font-weight: 400;
+    }
+
+    .status-badge {
+        padding: 0.6rem 1.2rem;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-align: center;
+        min-width: 100px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .status-completed {
+        background: linear-gradient(45deg, var(--success-green), #27ae60);
+        color: white;
+    }
+
+    .status-pending {
+        background: linear-gradient(45deg, var(--warning-yellow), #e67e22);
+        color: white;
+    }
+
+    .status-cancelled {
+        background: linear-gradient(45deg, var(--danger-red), #c0392b);
+        color: white;
+    }
+
+    .order-content {
+        flex: 1;
+    }
+
+    .vehicle-info {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(124, 77, 255, 0.1);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .vehicle-info h4 {
+        color: var(--light-purple);
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .vehicle-info h4::before {
+        content: '🚗';
+        font-size: 1.4rem;
+    }
+
+    .vehicle-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-light);
+        margin-bottom: 0.5rem;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .detail-item {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 0.8rem;
+        border-radius: 10px;
+        border: 1px solid rgba(124, 77, 255, 0.1);
+    }
+
+    .detail-label {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .detail-value {
+        color: var(--text-light);
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .order-summary {
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(160, 132, 255, 0.05));
+        border: 2px solid rgba(124, 77, 255, 0.2);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .order-summary h5 {
+        color: var(--light-purple);
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .total-amount {
+        text-align: center;
+        padding: 1rem;
+        background: rgba(124, 77, 255, 0.15);
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        border-radius: 12px;
+        margin-top: 1rem;
+    }
+
+    .total-amount .label {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .total-amount .amount {
+        color: var(--cosmic-purple);
+        font-size: 1.8rem;
+        font-weight: 900;
+        font-family: 'Orbitron', monospace;
+        text-shadow: 0 0 20px rgba(124, 77, 255, 0.5);
+    }
+
+    .order-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #7c4dff, #b084ff);
+        color: white;
+        border: 2px solid transparent;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(124, 77, 255, 0.4);
+        background: linear-gradient(45deg, #6a3de8, #9c6fff);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--cosmic-purple);
+        border: 2px solid var(--cosmic-purple);
+    }
+
+    .btn-outline:hover {
+        background: var(--cosmic-purple);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(124, 77, 255, 0.3);
+    }
+
+    .btn-success {
+        background: linear-gradient(45deg, var(--success-green), #27ae60);
+        color: white;
+        border: 2px solid transparent;
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 6rem 2rem;
+        color: var(--text-muted);
+        background: var(--gradient-dark);
+        border-radius: 22px;
+        border: 2px solid rgba(124, 77, 255, 0.2);
+        box-shadow: 0 12px 40px 0 rgba(124, 77, 255, 0.2);
+    }
+
+    .empty-state-icon {
+        font-size: 5rem;
+        margin-bottom: 2rem;
+        opacity: 0.6;
+        filter: drop-shadow(0 0 20px rgba(124, 77, 255, 0.3));
+    }
+
+    .empty-state h3 {
+        color: var(--light-purple);
+        margin-bottom: 1rem;
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: 'Orbitron', monospace;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+        .orders-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .order-header {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .order-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: 100%;
+            max-width: 250px;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .orders-container {
+            padding: 1rem;
+        }
+
+        .order-card {
+            padding: 1.5rem;
+        }
+
+        .orders-header h1 {
+            font-size: 2rem;
+        }
+    }
+
+    /* Loading Animation */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Success Animation */
+    @keyframes successPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .status-completed {
+        animation: successPulse 2s ease-in-out infinite;
+    }
+
+    /* Cancelled Order Styles */
+    .status-badge.cancelled {
+        background: rgba(231, 76, 60, 0.2);
+        color: #e74c3c;
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .cancellation-fee {
+        background: rgba(243, 156, 18, 0.2);
+        color: #f39c12;
+        border: 1px solid rgba(243, 156, 18, 0.3);
+        padding: 0.4rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-left: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .cancellation-fee::before {
+        content: "⚠️";
+        font-size: 0.9rem;
+    }
+
+    .refund-info {
+        margin-top: 0.5rem;
+        color: var(--text-muted);
+    }
+
+    .refund-info small {
+        background: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+        padding: 0.3rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border: 1px solid rgba(46, 204, 113, 0.2);
+    }
+
+    /* Enhanced Cancel Button Styling */
+    .btn.btn-outline {
+        border: 2px solid rgba(231, 76, 60, 0.5);
+        color: #e74c3c;
+        background: rgba(231, 76, 60, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .btn.btn-outline:hover {
+        background: rgba(231, 76, 60, 0.2);
+        border-color: #e74c3c;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Background Video -->
+<video class="background-video" autoplay muted loop playsinline>
+    <source src="{{ url_for('static', filename='car.mp4') }}" type="video/mp4">
+</video>
+
+<div class="orders-container">
+    <div class="orders-header">
+        <h1>My Orders</h1>
+        <p>Track and manage your premium vehicle purchases</p>
+    </div>
+
+    {% if orders %}
+        <div class="orders-grid">
+            {% for order in orders %}
+            <div class="order-card">
+                <div class="order-header">
+                    <div class="order-info">
+                        <div class="order-id">Order #{{ order.id }}</div>
+                        <div class="order-date">{{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</div>
+                    </div>
+                    <div class="status-badge status-{{ order.payment_status }}">
+                        {{ order.payment_status.title() }}
+                    </div>
+                </div>
+
+                <div class="order-content">
+                    <div class="vehicle-info">
+                        <h4>Car Information</h4>
+                        <div class="vehicle-name">{{ order.car.name if order.car else 'Car Information' }}</div>
+
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Payment Method</div>
+                                <div class="detail-value">{{ order.payment_method.replace('_', ' ').title() }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Transaction ID</div>
+                                <div class="detail-value">{{ order.transaction_id }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Customer Name</div>
+                                <div class="detail-value">{{ order.billing_name }}</div>
+                            </div>
+                            <div class="detail-item">
+                                    <div class="detail-label">Contact</div>
+                                    <div class="detail-value">{{ order.billing_phone }}</div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-summary">
+                        <h5>Payment Summary</h5>
+                        
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Vehicle Price</div>
+                                <div class="detail-value">${{ "{:,.0f}".format(order.total_amount / 1.1) }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Taxes & Fees</div>
+                                <div class="detail-value">${{ "{:,.0f}".format(order.total_amount * 0.1) }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="total-amount">
+                            <div class="label">Total Paid</div>
+                            <div class="amount">${{ "{:,.0f}".format(order.total_amount) }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    {% if order.payment_status == 'completed' and order.order_status == 'pending' %}
+                        <a href="{{ url_for('download_invoice', order_id=order.id) }}" class="btn btn-success">
+                            📄 Download Invoice
+                        </a>
+                        <button class="btn btn-outline" onclick="confirmCancel('{{ order.id }}')">
+                            ❌ Cancel Order
+                        </button>
+                        <a href="contact.html">
+                        <button class="btn btn-outline" onclick="alert('Support contact: support@carhub.com')">
+                            📞 Contact Support
+                        </button>
+                        </a>
+                    {% elif order.payment_status == 'completed' and order.order_status != 'pending' %}
+                        <a href="{{ url_for('download_invoice', order_id=order.id) }}" class="btn btn-success">
+                            📄 Download Invoice
+                        </a>
+                        <a href="contact.html">
+                        <button class="btn btn-outline" onclick="alert('Support contact: support@carhub.com')">
+                            📞 Contact Support
+                        </button>
+                        </a>
+                    {% elif order.payment_status == 'pending' %}
+                        <button class="btn btn-primary" onclick="alert('Redirecting to payment completion...')">
+                            💳 Complete Payment
+                        </button>
+                        <button class="btn btn-outline" onclick="confirmCancel('{{ order.id }}')">
+                            ❌ Cancel Order
+                        </button>
+                    {% elif order.payment_status == 'cancelled' or order.order_status == 'cancelled' %}
+                        <span class="status-badge cancelled">🚫 Cancelled</span>
+                        {% if order.cancellation_fee and order.cancellation_fee > 0 %}
+                        <span class="cancellation-fee">Fine: ${{ "{:,.2f}".format(order.cancellation_fee) }}</span>
+                        {% endif %}
+                        <div class="refund-info">
+                            <small>Refund Amount: ${{ "{:,.2f}".format(order.total_amount - (order.cancellation_fee or 0)) }}</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">🏎️</div>
+            <h3>No Orders Yet</h3>
+            <p>You haven't made any purchases yet. Start browsing our amazing collection of premium vehicles and find your dream car!</p>
+            <a href="{{ url_for('cars') }}" class="btn btn-primary">🚗 Browse Premium Cars</a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function confirmCancel(orderId) {
+        const confirmMsg = 'Are you sure you want to cancel this order?\n\n⚠️ CANCELLATION POLICY:\n• A $500 cancellation fee will be applied\n• This action cannot be undone\n• Refund will be processed within 3-5 business days\n\nDo you want to proceed?';
+        
+        if (confirm(confirmMsg)) {
+            // Create a form to submit POST request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/cancel-order/${orderId}`;
+            
+            // Add CSRF token if needed
+            const csrfToken = document.querySelector('meta[name=csrf-token]');
+            if (csrfToken) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrf_token';
+                csrfInput.value = csrfToken.getAttribute('content');
+                form.appendChild(csrfInput);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+
+    // Add loading state for buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            if (button.href && button.href.includes('download-invoice')) {
+                button.addEventListener('click', function() {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<span class="loading"></span> Generating PDF...';
+                    button.style.pointerEvents = 'none';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.pointerEvents = 'auto';
+                    }, 3000);
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

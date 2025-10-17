@@ -1,0 +1,2057 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - CarHub{% endblock %}
+
+{% block content %}
+<style>
+    /* CSS Variables Definition */
+    :root {
+        --font-primary: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        --accent-purple: #7c4dff;
+        --accent-cyan: #07b0b3;
+        --accent-gold: #ffd700;
+        --text-light: #e2e8f0;
+        --text-muted: #94a3b8;
+        --text-bright: #f8fafc;
+        --bg-dark: rgba(10, 10, 26, 0.95);
+        --bg-card: rgba(255, 255, 255, 0.05);
+        --shadow-luxury: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        --shadow-elegant: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --shadow-subtle: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --gradient-primary: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        --gradient-gold: linear-gradient(135deg, var(--accent-gold), #ff8c00);
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--font-primary);
+        scroll-behavior: smooth;
+        /* Add fallback background */
+        background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+    }
+    /* Enhanced Video Background */
+    .video-background {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        z-index: -2;
+        filter: brightness(40%) contrast(1.3) saturate(1.1);
+        object-fit: cover;
+        opacity: 1;
+    }
+    
+    .about-container {
+        padding: 120px 20px 80px;
+        background: rgba(10, 10, 26, 0.3);
+        min-height: 100vh;
+    }
+
+    .faq-section {
+        padding: 4rem 2rem;
+        background: var(--bg-dark);
+        margin: 2rem 0;
+    }
+
+    .faq-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .faq-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        background: var(--gradient-gold);
+        -webkit-background-clip: text;
+        background-clip: text;
+        background-clip: text;
+        background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: bold;
+    }
+
+    .faq-item {
+        background: var(--bg-card);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .faq-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-luxury);
+        border-color: var(--accent-cyan);
+    }
+
+    .faq-question {
+        font-size: 1.2rem;
+        color: var(--text-bright);
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-answer {
+        color: var(--text-muted);
+        margin-top: 1rem;
+        display: none;
+        line-height: 1.8;
+    }
+
+    .faq-item.active .faq-answer {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .testimonials-section {
+        background: var(--bg-dark);
+        padding: 4rem 2rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .testimonial-card {
+        background: var(--bg-card);
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 1rem;
+        box-shadow: var(--shadow-elegant);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-purple);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    /* Add a subtle overlay to improve text readability while keeping video visible */
+    .about-container::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(16, 16, 32, 0.1) 0%, rgba(10, 10, 26, 0.3) 100%);
+        z-index: -1;
+        pointer-events: none;
+    }
+    .hero-section {
+        text-align: center;
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.08), rgba(7, 176, 179, 0.08));
+        border-radius: 24px;
+        padding: 100px 50px;
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        max-width: 1200px;
+        margin: 0 auto 100px;
+        box-shadow: var(--shadow-luxury), 0 30px 60px -10px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(15px);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(124, 77, 255, 0.1) 0%, transparent 60%);
+        animation: rotateGradient 15s linear infinite;
+        z-index: -1;
+    }
+    
+    /* New hero section background pattern */
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="1" fill="rgba(124, 77, 255, 0.1)"/></svg>');
+        z-index: -1;
+        opacity: 0.5;
+    }
+    
+    @keyframes rotateGradient {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Logo styling in hero section */
+    .hero-logo {
+        display: block;
+        width: 180px;
+        height: auto;
+        margin: 0 auto 30px;
+        filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.6));
+        animation: logoFloat 4s ease-in-out infinite;
+        transition: transform 0.3s ease;
+    }
+    
+    .hero-logo:hover {
+        transform: scale(1.1);
+    }
+    
+    @keyframes logoFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(2deg); }
+    }
+    
+    @keyframes glowPulse {
+        0% { filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.6)); }
+        50% { filter: drop-shadow(0 0 25px rgba(7, 176, 179, 0.8)); }
+        100% { filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.6)); }
+    }
+    
+    .hero-logo {
+        animation: logoFloat 4s ease-in-out infinite, glowPulse 6s ease-in-out infinite alternate;
+    }
+    
+    .hero-title {
+        color: var(--accent-purple);
+        font-size: clamp(4rem, 7vw, 5rem);
+        margin-bottom: 30px;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: titlePulse 3s ease-in-out infinite alternate;
+        position: relative;
+        display: inline-block;
+        text-shadow: 0 0 30px rgba(124, 77, 255, 0.8);
+        filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.5));
+    }
+    @keyframes titlePulse {
+        0% { filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4)); }
+        100% { filter: drop-shadow(0 0 25px rgba(7, 176, 179, 0.6)); }
+    }
+    .hero-subtitle {
+        color: var(--accent-cyan);
+        font-size: clamp(1.2rem, 3vw, 1.6rem);
+        margin-bottom: 40px;
+        line-height: 1.6;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    @keyframes titlePulse {
+        0% { filter: drop-shadow(0 0 15px rgba(124, 77, 255, 0.4)); }
+        100% { filter: drop-shadow(0 0 25px rgba(7, 176, 179, 0.6)); }
+    }
+    .hero-subtitle {
+        color: var(--accent-cyan);
+        font-size: clamp(1.2rem, 3vw, 1.6rem);
+        margin-bottom: 40px;
+        line-height: 1.6;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    
+    /* Add decorative elements to subtitle */
+    .hero-subtitle {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .hero-subtitle::before, .hero-subtitle::after {
+        content: '';
+        position: absolute;
+        height: 2px;
+        width: 60px;
+        background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .hero-subtitle::before {
+        right: calc(100% + 20px);
+    }
+    
+    .hero-subtitle::after {
+        left: calc(100% + 20px);
+    }
+    
+    .hero-description {
+        color: var(--text-light);
+        font-size: 1.2rem;
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto 40px;
+        font-weight: 300;
+        position: relative;
+        padding: 0 40px;
+        font-style: italic;
+        text-align: center;
+        width: 100%;
+    }
+    
+    /* Add quote styling to description */
+    .hero-description::before, .hero-description::after {
+        content: '"';
+        font-family: serif;
+        font-size: 3rem;
+        color: rgba(124, 77, 255, 0.3);
+        position: absolute;
+        height: 30px;
+        line-height: 0;
+    }
+    
+    .hero-description::before {
+        left: 10px;
+        top: 10px;
+    }
+    
+    .hero-description::after {
+        right: 10px;
+        bottom: -10px;
+    }
+    
+    /* Add CTA button to hero section */
+    .hero-cta {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .hero-btn {
+        padding: 18px 40px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        text-decoration: none;
+        display: inline-block;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        color: white;
+        box-shadow: 0 10px 25px rgba(124, 77, 255, 0.3), 0 0 0 2px rgba(124, 77, 255, 0.1);
+        transform-origin: center;
+    }
+    
+    .hero-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s;
+    }
+    
+    .hero-btn:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 20px 35px rgba(124, 77, 255, 0.5), 0 0 0 4px rgba(124, 77, 255, 0.2);
+        filter: brightness(1.1);
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+        background-size: 200% 200%;
+        animation: gradientShift 3s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .hero-btn:active {
+        transform: translateY(-2px) scale(0.98);
+        box-shadow: 0 10px 20px rgba(124, 77, 255, 0.4), 0 0 0 3px rgba(124, 77, 255, 0.15);
+        filter: brightness(0.95);
+    }
+    
+    .hero-btn:hover::before {
+        left: 100%;
+    }
+    
+    /* Text Visibility Fallback Support */
+    /* Add fallback for browsers that don't support background-clip */
+    @supports not (-webkit-background-clip: text) {
+        .hero-title,
+        .commitments-title,
+        .scope-title,
+        .testimonial-title,
+        .cta-title,
+        .feedback-title {
+            color: var(--accent-purple) !important;
+            -webkit-text-fill-color: unset;
+        }
+    }
+    
+    /* Ensure all gradient text elements have proper fallback */
+    .hero-title,
+    .commitments-title,
+    .scope-title,
+    .testimonial-title,
+    .cta-title,
+    .feedback-title {
+        /* Add fallback color */
+        color: var(--accent-purple);
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .about-container {
+            padding: 80px 15px 60px;
+        }
+        
+        .hero-section {
+            padding: 40px 20px;
+            margin-bottom: 60px;
+        }
+        
+        .hero-title {
+            font-size: 2rem !important;
+            line-height: 1.2;
+        }
+        
+        .hero-description {
+            font-size: 1rem;
+            padding: 0 10px;
+        }
+        
+        .hero-logo {
+            width: 140px;
+        }
+        .hero-subtitle::before, .hero-subtitle::after {
+            width: 30px;
+        }
+        .hero-description::before {
+            left: 5px;
+        }
+        .hero-description::after {
+            right: 5px;
+        }
+        .hero-btn {
+            padding: 15px 30px;
+            font-size: 1rem;
+        }
+        
+        /* Simplify hover effects on mobile */
+        .content-card:hover,
+        .testimonial-card:hover,
+        .commitment-card:hover {
+            transform: none;
+        }
+    }
+    
+    /* Rest of your existing styles */
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 50px;
+        max-width: 1200px;
+        margin: 0 auto 80px;
+    }
+    .content-card {
+        background: rgba(35, 35, 91, 0.15);
+        border: 1px solid rgba(124, 77, 255, 0.25);
+        border-radius: 24px;
+        padding: 50px 40px;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-subtle);
+        backdrop-filter: blur(8px);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .content-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: var(--shadow-luxury), 0 30px 40px -15px rgba(0, 0, 0, 0.3);
+        border-color: rgba(124, 77, 255, 0.4);
+        background: linear-gradient(135deg, rgba(20, 30, 55, 0.4), rgba(15, 23, 42, 0.3));
+    }
+    
+    .content-card:hover .card-icon {
+        transform: scale(1.2) rotate(10deg);
+        color: var(--accent-cyan);
+    }
+    
+    .content-card:hover .card-title {
+        color: var(--accent-purple);
+        text-shadow: 0 0 10px rgba(124, 77, 255, 0.3);
+    }
+    .content-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+    }
+    .card-icon {
+        font-size: 3.5rem;
+        color: var(--accent-cyan);
+        margin-bottom: 25px;
+        display: inline-block;
+        background: rgba(7, 176, 179, 0.1);
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+        border-radius: 50%;
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(7, 176, 179, 0.2);
+        animation: floatIcon 3s ease-in-out infinite;
+    }
+    @keyframes floatIcon {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    .card-title {
+        color: var(--accent-purple);
+        font-size: 2rem;
+        margin-bottom: 25px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .card-description {
+        color: var(--text-light);
+        line-height: 1.8;
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+    }
+    .card-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .card-features li {
+        color: var(--text-muted);
+        padding: 10px 0;
+        position: relative;
+        padding-left: 30px;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+    }
+    .card-features li:hover {
+        color: var(--text-light);
+        transform: translateX(5px);
+    }
+    .card-features li:before {
+        content: '✓';
+        color: var(--accent-cyan);
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+        font-size: 1.2rem;
+    }
+    
+    /* Our Commitments Section */
+    .commitments-section {
+        background: linear-gradient(135deg, rgba(35, 35, 91, 0.3), rgba(10, 10, 26, 0.3));
+        border-radius: 24px;
+        padding: 80px 50px;
+        margin: 0 auto 80px;
+        max-width: 1200px;
+        text-align: center;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    .commitments-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(124, 77, 255, 0.1)"/></svg>');
+        z-index: -1;
+        opacity: 0.5;
+    }
+    .commitments-title {
+        color: var(--accent-purple);
+        font-size: 3.2rem;
+        margin-bottom: 50px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 20px rgba(124, 77, 255, 0.6);
+        filter: drop-shadow(0 0 8px rgba(124, 77, 255, 0.4));
+    }
+    .commitments-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+        border-radius: 2px;
+    }
+    .commitments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .commitment-card {
+        background: rgba(35, 35, 91, 0.15);
+        border: 1px solid rgba(124, 77, 255, 0.25);
+        border-radius: 24px;
+        padding: 40px 30px;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-subtle);
+        backdrop-filter: blur(8px);
+        text-align: center;
+    }
+    .commitment-card:hover {
+        transform: translateY(-15px);
+        box-shadow: var(--shadow-elegant);
+        border-color: var(--accent-purple);
+        background: rgba(35, 35, 91, 0.5);
+    }
+    .commitment-icon {
+        font-size: 3rem;
+        color: var(--accent-cyan);
+        margin-bottom: 20px;
+        display: inline-block;
+        background: rgba(7, 176, 179, 0.1);
+        width: 70px;
+        height: 70px;
+        line-height: 70px;
+        border-radius: 50%;
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(7, 176, 179, 0.2);
+    }
+    .commitment-title {
+        color: var(--accent-purple);
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    .commitment-description {
+        color: var(--text-light);
+        line-height: 1.7;
+        font-size: 1rem;
+    }
+    
+    .future-scope {
+        background: linear-gradient(135deg, rgba(35, 35, 91, 0.3), rgba(10, 10, 26, 0.3));
+        border-radius: 24px;
+        padding: 80px 50px;
+        margin: 0 auto 80px;
+        max-width: 1200px;
+        text-align: center;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    .future-scope::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(124, 77, 255, 0.1)"/></svg>');
+        z-index: -1;
+        opacity: 0.5;
+    }
+    .scope-title {
+        color: var(--accent-purple);
+        font-size: 3.2rem;
+        margin-bottom: 50px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 20px rgba(124, 77, 255, 0.6);
+        filter: drop-shadow(0 0 8px rgba(124, 77, 255, 0.4));
+    }
+    .scope-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+        border-radius: 2px;
+    }
+    .scope-description {
+        color: var(--text-light);
+        font-size: 1.3rem;
+        line-height: 1.8;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .future-features-container {
+        max-width: 900px;
+        margin: 50px auto 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+    }
+    
+    .future-feature {
+        display: flex;
+        align-items: flex-start;
+        padding: 25px;
+        background: rgba(15, 23, 42, 0.5);
+        border-radius: 16px;
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: var(--shadow-soft);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .future-feature::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--accent-purple), var(--accent-cyan));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    
+    .future-feature:hover {
+        transform: translateY(-10px);
+        background: rgba(15, 23, 42, 0.7);
+        border-color: rgba(124, 77, 255, 0.4);
+        box-shadow: var(--shadow-luxury);
+    }
+    
+    .future-feature:hover::before {
+        opacity: 1;
+    }
+    
+    .feature-icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.2), rgba(7, 176, 179, 0.2));
+        border-radius: 50%;
+        margin-right: 20px;
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+    
+    .future-feature:hover .feature-icon-container {
+        transform: scale(1.1) rotate(10deg);
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.3), rgba(7, 176, 179, 0.3));
+        box-shadow: 0 0 20px rgba(124, 77, 255, 0.4);
+    }
+    
+    .feature-icon {
+        font-size: 1.8rem;
+        color: var(--accent-cyan);
+    }
+    
+    .feature-content {
+        flex: 1;
+    }
+    
+    .feature-title {
+        color: var(--accent-purple);
+        font-size: 1.3rem;
+        margin: 0 0 10px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    .feature-text {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .future-features-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .testimonial-title, .cta-title {
+            font-size: 2.2rem;
+        }
+        
+        .testimonials-subtitle, .cta-description {
+            font-size: 1.1rem;
+            padding: 0 10px;
+        }
+        
+        .testimonial-grid {
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            padding: 30px 25px;
+        }
+        
+        .testimonial-quote {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .testimonial-author {
+            font-size: 1.1rem;
+        }
+        
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            font-size: 0.9rem;
+        }
+        
+        .cta-description::before,
+        .cta-description::after {
+            display: none;
+        }
+        
+        .cta-section {
+            padding: 80px 30px;
+        }
+        
+        .cta-buttons {
+            gap: 20px;
+        }
+    }
+    .testimonials-section {
+        background: linear-gradient(135deg, rgba(35, 35, 91, 0.3), rgba(10, 10, 26, 0.3));
+        border-radius: 24px;
+        padding: 100px 50px;
+        margin: 0 auto 80px;
+        max-width: 1200px;
+        text-align: center;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+    
+    .testimonials-section:hover {
+        box-shadow: 0 25px 50px -12px rgba(124, 77, 255, 0.25);
+        transform: translateY(-5px);
+    }
+    .testimonials-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: 
+            radial-gradient(circle at 20% 30%, rgba(124, 77, 255, 0.15) 0%, transparent 50%), 
+            radial-gradient(circle at 80% 70%, rgba(7, 176, 179, 0.15) 0%, transparent 50%),
+            url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(124, 77, 255, 0.1)"/></svg>');
+        z-index: -1;
+        opacity: 0.5;
+    }
+    .testimonial-title {
+        color: var(--text-bright) !important; /* Use a bright, solid color */
+        -webkit-text-fill-color: var(--text-bright) !important; /* Ensure it's applied */
+        background: none !important; /* Remove the gradient background */
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Add shadow for readability */
+    }
+    
+    .testimonial-title {
+        color: var(--accent-purple);
+        font-size: 3.5rem;
+        margin-bottom: 50px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        background: linear-gradient(to right, var(--accent-purple), var(--accent-cyan));
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 4px 15px rgba(124, 77, 255, 0.6);
+        filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.4));
+        animation: titlePulse 2s infinite alternate ease-in-out;
+    }
+    .testimonial-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+        border-radius: 2px;
+    }
+    
+    .testimonials-subtitle {
+        color: var(--text-light);
+        font-size: 1.4rem;
+        margin-bottom: 50px;
+        line-height: 1.6;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 20px;
+    }
+    
+    .testimonials-subtitle::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+        border-radius: 1px;
+        opacity: 0.7;
+    }
+    .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 50px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .testimonial-card {
+        background: rgba(35, 35, 91, 0.15);
+        border: 1px solid rgba(124, 77, 255, 0.25);
+        border-radius: 24px;
+        padding: 50px 40px;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-subtle);
+        backdrop-filter: blur(8px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-15px) scale(1.02) rotateX(5deg);
+        box-shadow: var(--shadow-elegant), 0 20px 40px rgba(124, 77, 255, 0.3);
+        border-color: var(--accent-purple);
+        background: rgba(35, 35, 91, 0.5);
+    }
+    
+    @keyframes floatAnimation {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0); }
+    }
+    
+    .testimonial-grid:hover .testimonial-card:not(:hover) {
+        filter: brightness(0.8);
+        transform: scale(0.95);
+    }
+    
+    .testimonial-card::before {
+        content: '"';
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 8rem;
+        color: rgba(124, 77, 255, 0.1);
+        font-family: serif;
+        line-height: 1;
+        transition: all 0.5s ease;
+    }
+    
+    .testimonial-card:hover::before {
+        color: rgba(124, 77, 255, 0.2);
+        transform: translateY(-10px) scale(1.1);
+    }
+    
+    .testimonial-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s ease;
+    }
+    
+    .testimonial-card:hover::after {
+        transform: scaleX(1);
+    }
+    .testimonial-quote {
+        color: var(--text-light);
+        font-size: 1.15rem;
+        line-height: 1.8;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+        font-style: italic;
+        text-align: left;
+        width: 100%;
+        padding: 0 10px;
+    }
+    
+    .testimonial-quote::after {
+        content: '"';
+        position: absolute;
+        bottom: -20px;
+        right: 20px;
+        font-size: 4rem;
+        color: rgba(7, 176, 179, 0.1);
+        font-family: serif;
+        line-height: 0;
+    }
+    
+    .testimonial-author-container {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        align-self: flex-start;
+        width: 100%;
+    }
+    
+    .testimonial-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 5px 15px rgba(124, 77, 255, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .testimonial-card:hover .testimonial-avatar {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 8px 25px rgba(124, 77, 255, 0.4);
+    }
+    
+    .testimonial-info {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+    
+    .testimonial-author {
+        color: var(--accent-cyan);
+        font-size: 1.3rem;
+        font-weight: 700;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 5px;
+        background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .testimonial-role {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .cta-section {
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.15), rgba(7, 176, 179, 0.15));
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        border-radius: 24px;
+        padding: 120px 60px;
+        text-align: center;
+        max-width: 1000px;
+        margin: 0 auto 80px;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+    }
+    
+    .cta-section:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 60px -15px rgba(124, 77, 255, 0.3);
+        border-color: var(--accent-cyan);
+    }
+    
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(7, 176, 179, 0.1) 0%, transparent 60%);
+        animation: rotateGradient 15s linear infinite reverse;
+        z-index: -1;
+    }
+    
+    .cta-section::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(124, 77, 255, 0.05)' fill-rule='evenodd'/%3E%3C/svg%3E");
+        opacity: 0.5;
+        z-index: -1;
+    }
+    
+    .cta-title {
+        color: var(--accent-purple);
+        font-size: 3.8rem;
+        margin-bottom: 30px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        background: linear-gradient(to right, var(--accent-purple), var(--accent-cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 4px 15px rgba(124, 77, 255, 0.6);
+        filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.4));
+        position: relative;
+        display: inline-block;
+        transition: transform 0.5s ease, text-shadow 0.5s ease;
+        animation: titlePulse 2s infinite alternate ease-in-out;
+    }
+    
+    .cta-section:hover .cta-title {
+        transform: scale(1.05);
+        text-shadow: 0 5px 15px rgba(124, 77, 255, 0.5);
+    }
+    
+    .cta-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+        border-radius: 2px;
+    }
+    
+    .cta-description {
+        color: var(--text-light);
+        font-size: 1.4rem;
+        margin-bottom: 60px;
+        line-height: 1.8;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        padding: 0 20px;
+        transition: transform 0.5s ease, color 0.5s ease;
+    }
+    
+    .cta-description::before,
+    .cta-description::after {
+        content: '';
+        position: absolute;
+        height: 3px;
+        width: 40px;
+        background: linear-gradient(90deg, var(--accent-purple), transparent);
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.5;
+        transition: width 0.5s ease, opacity 0.5s ease;
+    }
+    
+    .cta-description::before {
+        left: -20px;
+    }
+    
+    .cta-description::after {
+        right: -20px;
+        background: linear-gradient(90deg, transparent, var(--accent-cyan));
+    }
+    
+    .cta-section:hover .cta-description {
+        color: var(--text-bright);
+    }
+    
+    .cta-section:hover .cta-description::before,
+    .cta-section:hover .cta-description::after {
+        width: 60px;
+        opacity: 0.8;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn {
+        padding: 20px 45px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        text-decoration: none;
+        display: inline-block;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(124, 77, 255, 0.2);
+    }
+    
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s;
+    }
+    .btn:hover::before {
+        left: 100%;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        color: white;
+        box-shadow: 0 10px 25px rgba(124, 77, 255, 0.3);
+        position: relative;
+        z-index: 1;
+    }
+    
+    .btn-primary::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+        border-radius: 50px;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.5s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 20px 35px rgba(124, 77, 255, 0.4);
+    }
+    
+    .btn-primary:hover::after {
+        opacity: 1;
+    }
+    .btn-secondary {
+        background: transparent;
+        color: var(--accent-cyan);
+        border: 2px solid var(--accent-cyan);
+        box-shadow: 0 5px 15px rgba(7, 176, 179, 0.2);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+    }
+    
+    .btn-secondary::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(7, 176, 179, 0.1), rgba(124, 77, 255, 0.1));
+        z-index: -1;
+        transition: transform 0.6s ease;
+        transform: translateX(0);
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(7, 176, 179, 0.3);
+        color: var(--accent-purple);
+        border-color: var(--accent-purple);
+    }
+    
+    .btn-secondary:hover::after {
+        transform: translateX(100%);
+    }
+    /* Feedback Form Styles */
+    .feedback-section {
+        background: linear-gradient(135deg, rgba(7, 176, 179, 0.15), rgba(124, 77, 255, 0.15));
+        border: 1px solid rgba(7, 176, 179, 0.3);
+        border-radius: 24px;
+        padding: 80px 50px;
+        max-width: 1000px;
+        margin: 0 auto 80px;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .feedback-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(124, 77, 255, 0.1) 0%, transparent 60%);
+        animation: rotateGradient 15s linear infinite;
+        z-index: -1;
+    }
+    
+    .feedback-title {
+        color: var(--accent-cyan);
+        font-size: 3.5rem;
+        margin-bottom: 30px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-align: center;
+        background: linear-gradient(to right, var(--accent-cyan), var(--accent-purple));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 4px 15px rgba(7, 176, 179, 0.6);
+        filter: drop-shadow(0 0 10px rgba(7, 176, 179, 0.4));
+        animation: titlePulse 2s infinite alternate ease-in-out;
+    }
+    
+    .feedback-description {
+        color: var(--text-light);
+        font-size: 1.3rem;
+        margin-bottom: 40px;
+        line-height: 1.8;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+    
+    .feedback-form {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+    
+    .form-label {
+        display: block;
+        color: var(--text-light);
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 18px 25px;
+        border-radius: 12px;
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        background: rgba(15, 23, 42, 0.5);
+        color: var(--text-light);
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: var(--accent-cyan);
+        box-shadow: 0 5px 20px rgba(7, 176, 179, 0.3);
+        background: rgba(15, 23, 42, 0.7);
+    }
+    
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+    
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+    
+    .rating-container {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    
+    .rating-star {
+        font-size: 2rem;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .rating-star:hover, .rating-star.active {
+        color: var(--accent-cyan);
+        transform: scale(1.2);
+    }
+    
+    .submit-btn {
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+        color: white;
+        padding: 18px 40px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+        margin: 40px auto 0;
+        box-shadow: 0 10px 25px rgba(7, 176, 179, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .submit-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s;
+    }
+    
+    .submit-btn:hover::before {
+        left: 100%;
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 35px rgba(7, 176, 179, 0.4);
+        filter: brightness(1.1);
+    }
+    
+    /* Improved Alignment and Responsive Styles */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        .content-grid, .testimonial-grid, .commitments-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        .content-card, .testimonial-card, .commitment-card {
+            padding: 40px 25px;
+        }
+        .future-scope, .testimonials-section, .cta-section, .commitments-section, .feedback-section {
+            padding: 60px 30px;
+        }
+        .feedback-title {
+            font-size: 2.2rem;
+        }
+        .rating-container {
+            justify-content: center;
+        }
+    }
+    
+    /* Animation Performance Optimization */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+    
+    /* Form Visibility Enhancement */
+    .form-control {
+        width: 100%;
+        padding: 18px 25px;
+        border-radius: 12px;
+        border: 2px solid rgba(124, 77, 255, 0.5); /* Increased border visibility */
+        background: rgba(15, 23, 42, 0.8); /* Increased opacity */
+        color: var(--text-light);
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box; /* Ensure proper sizing */
+    }
+    
+    .form-control:focus {
+        border-color: var(--accent-purple);
+        box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
+        outline: none;
+    }
+    
+    /* Additional CSS for flash messages and form enhancements */
+    .flash-messages {
+        margin-bottom: 30px;
+    }
+
+    .alert {
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideIn 0.5s ease-out;
+    }
+
+    .alert-success {
+        background: rgba(46, 204, 113, 0.1);
+        border: 1px solid rgba(46, 204, 113, 0.3);
+        color: #2ecc71;
+    }
+
+    .alert-error {
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #e74c3c;
+    }
+
+    .close-alert {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 10px;
+        transition: opacity 0.3s ease;
+    }
+    
+    .close-alert:hover {
+        opacity: 0.7;
+    }
+
+    .character-count {
+        text-align: right;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 5px;
+    }
+
+    .form-group {
+        position: relative;
+    }
+
+    .form-control.error {
+        border-color: #e74c3c;
+        box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .btn-loading {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-loading::after {
+        content: '';
+        width: 16px;
+        height: 16px;
+        margin-left: 10px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+<video autoplay loop muted playsinline class="video-background">
+    <source src="{{ url_for('static', filename='b1.mp4') }}" type="video/mp4">
+</video>
+<div class="about-container">
+    <!-- Hero Section with Logo -->
+    <div class="hero-section">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="CarHub Logo" class="hero-logo">
+        <h1 class="hero-title">About CarHub</h1>
+        <p class="hero-subtitle">Your Premier Automotive Destination</p>
+        <p class="hero-description">
+            Welcome to CarHub, where automotive dreams become reality. We are passionate about connecting car enthusiasts 
+            with exceptional vehicles, providing unparalleled service, and creating unforgettable experiences in the world of luxury automobiles.
+        </p>
+        <div class="hero-cta">
+            <a href="{{ url_for('cars') }}" class="hero-btn">Explore Our Collection</a>
+        </div>
+    </div>
+    
+
+    <!-- Content Cards -->
+    <div class="content-grid">
+        <div class="content-card">
+            <span class="card-icon">🚗</span>
+            <h3 class="card-title">Premium Car Collection</h3>
+            <p class="card-description">
+                Discover our curated selection of the world's finest automobiles, from classic vintage cars to cutting-edge supercars.
+            </p>
+            <ul class="card-features">
+                <li>Luxury sports cars and supercars</li>
+                <li>Classic and vintage automobiles</li>
+                <li>Limited edition models</li>
+                <li>Certified pre-owned vehicles</li>
+            </ul>
+        </div>
+        
+        <div class="content-card">
+            <span class="card-icon">🔧</span>
+            <h3 class="card-title">Expert Services</h3>
+            <p class="card-description">
+                Our team of certified professionals provides comprehensive automotive services to keep your vehicle in perfect condition.
+            </p>
+            <ul class="card-features">
+                <li>Professional maintenance and repair</li>
+                <li>Performance upgrades and tuning</li>
+                <li>Detailing and restoration services</li>
+                <li>24/7 roadside assistance</li>
+            </ul>
+        </div>
+        
+        <div class="content-card">
+            <span class="card-icon">💎</span>
+            <h3 class="card-title">Luxury Experience</h3>
+            <p class="card-description">
+                Experience automotive luxury like never before with our personalized service and attention to detail.
+            </p>
+            <ul class="card-features">
+                <li>Personalized consultation</li>
+                <li>White-glove delivery service</li>
+                <li>Exclusive member benefits</li>
+                <li>VIP test drive experiences</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Our Commitments Section -->
+    <div class="commitments-section">
+        <h2 class="commitments-title">Our Commitments</h2>
+        <div class="commitments-grid">
+            <div class="commitment-card">
+            <div class="commitment-card">
+                <span class="commitment-icon">🅿️</span>
+                <h3 class="commitment-title">Free Parking</h3>
+                <p class="commitment-description">
+                    Access to exclusive public parking spaces for CarHub customers, making your city driving experience hassle-free.
+                </p>
+            </div>
+            
+            <div class="commitment-card">
+                <span class="commitment-icon">🔄</span>
+                <h3 class="commitment-title">New Models Guaranteed</h3>
+                <p class="commitment-description">
+                    We guarantee that all vehicles shown on our website are available in brand new condition, exactly as displayed.
+                </p>
+            </div>
+            
+            <div class="commitment-card">
+                <span class="commitment-icon">🛎️</span>
+                <h3 class="commitment-title">24/7 Customer Service</h3>
+                <p class="commitment-description">
+                    Our dedicated support team is available around the clock to assist with any inquiries or concerns you may have.
+                </p>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- Future Scope -->
+    <div class="future-scope">
+        <h2 class="scope-title">Future Scope</h2>
+        <p class="scope-description">
+            At CarHub, we're always looking ahead to bring you even more amazing experiences:
+        </p>
+        <div class="future-features-container">
+            <div class="future-feature">
+                <div class="feature-icon-container">
+                    <span class="feature-icon">📱</span>
+                </div>
+                <div class="feature-content">
+                    <h3 class="feature-title">Mobile App</h3>
+                    <p class="feature-text">Development of an Android app for convenient mobile access to our extensive car collection.</p>
+                </div>
+            </div>
+            <div class="future-feature">
+                <div class="feature-icon-container">
+                    <span class="feature-icon">🥽</span>
+                </div>
+                <div class="feature-content">
+                    <h3 class="feature-title">VR Experience</h3>
+                    <p class="feature-text">Introduction of VR views for each car to provide a realistic and immersive experience.</p>
+                </div>
+            </div>
+            <div class="future-feature">
+                <div class="feature-icon-container">
+                    <span class="feature-icon">📞</span>
+                </div>
+                <div class="feature-content">
+                    <h3 class="feature-title">Video Consultations</h3>
+                    <p class="feature-text">Enhanced video calls to facilitate detailed consultations and virtual test drives.</p>
+                </div>
+            </div>
+            <div class="future-feature">
+                <div class="feature-icon-container">
+                    <span class="feature-icon">🏎️</span>
+                </div>
+                <div class="feature-content">
+                    <h3 class="feature-title">Rare Collection</h3>
+                    <p class="feature-text">Expansion of our rare car inventory to fulfill your unique desires and aspirations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Testimonials -->
+    <div class="testimonials-section">
+        <h2 class="testimonial-title">What Our Customers Say</h2>
+        <p class="testimonials-subtitle">Hear from our satisfied clients about their exceptional experiences with CarHub</p>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"CarHub exceeded my expectations with their exceptional service and the quality of cars available. The attention to detail and personalized experience was outstanding!"</p>
+                <div class="testimonial-author-container">
+                    <div class="testimonial-avatar">JD</div>
+                    <div class="testimonial-info">
+                        <p class="testimonial-author">John Doe</p>
+                        <p class="testimonial-role">Luxury Car Enthusiast</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"The VR experience was amazing! It felt like I was actually inside the car. The team at CarHub is truly pioneering the future of car shopping."</p>
+                <div class="testimonial-author-container">
+                    <div class="testimonial-avatar">JS</div>
+                    <div class="testimonial-info">
+                        <p class="testimonial-author">Jane Smith</p>
+                        <p class="testimonial-role">Tech Executive</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"I couldn't be happier with my new car. The team at CarHub made the whole process seamless and enjoyable. Their knowledge and passion for automobiles is evident in everything they do."</p>
+                <div class="testimonial-author-container">
+                    <div class="testimonial-avatar">MJ</div>
+                    <div class="testimonial-info">
+                        <p class="testimonial-author">Mike Johnson</p>
+                        <p class="testimonial-role">Car Collector</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="cta-section">
+        <h2 class="cta-title">Ready to Find Your Dream Car?</h2>
+        <p class="cta-description">
+            Join thousands of satisfied customers who have found their perfect vehicle with CarHub. 
+            Let us help you discover the car of your dreams today.
+        </p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('cars') }}" class="btn btn-primary">Browse Our Collection</a>
+            <a href="#contact" class="btn btn-secondary">Contact Us Today</a>
+        </div>
+    </div>
+    
+    <!-- Feedback Form Section -->
+    <div class="feedback-section" id="feedback">
+        <h2 class="feedback-title">Share Your Feedback</h2>
+        <p class="feedback-description">
+            We value your opinion and are constantly striving to improve. Please take a moment to share your thoughts and help us serve you better.
+        </p>
+        
+        <!-- Flash messages for success/error -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                            <button type="button" class="close-alert">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form class="feedback-form" action="{{ url_for('about') }}" method="POST">
+            <div class="form-group">
+                <label for="name" class="form-label">Your Name *</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required maxlength="50">
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address *</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Rate Your Experience *</label>
+                <div class="rating-container">
+                    <span class="rating-star" data-rating="1">★</span>
+                    <span class="rating-star" data-rating="2">★</span>
+                    <span class="rating-star" data-rating="3">★</span>
+                    <span class="rating-star" data-rating="4">★</span>
+                    <span class="rating-star" data-rating="5">★</span>
+                </div>
+                <input type="hidden" id="rating" name="rating" value="0" required>
+                <div class="rating-error" style="color: #ff4757; font-size: 0.9rem; margin-top: 5px; display: none;">
+                    Please select a rating
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="feedback-type" class="form-label">Feedback Type *</label>
+                <select id="feedback-type" name="feedback-type" class="form-control" required>
+                    <option value="" disabled selected>Select feedback type</option>
+                    <option value="general">General Feedback</option>
+                    <option value="website">Website Experience</option>
+                    <option value="service">Customer Service</option>
+                    <option value="product">Vehicle Quality</option>
+                    <option value="suggestion">Suggestion</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="message" class="form-label">Your Feedback *</label>
+                <textarea id="message" name="message" class="form-control" placeholder="Please share your thoughts, suggestions, or experiences with us..." required minlength="10" maxlength="1000"></textarea>
+                <div class="character-count">
+                    <span id="char-count">0</span>/1000 characters
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submit-feedback">
+                <span class="btn-text">Submit Feedback</span>
+                <span class="btn-loading" style="display: none;">Sending...</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+// Enhanced JavaScript for form functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.rating-star');
+    const ratingInput = document.getElementById('rating');
+    const ratingError = document.querySelector('.rating-error');
+    const messageTextarea = document.getElementById('message');
+    const charCount = document.getElementById('char-count');
+    const form = document.querySelector('.feedback-form');
+    const submitBtn = document.getElementById('submit-feedback');
+    const btnText = document.querySelector('.btn-text');
+    const btnLoading = document.querySelector('.btn-loading');
+    
+    // Star rating functionality
+    stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-rating');
+            ratingInput.value = rating;
+            if (ratingError) ratingError.style.display = 'none';
+            ratingInput.classList.remove('error');
+            
+            // Reset all stars
+            stars.forEach(s => s.classList.remove('active'));
+            
+            // Highlight selected stars
+            for (let i = 0; i <= index; i++) {
+                stars[i].classList.add('active');
+            }
+        });
+        
+        // Hover effect
+        star.addEventListener('mouseenter', function() {
+            stars.forEach(s => s.style.color = 'rgba(255, 255, 255, 0.3)');
+            for (let i = 0; i <= index; i++) {
+                stars[i].style.color = 'var(--accent-cyan)';
+            }
+        });
+    });
+    
+    // Reset hover effect
+    const ratingContainer = document.querySelector('.rating-container');
+    if (ratingContainer) {
+        ratingContainer.addEventListener('mouseleave', function() {
+            const currentRating = ratingInput.value;
+            stars.forEach((star, index) => {
+                if (index < currentRating) {
+                    star.style.color = 'var(--accent-cyan)';
+                } else {
+                    star.style.color = 'rgba(255, 255, 255, 0.3)';
+                }
+            });
+        });
+    }
+    
+    // Character counter
+    if (messageTextarea && charCount) {
+        messageTextarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.textContent = length;
+            
+            if (length > 950) {
+                charCount.style.color = '#e74c3c';
+            } else {
+                charCount.style.color = 'var(--text-muted)';
+            }
+        });
+    }
+    
+    // Form validation
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Check rating
+            if (ratingInput.value === '0' || ratingInput.value === '') {
+                if (ratingError) ratingError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Check required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('error');
+                    isValid = false;
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Show loading state
+            if (submitBtn && btnText && btnLoading) {
+                submitBtn.disabled = true;
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'flex';
+            }
+        });
+    }
+    
+    // Close alert messages
+    document.querySelectorAll('.close-alert').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.parentElement.style.opacity = '0';
+            this.parentElement.style.transform = 'translateY(-20px)';
+            setTimeout(() => this.parentElement.remove(), 300);
+        });
+    });
+    
+    // Auto-hide success messages after 5 seconds
+    setTimeout(() => {
+        const successAlerts = document.querySelectorAll('.alert-success');
+        successAlerts.forEach(alert => {
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-20px)';
+            setTimeout(() => alert.remove(), 300);
+        });
+    }, 5000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+"""
+CarHub Chatbot Setup Script
+This script helps you set up the AI chatbot with OpenAI integration
+"""
+
+import os
+import sys
+from dotenv import load_dotenv
+import subprocess
+
+def check_requirements():
+    """Check if all required packages are installed"""
+    print("🔍 Checking requirements...")
+    
+    try:
+        import openai
+        print("✅ OpenAI package is installed")
+    except ImportError:
+        print("❌ OpenAI package not found. Installing...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "openai==1.54.4"])
+        print("✅ OpenAI package installed")
+    
+    try:
+        from dotenv import load_dotenv
+        print("✅ python-dotenv package is installed")
+    except ImportError:
+        print("❌ python-dotenv package not found. Installing...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "python-dotenv==1.0.1"])
+        print("✅ python-dotenv package installed")
+
+def setup_environment():
+    """Set up environment variables"""
+    print("\n🔧 Setting up environment...")
+    
+    # Check if .env file exists
+    if not os.path.exists('.env'):
+        if os.path.exists('.env.example'):
+            print("📋 Copying .env.example to .env...")
+            with open('.env.example', 'r') as example_file:
+                content = example_file.read()
+            
+            with open('.env', 'w') as env_file:
+                env_file.write(content)
+            
+            print("✅ .env file created")
+        else:
+            print("❌ .env.example file not found")
+            return False
+    else:
+        print("✅ .env file already exists")
+    
+    return True
+
+def check_openai_key():
+    """Check if OpenAI API key is configured"""
+    print("\n🔑 Checking OpenAI API key...")
+    
+    load_dotenv()
+    api_key = os.getenv('OPENAI_API_KEY')
+    
+    if not api_key or api_key == 'your-openai-api-key-here':
+        print("❌ OpenAI API key not configured")
+        print("\n📖 To set up your OpenAI API key:")
+        print("1. Go to https://platform.openai.com/api-keys")
+        print("2. Sign up or log in to your account")
+        print("3. Create a new secret key")
+        print("4. Copy the key and add it to your .env file:")
+        print("   OPENAI_API_KEY=your-actual-api-key-here")
+        return False
+    else:
+        print("✅ OpenAI API key is configured")
+        return True
+
+def test_chatbot():
+    """Test if the chatbot is working"""
+    print("\n🧪 Testing chatbot functionality...")
+    
+    try:
+        from chatbot import CarHubChatbot
+        from app import db, User, Car, Order
+        
+        # Create a test instance
+        chatbot = CarHubChatbot(db, User, Car, Order)
+        print("✅ Chatbot initialized successfully")
+        
+        # Test the knowledge base
+        if chatbot.knowledge_base:
+            print("✅ Knowledge base loaded")
+            print(f"   - Company: {chatbot.knowledge_base['company_info']['name']}")
+            print(f"   - Services: {len(chatbot.knowledge_base['services'])} available")
+            print(f"   - Inventory: {len(chatbot.knowledge_base['current_inventory'])} cars")
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Chatbot test failed: {e}")
+        return False
+
+def check_flask_integration():
+    """Check if Flask integration is working"""
+    print("\n🌐 Checking Flask integration...")
+    
+    try:
+        from app import app
+        
+        with app.app_context():
+            # Check if chatbot routes are registered
+            routes = [str(rule) for rule in app.url_map.iter_rules()]
+            
+            if '/api/chat' in routes:
+                print("✅ Chat API endpoint registered")
+            else:
+                print("❌ Chat API endpoint not found")
+                return False
+            
+            if '/chat' in routes:
+                print("✅ Chat page endpoint registered")
+            else:
+                print("❌ Chat page endpoint not found")
+                return False
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Flask integration check failed: {e}")
+        return False
+
+def main():
+    """Main setup function"""
+    print("🚗 CarHub AI Chatbot Setup")
+    print("=" * 40)
+    
+    # Step 1: Check requirements
+    check_requirements()
+    
+    # Step 2: Setup environment
+    if not setup_environment():
+        print("\n❌ Setup failed at environment configuration")
+        return
+    
+    # Step 3: Check OpenAI key
+    openai_configured = check_openai_key()
+    
+    # Step 4: Test chatbot (only if OpenAI key is configured)
+    if openai_configured:
+        test_chatbot()
+        check_flask_integration()
+    
+    # Final instructions
+    print("\n" + "=" * 40)
+    print("🎉 Setup Complete!")
+    print("\n📋 Next Steps:")
+    
+    if not openai_configured:
+        print("1. ⚠️  Configure your OpenAI API key in .env file")
+        print("2. Run this setup script again to test the chatbot")
+    else:
+        print("1. ✅ All components are ready!")
+        print("2. Start your Flask app: python app.py")
+        print("3. Visit http://localhost:5000")
+        print("4. Look for the chat widget in the bottom-right corner")
+    
+    print("\n💡 Features of your new AI chatbot:")
+    print("   • Comprehensive CarHub knowledge base")
+    print("   • Personalized car recommendations")
+    print("   • Service scheduling assistance")
+    print("   • Pricing and financing information")
+    print("   • 24/7 customer support simulation")
+    print("   • Integration with your user database")
+    
+    print("\n📞 If you need help:")
+    print("   • Check the console for error messages")
+    print("   • Ensure your OpenAI API key has sufficient credits")
+    print("   • Make sure all requirements are installed")
+
+if __name__ == "__main__":
+    main()

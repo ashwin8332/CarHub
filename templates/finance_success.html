@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}Finance Application Success - CarHub{% endblock %}
+
+{% block extra_head %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700;900&display=swap');
+    
+    :root {
+        --primary-purple: #7c4dff;
+        --primary-blue: #23235b;
+        --dark-blue: #181828;
+        --darker-blue: #0a0a1a;
+        --accent-cyan: #07b0b3;
+        --light-purple: #a084ff;
+        --text-light: #e0e6ff;
+        --text-muted: #b3baff;
+        --luxury-gold: #ffd700;
+        --deep-space: #0a0a1a;
+        --cosmic-purple: #7c4dff;
+        --silver: #c0c0c0;
+        --charcoal: #2E2E36;
+        --premium-gold: #d4af37;
+        --neon-blue: #00d4ff;
+        --electric-purple: #8b5cf6;
+        
+        --gradient-primary: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+        --gradient-luxury: linear-gradient(90deg, #a084ff 80%, #23235b 100%);
+        --gradient-dark: linear-gradient(120deg, #23235b 60%, #181828 100%);
+        --gradient-space: radial-gradient(ellipse at top left, #23235b 0%, #0a0a1a 100%);
+        --gradient-text: linear-gradient(45deg, #a084ff, #07b0b3, #ffd700);
+        
+        --dark-bg: #0a0a1a;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --border-color: rgba(124, 77, 255, 0.2);
+    }
+
+    body {
+        background: var(--gradient-space);
+        color: var(--text-light);
+        font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    .success-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 80px 20px;
+        text-align: center;
+    }
+
+    .success-icon {
+        font-size: 5rem;
+        color: var(--luxury-gold);
+        margin-bottom: 30px;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-20px);
+        }
+        60% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .success-title {
+        font-family: 'Orbitron', monospace;
+        font-size: 2.5rem;
+        font-weight: 900;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .success-message {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        margin-bottom: 40px;
+        line-height: 1.6;
+    }
+
+    .application-details {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 30px;
+        margin: 40px 0;
+        backdrop-filter: blur(20px);
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .detail-value {
+        color: var(--text-light);
+        font-weight: 700;
+    }
+
+    .next-steps {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 30px;
+        margin: 40px 0;
+        backdrop-filter: blur(20px);
+        text-align: left;
+    }
+
+    .steps-title {
+        font-family: 'Orbitron', monospace;
+        font-size: 1.5rem;
+        color: var(--light-purple);
+        margin-bottom: 20px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    .step-number {
+        background: var(--luxury-gold);
+        color: var(--dark-blue);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .step-text {
+        flex: 1;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 40px;
+    }
+
+    .btn {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Orbitron', monospace;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .primary-btn {
+        background: var(--gradient-primary);
+        color: white;
+    }
+
+    .primary-btn:hover {
+        background: var(--gradient-luxury);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(124, 77, 255, 0.4);
+    }
+
+    .secondary-btn {
+        background: transparent;
+        color: var(--light-purple);
+        border: 2px solid var(--light-purple);
+    }
+
+    .secondary-btn:hover {
+        background: var(--light-purple);
+        color: var(--dark-blue);
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+        .success-title {
+            font-size: 2rem;
+        }
+        
+        .detail-row {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .detail-label {
+            margin-bottom: 5px;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .step {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .step-number {
+            margin-right: 0;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="success-container">
+    <div class="success-icon">✅</div>
+    
+    <h1 class="success-title">Application Submitted Successfully!</h1>
+    
+    <p class="success-message">
+        Thank you for choosing CarHub Finance. Your finance application has been received and is being processed.
+        Our team will review your application and contact you within 24 hours with an update.
+    </p>
+
+    {% if application %}
+    <div class="application-details">
+        <div class="detail-row">
+            <span class="detail-label">Application ID</span>
+            <span class="detail-value">#{{ application.id }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Vehicle</span>
+            <span class="detail-value">{{ application.car_name }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Price</span>
+            <span class="detail-value">{{ application.car_price }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Selected Plan</span>
+            <span class="detail-value">{{ application.selected_plan.title() }} Plan</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Application Status</span>
+            <span class="detail-value">{{ application.application_status.title() }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Submitted On</span>
+            <span class="detail-value">{{ application.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="next-steps">
+        <h2 class="steps-title">What Happens Next?</h2>
+        
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-text">
+                <strong>Application Review</strong><br>
+                Our finance team will review your application within 24 hours
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-text">
+                <strong>Credit Check & Verification</strong><br>
+                We'll verify your information and run a credit check
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-text">
+                <strong>Approval Decision</strong><br>
+                You'll receive an email with your approval decision and terms
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-text">
+                <strong>Finalize Your Purchase</strong><br>
+                Once approved, we'll schedule your vehicle delivery
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <a href="{{ url_for('cars') }}" class="btn secondary-btn">Browse More Cars</a>
+        <a href="{{ url_for('profile') }}" class="btn primary-btn">View Profile</a>
+    </div>
+</div>
+{% endblock %}

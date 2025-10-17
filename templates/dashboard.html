@@ -1,0 +1,493 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CarHub{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Welcome to Your Dashboard</h1>
+        <p>Hello, {{ user.username }}! Manage your account and explore our premium car collection.</p>
+    </div>
+
+    <!-- Quick Stats Section -->
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-icon">🚗</div>
+            <div class="stat-info">
+                <h3>50+</h3>
+                <p>Premium Cars</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-info">
+                <h3>5★</h3>
+                <p>Customer Rating</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🌟</div>
+            <div class="stat-info">
+                <h3>15+</h3>
+                <p>Luxury Brands</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-info">
+                <h3>24/7</h3>
+                <p>Support</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-content">
+        <!-- Main Navigation Cards -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card featured">
+                <div class="card-icon">👤</div>
+                <h3>Profile Management</h3>
+                <p>Update your personal information, preferences, and account settings.</p>
+                <div class="card-features">
+                    <span class="feature">✓ Personal Info</span>
+                    <span class="feature">✓ Security Settings</span>
+                    <span class="feature">✓ Notifications</span>
+                </div>
+                <a href="{{ url_for('profile') }}" class="btn btn-primary">Manage Profile</a>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-icon">🚙</div>
+                <h3>Premium Car Collection</h3>
+                <p>Explore our curated selection of luxury and sports vehicles from top brands.</p>
+                <div class="card-features">
+                    <span class="feature">✓ Luxury Cars</span>
+                    <span class="feature">✓ Sports Cars</span>
+                    <span class="feature">✓ 3D Models</span>
+                </div>
+                <a href="{{ url_for('cars') }}" class="btn btn-primary">Browse Collection</a>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-icon">🎬</div>
+                <h3>Video Gallery</h3>
+                <p>Watch high-quality videos showcasing our featured vehicles in action.</p>
+                <div class="card-features">
+                    <span class="feature">✓ HD Videos</span>
+                    <span class="feature">✓ Car Reviews</span>
+                    <span class="feature">✓ Test Drives</span>
+                </div>
+                <a href="{{ url_for('video') }}" class="btn btn-primary">Watch Gallery</a>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-icon">ℹ️</div>
+                <h3>About CarHub</h3>
+                <p>Discover our story, mission, and commitment to automotive excellence.</p>
+                <div class="card-features">
+                    <span class="feature">✓ Our Story</span>
+                    <span class="feature">✓ Mission</span>
+                    <span class="feature">✓ Team</span>
+                </div>
+                <a href="{{ url_for('about') }}" class="btn btn-primary">Learn More</a>
+            </div>
+
+            <!-- Additional Professional Cards -->
+            <div class="dashboard-card">
+                <div class="card-icon">🛒</div>
+                <h3>Purchase History</h3>
+                <p>Track your orders, view purchase history, and manage transactions.</p>
+                <div class="card-features">
+                    <span class="feature">✓ Order Tracking</span>
+                    <span class="feature">✓ Invoices</span>
+                    <span class="feature">✓ Returns</span>
+                </div>
+                <a href="#" class="btn btn-secondary">View History</a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">💰</div>
+                <h3>Financing Options</h3>
+                <p>Explore flexible payment plans and financing solutions for your dream car.</p>
+                <div class="card-features">
+                    <span class="feature">✓ Loan Calculator</span>
+                    <span class="feature">✓ EMI Plans</span>
+                    <span class="feature">✓ Pre-approval</span>
+                </div>
+                <a href="#" class="btn btn-secondary">Explore Finance</a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">🔧</div>
+                <h3>Service & Support</h3>
+                <p>Access customer support, maintenance services, and technical assistance.</p>
+                <div class="card-features">
+                    <span class="feature">✓ Live Chat</span>
+                    <span class="feature">✓ Service Booking</span>
+                    <span class="feature">✓ Help Center</span>
+                </div>
+                <a href="#" class="btn btn-secondary">Get Support</a>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="recent-activity">
+            <h2>Recent Activity</h2>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon">👁️</div>
+                    <div class="activity-content">
+                        <h4>Viewed Lamborghini Revuelto</h4>
+                        <p>2 hours ago</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">❤️</div>
+                    <div class="activity-content">
+                        <h4>Added Ferrari 296 to Favorites</h4>
+                        <p>1 day ago</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🎬</div>
+                    <div class="activity-content">
+                        <h4>Watched Bugatti Centodieci Video</h4>
+                        <p>3 days ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Cars Section -->
+        <div class="featured-section">
+            <h2>Featured This Week</h2>
+            <div class="featured-cars">
+                <div class="featured-car">
+                    <div class="car-badge">NEW</div>
+                    <h4>2024 Lamborghini Huracán Sterrato</h4>
+                    <p>Off-road supercar excellence</p>
+                </div>
+                <div class="featured-car">
+                    <div class="car-badge">POPULAR</div>
+                    <h4>Tesla Cybertruck</h4>
+                    <p>Revolutionary electric pickup</p>
+                </div>
+                <div class="featured-car">
+                    <div class="car-badge">LUXURY</div>
+                    <h4>Rolls-Royce Spectre</h4>
+                    <p>Electric luxury redefined</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-purple, #7c4dff);
+    margin-bottom: 1rem;
+}
+
+.dashboard-header p {
+    font-size: 1.2rem;
+    color: var(--text-muted, #b3baff);
+}
+
+/* Stats Section */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.2), rgba(35, 35, 91, 0.4));
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    padding: 0.5rem;
+    background: rgba(124, 77, 255, 0.2);
+    border-radius: 10px;
+}
+
+.stat-info h3 {
+    color: #7c4dff;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.stat-info p {
+    color: #e0e6ff;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.dashboard-card {
+    background: rgba(35, 35, 91, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 2px solid rgba(124, 77, 255, 0.3);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #7c4dff, #a084ff);
+}
+
+.dashboard-card.featured::before {
+    height: 6px;
+    background: linear-gradient(90deg, #ff4081, #7c4dff, #00bcd4);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(124, 77, 255, 0.3);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    padding: 1rem;
+    background: rgba(124, 77, 255, 0.2);
+    border-radius: 50%;
+}
+
+.dashboard-card h3 {
+    color: var(--light-purple, #a084ff);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.dashboard-card p {
+    color: var(--text-light, #e0e6ff);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.card-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.feature {
+    color: #b3baff;
+    font-size: 0.9rem;
+    padding: 0.3rem 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+    color: white;
+    border: none;
+}
+
+.btn-secondary {
+    background: linear-gradient(90deg, #ff4081 60%, #7c4dff 100%);
+    color: white;
+    border: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(124, 77, 255, 0.4);
+}
+
+/* Recent Activity */
+.recent-activity {
+    background: rgba(35, 35, 91, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.recent-activity h2 {
+    color: #7c4dff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(124, 77, 255, 0.1);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.activity-item:hover {
+    background: rgba(124, 77, 255, 0.2);
+}
+
+.activity-icon {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    background: rgba(124, 77, 255, 0.3);
+    border-radius: 50%;
+}
+
+.activity-content h4 {
+    color: #a084ff;
+    margin: 0 0 0.3rem 0;
+    font-size: 1rem;
+}
+
+.activity-content p {
+    color: #b3baff;
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+/* Featured Section */
+.featured-section {
+    background: rgba(35, 35, 91, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.featured-section h2 {
+    color: #7c4dff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.featured-cars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.featured-car {
+    background: rgba(124, 77, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.featured-car:hover {
+    transform: translateY(-3px);
+}
+
+.car-badge {
+    position: absolute;
+    top: -8px;
+    right: 15px;
+    background: linear-gradient(90deg, #ff4081, #7c4dff);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.featured-car h4 {
+    color: #a084ff;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.featured-car p {
+    color: #b3baff;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+    
+    .stats-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-cars {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 2rem;
+    }
+}
+</style>
+{% endblock %}

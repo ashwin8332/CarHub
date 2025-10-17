@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Details - Premium Car Collection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='specs.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header class="main-header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="CarHub Logo">
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('cars') }}">Shop Cars</a></li>
+                <li><a href="{{ url_for('inventory') }}">Inventory</a></li>
+                <li><a href="{{ url_for('video') }}">Video Gallery</a></li>
+                <li><a href="{{ url_for('about') }}">About Us</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('sign_up') }}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                        {{ message }}
+                        <button type="button" class="close" onclick="this.parentElement.style.display='none'">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700;900&display=swap');
+    
+    :root {
+        --primary-purple: #7c4dff;
+        --primary-blue: #23235b;
+        --dark-blue: #181828;
+        --darker-blue: #0a0a1a;
+        --accent-cyan: #07b0b3;
+        --light-purple: #a084ff;
+        --text-light: #e0e6ff;
+        --text-muted: #b3baff;
+        --luxury-gold: #ffd700;
+        --deep-space: #0a0a1a;
+        --cosmic-purple: #7c4dff;
+        --silver: #c0c0c0;
+        --charcoal: #2E2E36;
+        
+        /* Updated gradients to match index page */
+        --gradient-primary: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+        --gradient-luxury: linear-gradient(90deg, #a084ff 80%, #23235b 100%);
+        --gradient-dark: linear-gradient(120deg, #23235b 60%, #181828 100%);
+        --gradient-space: radial-gradient(ellipse at top left, #23235b 0%, #0a0a1a 100%);
+        --gradient-text: linear-gradient(45deg, #a084ff, #07b0b3, #ffd700);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--gradient-space);
+        color: var(--text-light);
+        font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        padding-top: 0; /* Reset any potential padding */
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative; /* Add positioning context */
+    }
+
+    /* Enhanced animated background */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(124, 77, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(7, 176, 179, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+        animation: cosmicGlow 15s ease-in-out infinite alternate;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.4)"/><circle cx="150" cy="80" r="0.8" fill="rgba(124,77,255,0.3)"/><circle cx="80" cy="160" r="1.2" fill="rgba(7,176,179,0.3)"/><circle cx="170" cy="30" r="0.6" fill="rgba(255,215,0,0.4)"/><circle cx="30" cy="120" r="0.8" fill="rgba(160,132,255,0.3)"/></svg>') repeat;
+        animation: starField 25s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.8;
+    }
+
+    @keyframes cosmicGlow {
+        0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+        100% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
+    }
+
+    @keyframes starField {
+        0% { transform: translateY(0) translateX(0); }
+        100% { transform: translateY(-200px) translateX(-100px); }
+    }
+
+    /* Flash messages positioning for car details page */
+    .flash-messages {
+        position: fixed;
+        top: 6rem; /* Position below the fixed navigation */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        width: 90%;
+        max-width: 500px;
+    }
+
+    /* Enhanced header with glass effect */
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2rem;
+        position: relative;
+        z-index: 10;
+        background: rgba(35, 35, 91, 0.1);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(124, 77, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        margin-top: 5rem; /* Add top margin to account for fixed navigation */
+    }
+
+    .back-btn {
+        background: rgba(35, 35, 91, 0.8);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(124, 77, 255, 0.4);
+        color: var(--text-light);
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .back-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.4), transparent);
+        transition: left 0.5s;
+    }
+
+    .back-btn:hover::before {
+        left: 100%;
+    }
+
+    .back-btn:hover {
+        background: var(--gradient-primary);
+        border-color: var(--light-purple);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(124, 77, 255, 0.4);
+    }
+
+    .page-title {
+        font-family: 'Orbitron', monospace;
+        font-size: 2.8rem;
+        font-weight: 900;
+        background: linear-gradient(45deg, #a084ff, #07b0b3, #ffd700, #7c4dff);
+        background-size: 400% 400%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        flex: 1;
+        animation: gradientShift 8s ease-in-out infinite;
+        text-shadow: 0 0 30px rgba(124, 77, 255, 0.5);
+        margin: 0; /* Remove default margins */
+        padding: 1rem 0; /* Add controlled padding */
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    /* Main content with better proportions for larger model */
+    .main-content {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 8rem 2rem 2rem 2rem; /* Increased top padding to prevent navbar overlap */
+        position: relative;
+        z-index: 2;
+    }
+
+    .car-details-container {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 4rem;
+        margin-bottom: 3rem;
+        align-items: start;
+    }
+
+    /* Enhanced model section with floating effect */
+    .model-section {
+        background: rgba(35, 35, 91, 0.3);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 2.5rem;
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        box-shadow: 
+            0 25px 80px rgba(124, 77, 255, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .model-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(from 0deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+        animation: rotate 10s linear infinite;
+        z-index: -1;
+    }
+
+    .model-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 
+            0 35px 100px rgba(124, 77, 255, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .model-container {
+        position: relative;
+        margin-bottom: 2rem;
+        border-radius: 25px;
+        overflow: visible;
+        box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.4),
+            inset 0 2px 0 rgba(255, 255, 255, 0.1);
+        background: linear-gradient(135deg, rgba(35, 35, 91, 0.6), rgba(24, 24, 40, 0.8));
+        padding: 1rem;
+        min-height: 500px;
+        min-width: 300px;
+        max-height: 1000px;
+    }
+
+    .model-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, 
+            rgba(124, 77, 255, 0.1) 0%, 
+            transparent 30%, 
+            transparent 70%, 
+            rgba(7, 176, 179, 0.1) 100%);
+        border-radius: 22px;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .model-container:hover {
+        transform: scale(1.02);
+        box-shadow: 
+            0 30px 80px rgba(124, 77, 255, 0.5),
+            inset 0 2px 0 rgba(255, 255, 255, 0.2);
+        border-color: rgba(124, 77, 255, 0.7);
+    }
+
+    /* Model viewer styling */
+    model-viewer {
+        width: 100%;
+        height: 450px;
+        background: linear-gradient(135deg, 
+            rgba(10, 10, 26, 0.9) 0%, 
+            rgba(35, 35, 91, 0.7) 50%, 
+            rgba(10, 10, 26, 0.9) 100%);
+        border-radius: 20px;
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        z-index: 2;
+        overflow: hidden;
+        box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        --poster-color: transparent;
+        --progress-bar-color: var(--primary-purple);
+        --progress-bar-height: 4px;
+    }
+
+    model-viewer:hover {
+        border-color: rgba(124, 77, 255, 0.6);
+        box-shadow: 
+            0 25px 80px rgba(124, 77, 255, 0.4),
+            inset 0 4px 20px rgba(0, 0, 0, 0.3);
+        transform: translateZ(10px);
+    }
+
+    /* Loading state */
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+        border-radius: 20px;
+    }
+
+    .loading-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(124, 77, 255, 0.3);
+        border-top: 4px solid #7c4dff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+
+
+    .car-main-title {
+        font-family: 'Orbitron', monospace;
+        font-size: 2.5rem;
+        font-weight: 900;
+        background: linear-gradient(45deg, #a084ff, #07b0b3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        text-align: center;
+        text-shadow: 0 0 30px rgba(160, 132, 255, 0.5);
+        animation: titleGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+        0% { filter: brightness(1); }
+        100% { filter: brightness(1.2); }
+    }
+
+    .car-category {
+        color: var(--text-muted);
+        font-size: 1.3rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+        font-weight: 300;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .car-main-price {
+        font-size: 3rem;
+        background: linear-gradient(45deg, #07b0b3, #ffd700);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 900;
+        text-align: center;
+        margin-bottom: 2rem;
+        text-shadow: 0 0 30px rgba(7, 176, 179, 0.8);
+        animation: priceShine 3s ease-in-out infinite;
+    }
+
+    @keyframes priceShine {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    /* Right column - Details */
+    .details-section {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    /* Enhanced specs and pitch cards */
+    .specs-card, .pitch-card {
+        background: rgba(35, 35, 91, 0.4);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 2.5rem;
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        box-shadow: 
+            0 20px 60px rgba(124, 77, 255, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .specs-card::before, .pitch-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+        transition: left 0.8s;
+    }
+
+    .specs-card:hover::before, .pitch-card:hover::before {
+        left: 100%;
+    }
+
+    .specs-card:hover, .pitch-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+            0 25px 80px rgba(124, 77, 255, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .pitch-card {
+        background: rgba(160, 132, 255, 0.2);
+        border-color: rgba(160, 132, 255, 0.4);
+        box-shadow: 
+            0 20px 60px rgba(160, 132, 255, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .specs-title, .pitch-title {
+        font-family: 'Orbitron', monospace;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid rgba(124, 77, 255, 0.4);
+        padding-bottom: 1rem;
+        background: linear-gradient(45deg, #a084ff, #07b0b3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+    }
+
+    .specs-title::after, .pitch-title::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--gradient-primary);
+        transition: width 0.5s ease;
+    }
+
+    .specs-card:hover .specs-title::after,
+    .pitch-card:hover .pitch-title::after {
+        width: 100%;
+    }
+
+    .specs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .spec-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem;
+        background: rgba(35, 35, 91, 0.5);
+        border-radius: 15px;
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .spec-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .spec-item:hover::before {
+        left: 100%;
+    }
+
+    .spec-item:hover {
+        background: rgba(124, 77, 255, 0.2);
+        border-color: rgba(124, 77, 255, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(124, 77, 255, 0.3);
+    }
+
+    .spec-label {
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .spec-value {
+        color: var(--text-light);
+        font-weight: 700;
+        font-size: 1.1rem;
+        position: relative;
+        z-index: 1;
+        background: linear-gradient(45deg, #a084ff, #07b0b3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .pitch-text {
+        color: var(--text-light);
+        line-height: 1.9;
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+        text-align: justify;
+        font-weight: 400;
+    }
+
+    /* Enhanced action buttons with better animations */
+    .action-buttons {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .primary-btn, .secondary-btn {
+        flex: 1;
+        padding: 1.5rem 2.5rem;
+        border: none;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        font-family: 'Poppins', sans-serif;
+        position: relative;
+        overflow: hidden;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .primary-btn::before, .secondary-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        transition: left 0.5s;
+    }
+
+    .primary-btn {
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: 0 8px 30px rgba(124, 77, 255, 0.5);
+    }
+
+    .primary-btn::before {
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    }
+
+    .primary-btn:hover::before {
+        left: 100%;
+    }
+
+    .secondary-btn {
+        background: transparent;
+        border: 3px solid var(--accent-cyan);
+        color: var(--accent-cyan);
+        position: relative;
+    }
+
+    .secondary-btn::before {
+        background: var(--accent-cyan);
+        z-index: -1;
+        left: -100%;
+    }
+
+    .secondary-btn:hover::before {
+        left: 0%;
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 50px rgba(124, 77, 255, 0.6);
+    }
+
+    .secondary-btn:hover {
+        color: var(--dark-blue);
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 10px 40px rgba(7, 176, 179, 0.5);
+    }
+
+    .primary-btn:active, .secondary-btn:active {
+        transform: translateY(-2px) scale(1.02);
+    }
+
+    /* Enhanced features section */
+    .features-section {
+        margin-top: 4rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2.5rem;
+    }
+
+    .feature-card {
+        background: rgba(35, 35, 91, 0.4);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(124, 77, 255, 0.2);
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(from 0deg at 50% 50%, transparent, rgba(124, 77, 255, 0.1), transparent);
+        animation: featureRotate 8s linear infinite;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+        opacity: 1;
+    }
+
+    @keyframes featureRotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 20px 60px rgba(124, 77, 255, 0.4);
+        border-color: rgba(124, 77, 255, 0.6);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(45deg, #07b0b3, #ffd700);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: block;
+        animation: iconFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes iconFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    .feature-title {
+        color: var(--light-purple);
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .feature-desc {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    /* Control buttons */
+    .control-btn {
+        padding: 12px 20px;
+        border-radius: 25px;
+        border: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #7c4dff, #00ffff);
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 120px;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .control-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .control-btn:hover::before {
+        left: 100%;
+    }
+
+    .ar-controls {
+        display: flex;
+        gap: 8px;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        z-index: 1000;
+        flex-wrap: wrap;
+    }
+
+    .ar-btn {
+        background: var(--primary-purple);
+        color: white;
+    }
+
+    .full-btn {
+        background: var(--accent-cyan);
+        color: var(--background-dark);
+    }
+
+    .interior-btn {
+        background: linear-gradient(135deg, #ff6b35, #f7931e);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .interior-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.6s;
+    }
+
+    .interior-btn:hover::before {
+        left: 100%;
+    }
+
+    .exterior-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .exterior-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.6s;
+    }
+
+    .exterior-btn:hover::before {
+        left: 100%;
+    }
+
+    .control-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(124, 77, 255, 0.3);
+    }
+
+    .control-btn.active {
+        transform: scale(0.95);
+        box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Speech controls */
+    .speech-controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .speech-btn {
+        background: rgba(124, 77, 255, 0.2);
+        color: var(--accent-cyan);
+        border: 1px solid var(--accent-cyan);
+        padding: 12px 24px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .speech-btn:hover {
+        background: rgba(124, 77, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .car-details-container {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+        
+        .page-title {
+            font-size: 2.2rem;
+        }
+        
+        .car-main-title {
+            font-size: 2rem;
+        }
+        
+        .car-main-price {
+            font-size: 2.5rem;
+        }
+        
+        .specs-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .features-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .model-section, .specs-card, .pitch-card {
+            padding: 2rem;
+        }
+
+        model-viewer {
+            height: 400px;
+        }
+
+        .main-content {
+            max-width: 100%;
+            padding: 7rem 1.5rem 1.5rem 1.5rem; /* Better spacing for tablet */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-header {
+            height: 60px;
+            padding: 0.5rem 1rem;
+        }
+
+        .main-header .logo img {
+            height: 35px;
+        }
+
+        .main-nav ul {
+            gap: 0.5rem;
+        }
+
+        .main-nav a {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+        }
+
+        .main-content {
+            padding: 7rem 1rem 1rem 1rem; /* Adjusted for mobile header with more spacing */
+        }
+        
+        .header {
+            padding: 1.5rem 1rem;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 4rem; /* Reduced for mobile */
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            order: -1;
+        }
+        
+        model-viewer {
+            height: 350px;
+        }
+
+        .back-btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .car-main-title {
+            font-size: 1.6rem;
+        }
+
+        .car-main-price {
+            font-size: 2rem;
+        }
+
+        .model-section, .specs-card, .pitch-card {
+            padding: 1.5rem;
+            border-radius: 20px;
+        }
+
+        .model-container {
+            padding: 0.75rem;
+        }
+
+        .feature-card {
+            padding: 1.5rem;
+        }
+
+        .spec-item {
+            padding: 1rem;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .primary-btn, .secondary-btn {
+            padding: 1.2rem 2rem;
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<div class="header">
+    <a href="{{ url_for('cars') }}" class="back-btn">
+        <span>←</span> Back to Collection
+    </a>
+    <h1 class="page-title">{{ car.name }}</h1>
+    <div></div> <!-- Spacer for flexbox -->
+</div>
+
+<div class="main-content">
+    <div class="car-details-container">
+        <!-- Left Column - 3D Model -->
+        <div class="model-section">
+            <div class="model-container">
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="loading-spinner"></div>
+                </div>
+                <div class="ar-controls">
+                    <button class="control-btn full-btn" id="fullButton">🔍 FULL</button>
+                    <button class="control-btn interior-btn" id="interiorButton">INSIDE</button>
+                    <button class="control-btn exterior-btn active" id="exteriorButton">EXTERIOR</button>
+                </div>
+                <model-viewer
+                    src="{{ url_for('static', filename=car.model) }}"
+                    alt="3D model of {{ car.name }}"
+                    auto-rotate
+                    camera-controls
+                    shadow-intensity="1"
+                    ar
+                    ar-modes="webxr scene-viewer quick-look"
+                    environment-image="legacy"
+                    loading="eager"
+                    reveal="auto"
+                    poster="{{ url_for('static', filename='logo.png') }}"
+                    id="carModel"
+                    camera-orbit="25deg 70deg 2.5m"
+                    min-camera-orbit="auto auto 1.5m"
+                    max-camera-orbit="auto auto 5m"
+                    field-of-view="25deg"
+                    auto-rotate-delay="0"
+                    rotation-per-second="20deg"
+                    exposure="0.9"
+                    data-car-key="{{ car.model.replace('.glb', '') }}">
+                </model-viewer>
+            </div>
+            
+            <h2 class="car-main-title">{{ car.name }}</h2>
+            <p class="car-category">{{ car.year }} HYPERCAR</p>
+            <div class="car-main-price">{{ car.price }}</div>
+            
+            <div class="speech-controls">
+                <button class="speech-btn" onclick="speakCarDetails()">
+                    🎙️ Auto-reading car description
+                </button>
+                <button class="speech-btn" onclick="stopSpeech()">
+                    ⏹️ Pause
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Column - Details -->
+        <div class="details-section">
+            <div class="specs-card">
+                <h3 class="specs-title">Technical Specifications</h3>
+                
+                <div class="specs-grid">
+                    <div class="spec-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="spec-label">Engine</div>
+                        <div class="spec-value">{{ car.engine if car.engine else 'Dual Electric Motors' }}</div>
+                    </div>
+                    <div class="spec-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="spec-label">Power</div>
+                        <div class="spec-value">{{ car.horsepower if car.horsepower else '577 hp' }}</div>
+                    </div>
+                    <div class="spec-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="spec-label">Torque</div>
+                        <div class="spec-value">{{ car.torque if car.torque else '664 lb-ft' }}</div>
+                    </div>
+                    <div class="spec-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="spec-label">0-60 mph</div>
+                        <div class="spec-value">{{ car.acceleration if car.acceleration else '4.4 seconds' }}</div>
+                    </div>
+                    <div class="spec-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="spec-label">Top Speed</div>
+                        <div class="spec-value">{{ car.topSpeed if car.topSpeed else '155 mph' }}</div>
+                    </div>
+                    <div class="spec-item" data-aos="fade-up" data-aos-delay="600">
+                        <div class="spec-label">Transmission</div>
+                        <div class="spec-value">{{ car.transmission if car.transmission else 'Single-Speed Direct Drive' }}</div>
+                    </div>
+                    <div class="spec-item" data-aos="fade-up" data-aos-delay="700">
+                        <div class="spec-label">Drive</div>
+                        <div class="spec-value">{{ car.drivetrain if car.drivetrain else 'All-Wheel Drive' }}</div>
+                    </div>
+                    <div class="spec-item" data-aos="fade-up" data-aos-delay="800">
+                        <div class="spec-label">Production</div>
+                        <div class="spec-value">{{ car.features[0] if car.features and 'Limited' in car.features[0] else 'Exclusive' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pitch-card">
+                <h3 class="pitch-title">Why This Car is Perfect for You</h3>
+                <p class="pitch-text">{{ car.description }}</p>
+                
+                <div class="action-buttons">
+                    <button class="primary-btn" onclick="redirectToPayment()">BUY</button>
+                    <button class="secondary-btn" onclick="redirectToFinancing()">FINANCE OPTIONS</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="features-section">
+        <div class="specs-card">
+            <h3 class="specs-title">Premium Features</h3>
+            <div class="features-grid">
+                {% if car.features %}
+                    {% for feature in car.features %}
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            {% if 'leather' in feature.lower() or 'interior' in feature.lower() %}
+                                🪑
+                            {% elif 'engine' in feature.lower() or 'turbo' in feature.lower() or 'horsepower' in feature.lower() %}
+                                ⚡
+                            {% elif 'navigation' in feature.lower() or 'gps' in feature.lower() or 'infotainment' in feature.lower() %}
+                                🗺️
+                            {% elif 'safety' in feature.lower() or 'airbag' in feature.lower() or 'brake' in feature.lower() %}
+                                🛡️
+                            {% elif 'audio' in feature.lower() or 'sound' in feature.lower() or 'speaker' in feature.lower() %}
+                                �
+                            {% elif 'climate' in feature.lower() or 'ac' in feature.lower() or 'heating' in feature.lower() %}
+                                ❄️
+                            {% elif 'wheel' in feature.lower() or 'alloy' in feature.lower() %}
+                                🛞
+                            {% elif 'light' in feature.lower() or 'led' in feature.lower() or 'headlight' in feature.lower() %}
+                                💡
+                            {% elif 'sport' in feature.lower() or 'performance' in feature.lower() %}
+                                🏁
+                            {% elif 'luxury' in feature.lower() or 'premium' in feature.lower() %}
+                                ✨
+                            {% elif 'technology' in feature.lower() or 'tech' in feature.lower() or 'smart' in feature.lower() %}
+                                📱
+                            {% elif 'automatic' in feature.lower() or 'transmission' in feature.lower() %}
+                                ⚙️
+                            {% else %}
+                                �🚗
+                            {% endif %}
+                        </div>
+                        <div class="feature-title">
+                            {% if 'leather' in feature.lower() or 'interior' in feature.lower() %}
+                                Interior Luxury
+                            {% elif 'engine' in feature.lower() or 'turbo' in feature.lower() or 'horsepower' in feature.lower() %}
+                                Engine Performance
+                            {% elif 'navigation' in feature.lower() or 'gps' in feature.lower() or 'infotainment' in feature.lower() %}
+                                Navigation & Tech
+                            {% elif 'safety' in feature.lower() or 'airbag' in feature.lower() or 'brake' in feature.lower() %}
+                                Safety Features
+                            {% elif 'audio' in feature.lower() or 'sound' in feature.lower() or 'speaker' in feature.lower() %}
+                                Audio System
+                            {% elif 'climate' in feature.lower() or 'ac' in feature.lower() or 'heating' in feature.lower() %}
+                                Climate Control
+                            {% elif 'wheel' in feature.lower() or 'alloy' in feature.lower() %}
+                                Wheel Package
+                            {% elif 'light' in feature.lower() or 'led' in feature.lower() or 'headlight' in feature.lower() %}
+                                Lighting System
+                            {% elif 'sport' in feature.lower() or 'performance' in feature.lower() %}
+                                Sport Package
+                            {% elif 'luxury' in feature.lower() or 'premium' in feature.lower() %}
+                                Luxury Package
+                            {% elif 'technology' in feature.lower() or 'tech' in feature.lower() or 'smart' in feature.lower() %}
+                                Technology Suite
+                            {% elif 'automatic' in feature.lower() or 'transmission' in feature.lower() %}
+                                Transmission
+                            {% else %}
+                                Premium Feature
+                            {% endif %}
+                        </div>
+                        <div class="feature-desc">{{ feature }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Default features when no features are available -->
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-title">High Performance</div>
+                        <div class="feature-desc">Advanced engine technology for optimal performance</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <div class="feature-title">Advanced Safety</div>
+                        <div class="feature-desc">Comprehensive safety systems for maximum protection</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✨</div>
+                        <div class="feature-title">Luxury Interior</div>
+                        <div class="feature-desc">Premium materials and sophisticated design</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <div class="feature-title">Smart Technology</div>
+                        <div class="feature-desc">Cutting-edge infotainment and connectivity</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let speechSynthesis = window.speechSynthesis;
+    let currentUtterance = null;
+    let modelViewer;
+    let carKey;
+    
+    // Camera configurations for each car model
+    const carCameraConfigs = {
+        'lamborghini_revuelto': { 
+            baseDistance: 2.5,
+            interior: { distance: 1, orbit: '0deg 5deg', target: '0m 1m 1.0m' }
+        },
+        '2019_bugatti_centodieci': { 
+            baseDistance: 3.0,
+            interior: { distance: 0.5, orbit: '0deg 8deg', target: '0m 0.8m 1.2m' }
+        },
+        'ferrari_296': { 
+            baseDistance: 2.8,
+            interior: { distance: 0.45, orbit: '0deg 12deg', target: '0m 0.85m 1.1m' }
+        },
+        'mclaren': { 
+            baseDistance: 2.7,
+            interior: { distance: 0.42, orbit: '0deg 15deg', target: '0m 0.9m 1.0m' }
+        },
+        'porsche_718_cayman_gt4': { 
+            baseDistance: 2.6,
+            interior: { distance: 0.38, orbit: '0deg 18deg', target: '0m 0.85m 0.9m' }
+        },
+        'aston_martin_v8_vantage': { 
+            baseDistance: 2.4,
+            interior: { distance: 0.35, orbit: '0deg 20deg', target: '0m 0.8m 0.8m' }
+        },
+        'lamborghini_temerario': { 
+            baseDistance: 2.5,
+            interior: { distance: 0.4, orbit: '0deg 12deg', target: '0m 0.9m 1.0m' }
+        },
+        'tesla_cybertruck': { 
+            baseDistance: 3.2,
+            interior: { distance: 0.6, orbit: '0deg 5deg', target: '0m 1.0m 1.5m' }
+        },
+        'koenigsegg_agera': { 
+            baseDistance: 2.9,
+            interior: { distance: 0.48, orbit: '0deg 10deg', target: '0m 0.85m 1.2m' }
+        },
+        'bmw_m2_g87': { 
+            baseDistance: 2.3,
+            interior: { distance: 0.35, orbit: '0deg 22deg', target: '0m 0.8m 0.8m' }
+        },
+        '1995_lamborghini_diablo_sv': { 
+            baseDistance: 2.8,
+            interior: { distance: 0.45, orbit: '0deg 15deg', target: '0m 0.9m 1.1m' }
+        },
+        '2003_renault_clio_v6_renault_sport': { 
+            baseDistance: 2.6,
+            interior: { distance: 0.4, orbit: '0deg 25deg', target: '0m 0.75m 0.7m' }
+        },
+        '2018_porsche_718_cayman_gts': { 
+            baseDistance: 2.7,
+            interior: { distance: 0.4, orbit: '0deg 18deg', target: '0m 0.85m 0.9m' }
+        },
+        '2022_lamborghini_countach_lpi_800-4': { 
+            baseDistance: 2.5,
+            interior: { distance: 0.4, orbit: '0deg 12deg', target: '0m 0.9m 1.0m' }
+        },
+        '2024_hyundai_ioniq_5_n': { 
+            baseDistance: 2.8,
+            interior: { distance: 0.45, orbit: '0deg 8deg', target: '0m 0.9m 1.3m' }
+        },
+        '2024_lamborghini_huracan_sterrato': { 
+            baseDistance: 2.5,
+            interior: { distance: 0.4, orbit: '0deg 12deg', target: '0m 0.9m 1.0m' }
+        },
+        'bentley_mulliner_batur': { 
+            baseDistance: 3.1,
+            interior: { distance: 0.55, orbit: '0deg 6deg', target: '0m 0.95m 1.4m' }
+        },
+        'ferrari_monza_sp1': { 
+            baseDistance: 2.9,
+            interior: { distance: 0.45, orbit: '0deg 25deg', target: '0m 0.7m 0.8m' }
+        },
+        'jeep_wrangler_rubicon': { 
+            baseDistance: 3.0,
+            interior: { distance: 0.5, orbit: '0deg 5deg', target: '0m 1.1m 1.4m' }
+        },
+        'mercedes-benz_maybach_2022': { 
+            baseDistance: 3.2,
+            interior: { distance: 0.6, orbit: '0deg 3deg', target: '0m 1.0m 1.6m' }
+        },
+        'rolls_royce_ghost': { 
+            baseDistance: 3.3,
+            interior: { distance: 0.65, orbit: '0deg 2deg', target: '0m 1.0m 1.7m' }
+        },
+        'rolls-royce_spectre': { 
+            baseDistance: 3.1,
+            interior: { distance: 0.6, orbit: '0deg 3deg', target: '0m 1.0m 1.6m' }
+        },
+        'ssc_tuatara_striker': { 
+            baseDistance: 2.7,
+            interior: { distance: 0.42, orbit: '0deg 15deg', target: '0m 0.85m 1.0m' }
+        },
+        'tesla_m3_model': { 
+            baseDistance: 2.4,
+            interior: { distance: 0.38, orbit: '0deg 8deg', target: '0m 0.9m 1.1m' }
+        },
+        'tata_tiago': { 
+            baseDistance: 2.3,
+            interior: { distance: 0.35, orbit: '0deg 25deg', target: '0m 0.8m 0.7m' }
+        },
+        'mahindra_scorpio': { 
+            baseDistance: 2.8,
+            interior: { distance: 0.45, orbit: '0deg 5deg', target: '0m 1.1m 1.3m' }
+        },
+        'maruti_suzuki_xl6': { 
+            baseDistance: 2.6,
+            interior: { distance: 0.4, orbit: '0deg 20deg', target: '0m 0.85m 0.8m' }
+        },
+    };
+    
+    // Get current car configuration
+    function getCarConfig() {
+        return carCameraConfigs[carKey] || {
+            baseDistance: 2.5,
+            minDistance: 1.5,
+            maxDistance: 5.0
+        };
+    }
+    
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+        modelViewer = document.querySelector('#carModel');
+        carKey = modelViewer ? modelViewer.getAttribute('data-car-key') : null;
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        
+        // Debug: Log the car key and configuration
+        console.log('Car Key:', carKey);
+        console.log('Car Config:', getCarConfig());
+        
+        if (modelViewer) {
+            // Debug: Log the car key and configuration
+            console.log('Car Key:', carKey);
+            console.log('Car Config:', getCarConfig());
+            
+            // Handle successful model load
+            modelViewer.addEventListener('load', () => {
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                }
+                console.log('3D model loaded successfully for:', carKey);
+                
+                // Apply car-specific initial settings
+                applyCarSpecificSettings();
+            });
+            
+            // Handle model load errors
+            modelViewer.addEventListener('error', (event) => {
+                console.error('Model loading error:', event);
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                }
+                
+                // Still apply settings even on error
+                setTimeout(() => {
+                    applyCarSpecificSettings();
+                }, 1000);
+            });
+        }
+        
+        // Initialize button functionality
+        initializeButtons();
+    });
+    
+    // Initialize button functionality
+    function initializeButtons() {
+        // AR button functionality
+        const arButton = document.getElementById('arButton');
+        if (arButton) {
+            arButton.addEventListener('click', function() {
+                if (modelViewer && modelViewer.canActivateAR) {
+                    modelViewer.activateAR();
+                } else {
+                    alert('AR not supported on this device');
+                }
+            });
+        }
+        
+        // Full screen functionality
+        const fullButton = document.getElementById('fullButton');
+        if (fullButton) {
+            fullButton.addEventListener('click', function() {
+                if (modelViewer.requestFullscreen) {
+                    modelViewer.requestFullscreen();
+                } else if (modelViewer.webkitRequestFullscreen) {
+                    modelViewer.webkitRequestFullscreen();
+                }
+            });
+        }
+        
+        // Interior view functionality
+        const interiorButton = document.getElementById('interiorButton');
+        if (interiorButton) {
+            interiorButton.addEventListener('click', function() {
+                // Get car-specific interior configuration
+                const config = getCarConfig();
+                if (config && config.interior) {
+    // ✅ Correctly format camera orbit: "<horizontal> <vertical> <distance>"
+    modelViewer.cameraOrbit = `${config.interior.orbit} ${config.interior.distance}m`;
+
+    // ✅ Use cameraTarget property instead of setAttribute for better live updates
+    modelViewer.cameraTarget = config.interior.target;
+} else {
+    // ✅ Protect against config being undefined
+    const interiorDistance = config ? config.baseDistance * 0.15 : 0.4;
+
+    // ✅ Use correct fallback orbit format
+    modelViewer.cameraOrbit = `0deg 5deg ${interiorDistance}m`;
+    modelViewer.cameraTarget = '0m 0.8m 1.2m';
+}
+
+// Optional: smooth transition and control enabling
+modelViewer.setAttribute('camera-controls', '');
+modelViewer.setAttribute('auto-rotate', 'false');
+
+                
+                // Add active state to interior button
+                document.querySelectorAll('.ar-controls button').forEach(btn => btn.classList.remove('active'));
+                interiorButton.classList.add('active');
+            });
+        }
+        
+        // Exterior view functionality
+        const exteriorButton = document.getElementById('exteriorButton');
+        if (exteriorButton) {
+            exteriorButton.addEventListener('click', function() {
+                // Reset to default exterior view
+                applyCarSpecificSettings();
+                modelViewer.setAttribute('camera-target', 'auto auto auto'); // Reset camera target
+                
+                // Add active state to exterior button
+                document.querySelectorAll('.ar-controls button').forEach(btn => btn.classList.remove('active'));
+                exteriorButton.classList.add('active');
+            });
+        }
+    }
+    
+    // Apply car-specific camera settings
+    function applyCarSpecificSettings() {
+        if (!modelViewer || !carKey) return;
+        
+        const config = getCarConfig();
+        const distance = config.baseDistance;
+        
+        // Set camera orbit with car-specific distance
+        modelViewer.cameraOrbit = `25deg 70deg ${distance}m`;
+        modelViewer.setAttribute('min-camera-orbit', `auto auto ${config.minDistance}m`);
+        modelViewer.setAttribute('max-camera-orbit', `auto auto ${config.maxDistance}m`);
+    }
+    
+    // Add keyboard shortcuts for basic model interaction
+    document.addEventListener('keydown', function(event) {
+        if (!modelViewer || !carKey) return;
+        
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            return;
+        }
+        
+        // Reserved for future keyboard shortcuts
+    });
+    
+    
+    function speakCarDetails() {
+        if (currentUtterance) {
+            speechSynthesis.cancel();
+        }
+        
+        const carName = "{{ car.name }}";
+        const carPrice = "{{ car.price }}";
+        const carEngine = "{{ car.engine }}";
+        const carHorsepower = "{{ car.horsepower }}";
+        const carDescription = "{{ car.description }}";
+        
+        const textToSpeak = `
+            Welcome to the ${carName}. 
+            This exceptional vehicle is priced at ${carPrice}. 
+            Under the hood, it features a powerful ${carEngine} engine, 
+            producing an impressive ${carHorsepower}. 
+            ${carDescription}
+            This is truly a masterpiece of automotive engineering.
+        `;
+        
+        currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
+        currentUtterance.rate = 0.8;
+        currentUtterance.pitch = 1.1;
+        currentUtterance.volume = 1;
+        
+        // Try to use a female voice
+        const voices = speechSynthesis.getVoices();
+        const femaleVoice = voices.find(voice => 
+            voice.lang.includes('en') && 
+            (voice.name.includes('Female') || voice.name.includes('Samantha') || voice.name.includes('Karen'))
+        );
+        
+        if (femaleVoice) {
+            currentUtterance.voice = femaleVoice;
+        }
+        
+        speechSynthesis.speak(currentUtterance);
+    }
+    
+    function stopSpeech() {
+        if (speechSynthesis.speaking) {
+            speechSynthesis.cancel();
+        }
+    }
+    
+    function redirectToPayment() {
+        // Redirect to payment page with car information
+        const carId = "{{ car.id }}";
+        const carName = "{{ car.name }}";
+        const carPrice = "{{ car.price }}";
+        
+        // Create URL with car details as query parameters
+        const paymentUrl = `/payment?car_id=${carId}&car_name=${encodeURIComponent(carName)}&price=${encodeURIComponent(carPrice)}`;
+        
+        // Redirect to payment page
+        window.location.href = paymentUrl;
+    }
+    
+    function redirectToFinancing() {
+        // Redirect to finance page with car information
+        const carId = "{{ car.id }}";
+        const carName = "{{ car.name }}";
+        const carPrice = "{{ car.price }}";
+        
+        // Create URL with car details as query parameters
+        const financeUrl = `/finance?car_id=${carId}&car_name=${encodeURIComponent(carName)}&price=${encodeURIComponent(carPrice)}`;
+        
+        // Redirect to finance page
+        window.location.href = financeUrl;
+    }
+    
+    // Ensure voices are loaded
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = function() {
+            // Voices are now loaded
+        };
+    }
+    
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        offset: 100,
+        once: true
+    });
+</script>
+</body>
+</html>

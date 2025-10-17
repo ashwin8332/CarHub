@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}CarHub - Premium Car Marketplace{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="background-media">
+        <video autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='car.mp4') }}" type="video/mp4">
+        </video>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>CarHub</h1>
+        <p class="tagline">Premium Car Marketplace</p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('cars') }}" class="btn btn-primary large-btn">Shop Cars</a>
+            {% if not session.user_id %}
+                <a href="{{ url_for('sign_up') }}" class="btn btn-secondary large-btn">Join Now</a>
+            {% else %}
+                <a href="{{ url_for('profile') }}" class="btn btn-secondary large-btn">My Profile</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Welcome Message for Logged In Users -->
+{% if session.user_id %}
+<section style="background: var(--background-dark); padding: 40px; text-align: center;">
+    <h2 style="color: var(--accent-cyan); margin-bottom: 20px;">Welcome back, {{ session.username }}!</h2>
+    <p style="color: var(--text-light); font-size: 1.2rem;">Ready to explore our premium car collection?</p>
+</section>
+{% endif %}
+
+<!-- Sample USP Section -->
+<section class="usp-showcase" id="buy">
+    <div class="usp-text-block">
+        <h2>Discover Premium Cars</h2>
+        <p>Find your dream car from our curated collection of premium vehicles. From luxury sedans to high-performance sports cars, we have something for every automotive enthusiast.</p>
+        <a href="{{ url_for('cars') }}" class="btn btn-dark">Explore Collection</a>
+    </div>
+    <div class="usp-image-block">
+        <img src="{{ url_for('static', filename='bmw.jpg') }}" alt="Premium BMW" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+    <h3>Ready to Start Your Journey?</h3>
+    {% if not session.user_id %}
+        <a href="{{ url_for('sign_up') }}" class="btn btn-primary large-btn">Create Account</a>
+    {% else %}
+        <a href="{{ url_for('cars') }}" class="btn btn-primary large-btn">Browse Cars</a>
+    {% endif %}
+</section>
+{% endblock %}

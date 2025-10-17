@@ -1,0 +1,541 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Login - CarHub{% endblock %}
+
+{% block content %}
+<style>
+body {
+    background: radial-gradient(ellipse at top left, #23235b 0%, #0a0a1a 100%);
+    color: #e0e6ff;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    filter: brightness(0.3);
+}
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    background: rgba(35, 35, 91, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 18px;
+    border: 1.5px solid rgba(124, 77, 255, 0.3);
+    padding: 1.8rem 1.5rem 1.6rem 1.5rem;
+    max-width: 370px;
+    width: 100%;
+    z-index: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-shadow:
+        0 0 25px rgba(124, 77, 255, 0.25),
+        0 0 45px rgba(124, 77, 255, 0.12),
+        inset 0 0 10px rgba(124, 77, 255, 0.12),
+        0 1px 6px rgba(24, 24, 40, 0.5);
+    animation: pulseGlow 3s ease-in-out infinite;
+}
+
+
+.login-card h1 {
+    color: #07b0b3;
+    font-size: 1.8rem;
+    margin-bottom: 1.1rem;
+    letter-spacing: 1px;
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 0 2px 18px #23235b80, 0 1px 0 #7c4dff44;
+}
+
+.login-card form {
+    display: flex;
+    flex-direction: column;
+     gap: 0.8rem;
+    margin-bottom: 0.4rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.form-control {
+    background: rgba(24, 24, 40, 0.5);
+    border: 2px solid #7c4dff44;
+    border-radius: 12px;
+    padding: 0.75rem 0.9rem;
+    color: #e0e6ff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+    box-shadow: 0 2px 8px #7c4dff11;
+    margin-bottom: 0.1rem;
+}
+
+.form-control:focus {
+    border: 2px solid #a084ff;
+    background: #23235b;
+}
+
+.form-group label {
+    color: #a084ff;
+    font-size: 0.9rem;
+    margin-bottom: 0.15rem;
+    font-weight: 600;
+    margin-left: 0.2rem;
+}
+
+.btn-primary {
+    width: 100%;
+    background: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+    border: none;
+    padding: 0.75rem;
+    font-weight: 700;
+    font-size: 1.0rem;
+    color: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px #7c4dff22;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(90deg, #a084ff 80%, #23235b 100%);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.forgot-link {
+    text-align: right;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.forgot-link a {
+    color: #a084ff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.forgot-link a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 1.1rem;
+    margin-bottom: 0.7rem;
+}
+
+.register-link p {
+    color: #b3baff;
+    font-size: 1.01rem;
+    margin-bottom: 0.1rem;
+}
+
+.register-link a {
+    color: #7c4dff;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+.register-link a:hover {
+    color: #a084ff;
+    text-decoration: underline;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 0.8rem 0;
+    color: #b3baff;
+    font-size: 1.01rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1.5px solid #7c4dff44;
+}
+
+.divider:not(:empty)::before {
+    margin-right: .75em;
+}
+
+.divider:not(:empty)::after {
+    margin-left: .75em;
+}
+
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: #fff;
+    color: #23235b;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem;
+    font-weight: 700;
+    font-size: 1.07rem;
+    cursor: pointer;
+    margin-top: 0.2rem;
+    margin-bottom: 0.1rem;
+    box-shadow: 0 2px 8px #7c4dff22;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.google-btn img {
+    width: 22px;
+    height: 22px;
+}
+
+.google-btn:hover {
+    background: #e0e6ff;
+    color: #7c4dff;
+    transform: scale(1.03);
+}
+
+@media (max-width: 600px) {
+    .login-card {
+        padding: 1.2rem 0.7rem;
+        max-width: 98vw;
+    }
+    .login-card h1 {
+        font-size: 1.3rem;
+    }
+}
+
+/* Form Validation */
+.error-messages {
+    margin-top: 0.25rem;
+}
+
+.error-text {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 0.2rem;
+}
+
+.form-control.is-invalid {
+    border-color: #ff6b6b;
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+/* Remember me checkbox */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px !important;
+}
+
+.form-check-input {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #7c4dff;
+    border-radius: 4px;
+    background: transparent;
+    margin-right: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.form-check-input:checked {
+    background: linear-gradient(135deg, #7c4dff, #a084ff);
+    border-color: #a084ff;
+}
+
+.form-check-input:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.form-check-input:hover {
+    border-color: #a084ff;
+    box-shadow: 0 0 10px rgba(124, 77, 255, 0.3);
+}
+
+.form-check-input:focus {
+    outline: none;
+    border-color: #a084ff;
+    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
+}
+
+.form-check-label {
+    color: #e0e6ff;
+    font-size: 0.95rem;
+    cursor: pointer;
+    user-select: none;
+    margin: 0;
+}
+
+/* Loading spinner for Google Sign-In */
+.google-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #7c4dff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
+<!-- Google Sign-In API -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<!-- Background Video -->
+<video autoplay muted loop playsinline class="bg-video">
+  <source src="{{ url_for('static', filename='car.mp4') }}" type="video/mp4" />
+</video>
+
+<div class="login-container">
+    <div class="login-card">
+        <h1>Welcome</h1>
+        
+        <!-- Navigation back to home -->
+        <div style="text-align: center; margin-bottom: 1rem;">
+            <a href="{{ url_for('index') }}" style="color: #a084ff; text-decoration: none; font-size: 0.9rem;">
+                ← Back to Home
+            </a>
+        </div>
+        
+        <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control", placeholder="Enter your email") }}
+                {% if form.email.errors %}
+                    <div class="error-messages">
+                        {% for error in form.email.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control", placeholder="Enter your password") }}
+                {% if form.password.errors %}
+                    <div class="error-messages">
+                        {% for error in form.password.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group checkbox-group">
+                {{ form.remember_me(class="form-check-input") }}
+                {{ form.remember_me.label(class="form-check-label") }}
+            </div>
+            <div class="forgot-link">
+                <a href="{{ url_for('forgot_password_legacy') }}">Forgot Password?</a>
+            </div>
+            {{ form.submit(class="btn-primary") }}
+        </form>
+        <div class="register-link">
+            <p>Don't have an account?</p>
+            <a href="{{ url_for('sign_up') }}">Sign Up</a>
+        </div>
+        
+        <div class="divider">or sign in with</div>
+        
+        <!-- Google Sign-In Button -->
+        <div id="g_id_onload"
+             data-client_id="{{ config.GOOGLE_CLIENT_ID }}"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+        
+        <button type="button" class="google-btn" id="googleSignInBtn">
+            <img src="{{ url_for('static', filename='google-icon.png') }}" alt="Google Icon" id="googleIcon">
+            <span id="googleBtnText">Sign in with Google</span>
+        </button>
+    </div>
+</div>
+
+<script>
+// Form validation and user experience enhancements
+document.addEventListener('DOMContentLoaded', function() {
+    // Add form validation
+    const form = document.querySelector('form');
+    const emailInput = document.querySelector('input[name="email"]');
+    const passwordInput = document.querySelector('input[name="password"]');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let valid = true;
+            
+            // Clear previous validation states
+            if (emailInput) {
+                emailInput.classList.remove('is-invalid', 'is-valid');
+                
+                // Email validation
+                if (!emailInput.value || !emailInput.validity.valid) {
+                    emailInput.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    emailInput.classList.add('is-valid');
+                }
+            }
+            
+            if (passwordInput) {
+                passwordInput.classList.remove('is-invalid', 'is-valid');
+                
+                // Password validation
+                if (!passwordInput.value || passwordInput.value.length < 6) {
+                    passwordInput.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    passwordInput.classList.add('is-valid');
+                }
+            }
+            
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+    }
+    
+    // Initialize Google Sign-In
+    initializeGoogleSignIn();
+});
+
+// Google Sign-In Functions
+function initializeGoogleSignIn() {
+    const googleBtn = document.getElementById('googleSignInBtn');
+    
+    if (googleBtn) {
+        googleBtn.addEventListener('click', function() {
+            // Show loading state
+            showGoogleLoading();
+            
+            // Initialize Google Sign-In
+            google.accounts.id.initialize({
+                client_id: '{{ config.GOOGLE_CLIENT_ID }}',
+                callback: handleCredentialResponse
+            });
+            
+            // Prompt for sign-in
+            google.accounts.id.prompt((notification) => {
+                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                    // Hide loading state if prompt fails
+                    hideGoogleLoading();
+                    console.log('Google Sign-In prompt failed:', notification);
+                }
+            });
+        });
+    }
+}
+
+function handleCredentialResponse(response) {
+    console.log("Encoded JWT ID token: " + response.credential);
+    
+    // Show loading state
+    showGoogleLoading();
+    
+    // Send the credential to your backend
+    fetch('/auth/google', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+        },
+        body: JSON.stringify({
+            credential: response.credential
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideGoogleLoading();
+        
+        if (data.success) {
+            // Redirect to dashboard or home page
+            window.location.href = data.redirect_url || '/dashboard';
+        } else {
+            // Show error message
+            alert('Google Sign-In failed: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        hideGoogleLoading();
+        console.error('Error:', error);
+        alert('Google Sign-In failed. Please try again.');
+    });
+}
+
+function showGoogleLoading() {
+    const googleBtn = document.getElementById('googleSignInBtn');
+    const googleIcon = document.getElementById('googleIcon');
+    const googleBtnText = document.getElementById('googleBtnText');
+    
+    if (googleBtn && googleIcon && googleBtnText) {
+        googleBtn.classList.add('loading');
+        googleIcon.style.display = 'none';
+        googleBtnText.innerHTML = '<div class="spinner"></div> Signing in...';
+    }
+}
+
+function hideGoogleLoading() {
+    const googleBtn = document.getElementById('googleSignInBtn');
+    const googleIcon = document.getElementById('googleIcon');
+    const googleBtnText = document.getElementById('googleBtnText');
+    
+    if (googleBtn && googleIcon && googleBtnText) {
+        googleBtn.classList.remove('loading');
+        googleIcon.style.display = 'block';
+        googleBtnText.textContent = 'Sign in with Google';
+    }
+}
+</script>
+{% endblock %}
