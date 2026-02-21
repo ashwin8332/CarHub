@@ -1,0 +1,264 @@
+/* Animation styles for theme switching */
+.theme-transition * {
+    transition: background-color 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+.theme-toggle-animating {
+    animation: theme-toggle-rotate 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes theme-toggle-rotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+.theme-switch-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 9999;
+    pointer-events: none;
+    animation: theme-flash 0.5s ease-out forwards;
+}
+
+@keyframes theme-flash {
+    0% { opacity: 0.5; }
+    100% { opacity: 0; }
+}
+
+/* Add some specific styling for main elements to ensure they change properly */
+body.theme-light main,
+body.theme-light section,
+body.theme-light .customer-reviews-section,
+body.theme-light .partners-section,
+body.theme-light .service-usp-section,
+body.theme-light .final-cta {
+    background-color: var(--background-darker);
+    color: var(--text-light);
+}
+
+/* Keep hero section dark background even in light mode for contrast with video */
+body.theme-light .hero-section {
+    background-color: #0a0a1a; /* Darker blue to match image */
+    overflow: hidden;
+    position: relative;
+    width: 100vw; /* Full viewport width */
+    max-width: 100%; /* Prevent overflow */
+    height: 100vh; /* Ensure full height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+body.theme-light .usp-showcase {
+    background: linear-gradient(135deg, #f0f0f7 0%, #e0e0f0 100%);
+    color: var(--text-light);
+}
+
+/* Hero content container styling in light mode */
+body.theme-light .hero-content {
+    color: #ffffff;
+    max-width: 900px;
+    width: 100%;
+    padding: 0 5rem;
+    /* Remove background, border, box-shadow and backdrop-filter to match image */
+    background: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+body.theme-light .hero-content h1 {
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    /* Use stronger gradient to match image */
+    background: linear-gradient(45deg, #ffffff 30%, #a084ff 60%, #7c4dff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+}
+
+body.theme-light .hero-content .tagline {
+    color: #07b0b3; /* Cyan color to match the image */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    letter-spacing: 8px;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 300;
+}
+
+/* Main content text color */
+body.theme-light p, 
+body.theme-light h1, 
+body.theme-light h2, 
+body.theme-light h3, 
+body.theme-light h4, 
+body.theme-light h5, 
+body.theme-light h6 {
+    color: var(--text-light);
+}
+
+/* Section with videos or images need special handling */
+body.theme-light .merged-background-video {
+    filter: brightness(1.0) contrast(1.0) saturate(1.0);
+}
+
+/* Enhanced background video handling for light mode */
+body.theme-light .background-media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+body.theme-light .background-media video {
+    width: 100%;
+    height: 100%;
+    margin-left: 0;
+    filter: brightness(0.5) contrast(1.2) saturate(1.2); /* Darker video to match image */
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Add a stronger overlay in light mode for better text contrast */
+body.theme-light .hero-overlay {
+    background: linear-gradient(135deg, rgba(10, 10, 26, 0.8) 0%, rgba(35, 35, 91, 0.7) 100%);
+    width: 100%;
+    height: 100%;
+    margin-left: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+/* Specific style overrides for specific components that might not be captured */
+body.theme-light .animate-on-scroll,
+body.theme-light .animate-left,
+body.theme-light .animate-right,
+body.theme-light .animate-zoom {
+    color: var(--text-light);
+}
+
+/* Button styles specific to light mode */
+body.theme-light .btn-primary {
+    background: linear-gradient(45deg, #7c4dff, #9c6fff);
+    color: white;
+    box-shadow: 0 0 20px rgba(124, 77, 255, 0.6);
+    border-radius: 30px;
+    padding: 1.2rem 2.5rem;
+    border: none;
+    min-width: 200px;
+}
+
+body.theme-light .btn-primary:hover {
+    box-shadow: 0 0 30px rgba(124, 77, 255, 0.8);
+    transform: translateY(-2px);
+}
+
+body.theme-light .btn-secondary {
+    background: rgba(30, 30, 50, 0.7);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 1.2rem 2.5rem;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+}
+
+body.theme-light .btn-secondary:hover {
+    background: rgba(40, 40, 60, 0.8);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Button container styling */
+body.theme-light .cta-buttons {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+/* Additional light mode enhancements */
+body.theme-light .section-title {
+    color: var(--text-light);
+}
+
+body.theme-light .section-subtitle {
+    color: var(--text-muted);
+}
+
+/* Card styles for light mode */
+body.theme-light .card {
+    background-color: #ffffff;
+    box-shadow: 0 8px 32px rgba(106, 61, 232, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.theme-light .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 48px rgba(106, 61, 232, 0.25);
+}
+
+/* Make sure the scrolled header in light mode has appropriate styling */
+body.theme-light.scrolled .main-header {
+    background: rgba(240, 240, 247, 0.8);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 20px rgba(106, 61, 232, 0.1);
+}
+
+/* Ensure content sections have proper spacing and borders in light mode */
+body.theme-light .content-section {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Make sure any highlighted text is properly visible */
+body.theme-light .highlight-text {
+    color: var(--primary-purple);
+}
+
+/* Navigation styling in light mode */
+body.theme-light .main-nav ul li a {
+    color: var(--text-light);
+}
+
+body.theme-light .main-nav ul li a:hover {
+    background-color: rgba(106, 61, 232, 0.1);
+    color: var(--primary-purple);
+}
+
+body.theme-light .main-nav ul li a.active {
+    background-color: rgba(106, 61, 232, 0.15);
+    color: var(--primary-purple);
+}
+
+/* Logo adjustment in light mode */
+body.theme-light .logo img {
+    filter: brightness(0); /* Make logo dark in light mode */
+}
+
+body.theme-light.scrolled .logo img {
+    filter: brightness(0); /* Keep logo dark when scrolled in light mode */
+}
+
+/* Fix header transparency in light mode */
+body.theme-light .main-header {
+    background-color: rgba(240, 240, 247, 0.9);
+    backdrop-filter: blur(10px);
+}
