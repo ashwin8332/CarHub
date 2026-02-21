@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # 🚗 CarHub - Premium Automotive Web Application
-
-![CarHub Logo](static/logo.png)
 
 ## 📋 Table of Contents
 1. [Overview](#-overview)
@@ -837,4 +834,3 @@ The application is fully functional with:
 - Mobile responsiveness ✅
 
 Your CarHub application is ready for use and further development!
->>>>>>> origin/main
