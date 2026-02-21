@@ -1,0 +1,1860 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - CarHub{% endblock %}
+
+{% block content %}
+<style>
+    /* CSS Variables Definition */
+    :root {
+        --font-primary: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        --accent-purple: #7c4dff;
+        --accent-cyan: #07b0b3;
+        --text-light: #e2e8f0;
+        --text-muted: #94a3b8;
+        --text-bright: #f8fafc;
+        --shadow-luxury: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        --shadow-elegant: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --shadow-subtle: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    /* Base Styles */
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--font-primary);
+        scroll-behavior: smooth;
+        background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+    }
+
+    /* Video Background */
+    .video-background {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        z-index: -2;
+        filter: brightness(40%) contrast(1.3) saturate(1.1);
+        object-fit: cover;
+        opacity: 1;
+    }
+    
+    /* Main Container */
+    .about-container {
+        padding: 120px 20px 80px;
+        background: rgba(10, 10, 26, 0.3);
+        min-height: 100vh;
+        color: var(--text-light);
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Enhanced Hero Section */
+    .hero-section {
+        text-align: center;
+        padding: 80px 60px;
+        margin: 0 auto 120px;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+        border: 2px solid rgba(124, 77, 255, 0.4);
+        border-radius: 30px;
+        backdrop-filter: blur(25px);
+        max-width: 1200px;
+        width: 90%;
+        position: relative;
+        overflow: visible;
+        box-shadow: 
+            0 25px 60px -12px rgba(124, 77, 255, 0.4),
+            0 15px 35px -8px rgba(7, 176, 179, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        transition: var(--transition-smooth);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: auto;
+    }
+
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 30% 20%, rgba(124, 77, 255, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 70% 80%, rgba(7, 176, 179, 0.06) 0%, transparent 50%);
+        z-index: -1;
+    }
+
+    .hero-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 
+            0 30px 70px -15px rgba(124, 77, 255, 0.5),
+            0 20px 40px -10px rgba(7, 176, 179, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        border-color: rgba(124, 77, 255, 0.6);
+    }
+
+    .hero-logo {
+        width: 150px;
+        height: auto;
+        margin: 0 auto 30px auto;
+        filter: 
+            drop-shadow(0 0 20px rgba(124, 77, 255, 0.6))
+            drop-shadow(0 0 10px rgba(7, 176, 179, 0.4));
+        transition: var(--transition-smooth);
+        position: relative;
+        z-index: 2;
+        display: block;
+    }
+
+    .hero-logo:hover {
+        transform: scale(1.05);
+        filter: 
+            drop-shadow(0 0 30px rgba(124, 77, 255, 0.8))
+            drop-shadow(0 0 20px rgba(7, 176, 179, 0.6));
+    }
+
+    /* Gradient Text Styles */
+    .hero-title,
+    .commitments-title,
+    .scope-title,
+    .testimonial-title,
+    .cta-title,
+    .feedback-title,
+    .faq-title {
+        color: var(--accent-purple);
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Fallback for browsers that don't support background-clip */
+    @supports not (-webkit-background-clip: text) {
+        .hero-title,
+        .commitments-title,
+        .scope-title,
+        .testimonial-title,
+        .cta-title,
+        .feedback-title,
+        .faq-title {
+            color: var(--accent-purple) !important;
+            -webkit-text-fill-color: unset;
+        }
+    }
+
+    .hero-title {
+        font-size: 3.8rem;
+        font-weight: 800;
+        margin: 0 auto 25px auto;
+        letter-spacing: -1px;
+        line-height: 1.2;
+        text-shadow: 
+            0 4px 12px rgba(124, 77, 255, 0.4),
+            0 2px 6px rgba(7, 176, 179, 0.3);
+        position: relative;
+        z-index: 2;
+        text-transform: uppercase;
+        max-width: 100%;
+        text-align: center;
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .hero-subtitle {
+        font-size: 1.6rem;
+        margin: 0 auto 30px auto;
+        color: var(--accent-cyan);
+        font-weight: 600;
+        position: relative;
+        display: inline-block;
+        padding: 12px 40px;
+        border: 2px solid rgba(7, 176, 179, 0.4);
+        border-radius: 25px;
+        background: linear-gradient(135deg, rgba(7, 176, 179, 0.15), rgba(7, 176, 179, 0.08));
+        backdrop-filter: blur(12px);
+        text-transform: capitalize;
+        letter-spacing: 1px;
+        transition: var(--transition-smooth);
+        box-shadow: 0 8px 20px rgba(7, 176, 179, 0.3);
+        text-align: center;
+        max-width: 90%;
+        box-sizing: border-box;
+    }
+
+    .hero-subtitle:hover {
+        transform: scale(1.02);
+        border-color: rgba(7, 176, 179, 0.6);
+        background: linear-gradient(135deg, rgba(7, 176, 179, 0.2), rgba(7, 176, 179, 0.12));
+        box-shadow: 0 10px 25px rgba(7, 176, 179, 0.4);
+    }
+
+    .hero-description {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin: 0 auto 35px auto;
+        color: var(--text-light);
+        max-width: 85%;
+        position: relative;
+        padding: 25px 30px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+        border-radius: 18px;
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        backdrop-filter: blur(12px);
+        text-align: center;
+        font-weight: 400;
+        transition: var(--transition-smooth);
+        box-shadow: 0 8px 25px rgba(124, 77, 255, 0.2);
+        box-sizing: border-box;
+    }
+
+    .hero-description:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
+        border-color: rgba(124, 77, 255, 0.4);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 30px rgba(124, 77, 255, 0.25);
+    }
+
+    /* Hero Button */
+    .hero-cta {
+        margin: 0 auto 20px auto;
+        position: relative;
+        z-index: 3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .hero-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 40px;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 
+            0 12px 30px -8px rgba(124, 77, 255, 0.6),
+            0 6px 16px -4px rgba(7, 176, 179, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 2px solid transparent;
+        margin: 0 auto;
+        z-index: 4;
+    }
+
+    .hero-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.8s;
+    }
+
+    .hero-btn::after {
+        content: '🚀';
+        font-size: 1.2rem;
+        margin-left: 5px;
+        transition: transform 0.3s ease;
+    }
+
+    .hero-btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 
+            0 20px 40px -10px rgba(124, 77, 255, 0.8),
+            0 12px 25px -5px rgba(7, 176, 179, 0.6),
+            0 0 30px rgba(124, 77, 255, 0.4);
+        filter: brightness(1.15);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-btn:hover::before {
+        left: 100%;
+    }
+
+    .hero-btn:hover::after {
+        transform: rotate(15deg) scale(1.2);
+    }
+
+    /* Content Grid */
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 50px;
+        max-width: 1200px;
+        margin: 50px auto 80px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .content-card {
+        background: rgba(35, 35, 91, 0.15);
+        border: 1px solid rgba(124, 77, 255, 0.25);
+        border-radius: 24px;
+        padding: 50px 40px;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-subtle);
+    }
+
+    .content-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(7, 176, 179, 0.05));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: -1;
+    }
+
+    .content-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: rgba(124, 77, 255, 0.5);
+        box-shadow: var(--shadow-luxury);
+    }
+
+    .content-card:hover::before {
+        opacity: 1;
+    }
+
+    .card-icon {
+        font-size: 3rem;
+        margin-bottom: 25px;
+        display: block;
+        filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.5));
+    }
+
+    .card-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--text-bright);
+    }
+
+    .card-description {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: var(--text-light);
+    }
+
+    /* Commitments Section */
+    .commitments-section {
+        background: linear-gradient(135deg, rgba(35, 35, 91, 0.2), rgba(10, 10, 26, 0.2));
+        border-radius: 24px;
+        padding: 100px 50px;
+        margin: 0 auto 80px;
+        max-width: 1200px;
+        text-align: center;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition-smooth);
+    }
+
+    .commitments-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(124, 77, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+        z-index: -1;
+    }
+
+    .commitments-section:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-elegant);
+    }
+
+    .commitments-title {
+        font-size: 3.5rem;
+        margin-bottom: 50px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .commitments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+    }
+
+    .commitment-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        border-radius: 20px;
+        padding: 40px 30px;
+        transition: var(--transition-smooth);
+        backdrop-filter: blur(8px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .commitment-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+        transition: left 0.6s;
+    }
+
+    .commitment-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(124, 77, 255, 0.4);
+        box-shadow: var(--shadow-elegant);
+    }
+
+    .commitment-card:hover::before {
+        left: 100%;
+    }
+
+    .commitment-icon {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        display: block;
+        filter: drop-shadow(0 0 10px rgba(7, 176, 179, 0.5));
+    }
+
+    .commitment-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: var(--text-bright);
+    }
+
+    .commitment-description {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--text-light);
+    }
+
+    /* Future Scope Section */
+    .future-scope {
+        background: linear-gradient(135deg, rgba(7, 176, 179, 0.15), rgba(124, 77, 255, 0.15));
+        border: 1px solid rgba(7, 176, 179, 0.3);
+        border-radius: 24px;
+        padding: 80px 50px;
+        max-width: 1000px;
+        margin: 0 auto 80px;
+        text-align: center;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(15px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .future-scope::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(7, 176, 179, 0.1), rgba(124, 77, 255, 0.1));
+        animation: pulse 4s ease-in-out infinite;
+        z-index: -1;
+    }
+
+    .scope-title {
+        font-size: 3rem;
+        margin-bottom: 30px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .scope-description {
+        font-size: 1.3rem;
+        line-height: 1.8;
+        color: var(--text-light);
+        margin-bottom: 40px;
+    }
+
+    .scope-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
+
+    .scope-feature {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(7, 176, 179, 0.3);
+        border-radius: 16px;
+        padding: 30px 20px;
+        transition: var(--transition-smooth);
+        backdrop-filter: blur(8px);
+    }
+
+    .scope-feature:hover {
+        transform: translateY(-5px);
+        border-color: rgba(7, 176, 179, 0.5);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .scope-feature-icon {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        display: block;
+        color: var(--accent-cyan);
+    }
+
+    .scope-feature-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--text-bright);
+    }
+
+    .scope-feature-description {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+    }
+
+    /* Testimonials Section */
+    .testimonials-section {
+        background: linear-gradient(135deg, rgba(35, 35, 91, 0.3), rgba(10, 10, 26, 0.3));
+        border-radius: 24px;
+        padding: 100px 50px;
+        margin: 0 auto 80px;
+        max-width: 1200px;
+        text-align: center;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition-smooth);
+    }
+
+    .testimonials-section::before {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 300%;
+        height: 300%;
+        background: linear-gradient(45deg, transparent 30%, rgba(124, 77, 255, 0.1) 50%, transparent 70%);
+        animation: rotate 15s linear infinite;
+        z-index: -1;
+    }
+
+    .testimonials-section:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-elegant);
+    }
+
+    .testimonial-title {
+        font-size: 3.5rem;
+        margin-bottom: 50px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        text-shadow: 0 4px 15px rgba(124, 77, 255, 0.6);
+        filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.4));
+        animation: titlePulse 2s infinite alternate ease-in-out;
+    }
+
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+    }
+
+    .testimonial-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        border-radius: 20px;
+        padding: 40px 30px;
+        transition: var(--transition-smooth);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .testimonial-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(7, 176, 179, 0.05));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: -1;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: rgba(124, 77, 255, 0.5);
+        box-shadow: var(--shadow-luxury);
+    }
+
+    .testimonial-card:hover::before {
+        opacity: 1;
+    }
+
+    .testimonial-text {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: var(--text-light);
+        margin-bottom: 25px;
+        font-style: italic;
+        position: relative;
+    }
+
+    .testimonial-text::before,
+    .testimonial-text::after {
+        content: '"';
+        font-size: 1.5rem;
+        color: var(--accent-cyan);
+        opacity: 0.6;
+    }
+
+    .testimonial-author {
+        font-weight: 600;
+        color: var(--text-bright);
+        font-size: 1rem;
+    }
+
+    .testimonial-role {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    /* Testimonial Avatar */
+    .testimonial-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #6B46C1;
+        color: white;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        border: none;
+        margin-bottom: 20px;
+        transition: var(--transition-smooth);
+        box-shadow: 0 2px 8px rgba(107, 70, 193, 0.3);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .testimonial-avatar:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(107, 70, 193, 0.4);
+        background: #7C3AED;
+    }
+
+    .testimonial-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.2), rgba(7, 176, 179, 0.2));
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        border-radius: 24px;
+        padding: 80px 50px;
+        max-width: 1000px;
+        margin: 0 auto 80px;
+        text-align: center;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(15px);
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition-smooth);
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(124, 77, 255, 0.1), rgba(7, 176, 179, 0.1));
+        animation: pulse 3s ease-in-out infinite;
+        z-index: -1;
+    }
+
+    .cta-section:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-elegant);
+    }
+
+    .cta-title {
+        font-size: 3rem;
+        margin-bottom: 25px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .cta-description {
+        font-size: 1.3rem;
+        line-height: 1.7;
+        color: var(--text-light);
+        margin-bottom: 40px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 18px 35px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+        border: 2px solid transparent;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        color: white;
+        box-shadow: var(--shadow-soft);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-elegant);
+        filter: brightness(1.1);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: var(--accent-cyan);
+        border-color: var(--accent-cyan);
+    }
+
+    .btn-secondary:hover {
+        background: var(--accent-cyan);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-soft);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(7, 176, 179, 0.1));
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        border-radius: 24px;
+        padding: 80px 50px;
+        max-width: 1200px;
+        margin: 0 auto 80px;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(15px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .faq-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(124, 77, 255, 0.05), rgba(7, 176, 179, 0.05));
+        animation: pulse 4s ease-in-out infinite;
+        z-index: -1;
+    }
+
+    .faq-title {
+        font-size: 3.5rem;
+        margin-bottom: 30px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-align: center;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        text-shadow: 0 4px 15px rgba(124, 77, 255, 0.6);
+        filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.4));
+    }
+
+    .faq-description {
+        font-size: 1.3rem;
+        line-height: 1.7;
+        color: var(--text-light);
+        text-align: center;
+        margin-bottom: 50px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    .faq-item {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        border-radius: 16px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        transition: var(--transition-smooth);
+        backdrop-filter: blur(10px);
+    }
+
+    .faq-item:hover {
+        border-color: rgba(124, 77, 255, 0.4);
+        box-shadow: var(--shadow-soft);
+        transform: translateY(-2px);
+    }
+
+    .faq-item.active {
+        border-color: rgba(7, 176, 179, 0.5);
+        box-shadow: var(--shadow-elegant);
+    }
+
+    .faq-question {
+        padding: 25px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-bright);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .faq-question::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+        transition: left 0.6s;
+    }
+
+    .faq-question:hover {
+        background: rgba(124, 77, 255, 0.1);
+    }
+
+    .faq-question:hover::before {
+        left: 100%;
+    }
+
+    .faq-icon {
+        width: 20px;
+        height: 20px;
+        font-size: 1.5rem;
+        color: var(--accent-cyan);
+        transition: var(--transition-smooth);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .faq-item.active .faq-icon {
+        transform: rotate(45deg);
+        color: var(--accent-purple);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: var(--transition-smooth);
+        background: rgba(7, 176, 179, 0.05);
+    }
+
+    .faq-answer p {
+        padding: 25px;
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--text-light);
+    }
+
+    .faq-item.active .faq-answer {
+        max-height: 300px;
+    }
+
+    /* Feedback Section */
+    .feedback-section {
+        background: linear-gradient(135deg, rgba(35, 35, 91, 0.2), rgba(10, 10, 26, 0.2));
+        border-radius: 24px;
+        padding: 80px 50px;
+        margin: 0 auto 40px;
+        max-width: 1000px;
+        text-align: center;
+        box-shadow: var(--shadow-luxury);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(124, 77, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feedback-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(124, 77, 255, 0.1), rgba(7, 176, 179, 0.1));
+        animation: pulse 4s ease-in-out infinite;
+        z-index: -1;
+    }
+
+    .feedback-title {
+        font-size: 3rem;
+        margin-bottom: 30px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .feedback-description {
+        font-size: 1.2rem;
+        line-height: 1.7;
+        color: var(--text-light);
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Form Styles */
+    .feedback-form {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-bright);
+        font-size: 1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-light);
+        font-size: 1rem;
+        transition: var(--transition-smooth);
+        backdrop-filter: blur(8px);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--accent-cyan);
+        box-shadow: 0 0 0 3px rgba(7, 176, 179, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .form-control.error {
+        border-color: #e74c3c;
+        background: rgba(231, 76, 60, 0.1);
+    }
+
+    /* Rating System */
+    .rating-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    .rating-star {
+        font-size: 2rem;
+        color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+    .rating-star:hover,
+    .rating-star.active {
+        color: var(--accent-cyan);
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 10px rgba(7, 176, 179, 0.5));
+    }
+
+    .rating-error {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+    }
+
+    /* Character Counter */
+    .char-counter {
+        text-align: right;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 5px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        color: white;
+        border: none;
+        padding: 18px 40px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        margin-top: 20px;
+        box-shadow: var(--shadow-soft);
+    }
+
+    .submit-btn:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-elegant);
+        filter: brightness(1.1);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .btn-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-loading {
+        display: none;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .loading-spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    /* Alert Messages */
+    .alert {
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        position: relative;
+        backdrop-filter: blur(8px);
+    }
+
+    .alert-success {
+        background: rgba(46, 204, 113, 0.1);
+        border: 1px solid rgba(46, 204, 113, 0.3);
+        color: #2ecc71;
+    }
+
+    .alert-error {
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #e74c3c;
+    }
+
+    .close-alert {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: inherit;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+    }
+
+    .close-alert:hover {
+        opacity: 1;
+    }
+
+    /* Animations */
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.7; }
+    }
+
+    @keyframes rotate {
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes titlePulse {
+        0% { filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.4)); }
+        100% { filter: drop-shadow(0 0 20px rgba(124, 77, 255, 0.8)); }
+    }
+
+    @keyframes logoFloat {
+        0%, 100% { transform: scale(1.1) rotate(5deg) translateY(0px); }
+        50% { transform: scale(1.1) rotate(5deg) translateY(-10px); }
+    }
+
+    @keyframes titleGlow {
+        0% { text-shadow: 0 8px 20px rgba(124, 77, 255, 0.4), 0 4px 10px rgba(7, 176, 179, 0.3); }
+        100% { text-shadow: 0 12px 30px rgba(124, 77, 255, 0.8), 0 6px 15px rgba(7, 176, 179, 0.6); }
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .about-container {
+            padding: 80px 15px 60px;
+        }
+        
+        .hero-section {
+            padding: 70px 40px;
+            margin-bottom: 80px;
+            min-height: 600px;
+            border-radius: 25px;
+            max-width: 98%;
+            width: 95%;
+        }
+        
+        .hero-logo {
+            width: 140px;
+            margin-bottom: 30px;
+        }
+        
+        .hero-title {
+            font-size: 2.8rem !important;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            padding: 12px 35px;
+            margin-bottom: 30px;
+        }
+
+        .hero-description {
+            font-size: 1.15rem;
+            padding: 25px 30px;
+            margin-bottom: 40px;
+            max-width: 95%;
+        }
+
+        .hero-btn {
+            padding: 16px 40px;
+            font-size: 1.05rem;
+            gap: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            padding: 12px 40px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            padding: 20px 25px;
+            margin-bottom: 35px;
+        }
+
+        .hero-btn {
+            padding: 18px 35px;
+            font-size: 1rem;
+            border-radius: 50px;
+        }
+
+        .testimonial-title,
+        .commitments-title,
+        .cta-title,
+        .feedback-title,
+        .faq-title {
+            font-size: 2.2rem;
+        }
+        
+        .hero-description {
+            font-size: 1rem;
+            padding: 0 10px;
+        }
+        
+        .hero-logo {
+            width: 140px;
+        }
+
+        .hero-subtitle::before,
+        .hero-subtitle::after {
+            width: 30px;
+        }
+
+        .hero-description::before {
+            left: 5px;
+        }
+
+        .hero-description::after {
+            right: 5px;
+        }
+
+        .hero-btn {
+            padding: 15px 30px;
+            font-size: 1rem;
+        }
+
+        .content-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .content-card,
+        .testimonial-card,
+        .commitment-card {
+            padding: 40px 25px;
+        }
+
+        .future-scope,
+        .testimonials-section,
+        .cta-section,
+        .commitments-section,
+        .feedback-section,
+        .faq-section {
+            padding: 60px 30px;
+        }
+
+        .rating-container {
+            justify-content: center;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+        }
+
+        .faq-question {
+            padding: 15px;
+            font-size: 1rem;
+        }
+
+        .faq-answer p {
+            padding: 15px;
+            font-size: 0.9rem;
+        }
+
+        .faq-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Simplify hover effects on mobile */
+        .content-card:hover,
+        .testimonial-card:hover,
+        .commitment-card:hover {
+            transform: none;
+        }
+    }
+
+    /* Performance optimizations */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+
+<!-- Video Background -->
+<video autoplay muted loop class="video-background">
+    <source src="{{ url_for('static', filename='intropagevd.mp4') }}" type="video/mp4">
+    Your browser does not support HTML5 video.
+</video>
+
+<div class="about-container">
+    <!-- Hero Section with Logo -->
+    <div class="hero-section">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="CarHub Logo" class="hero-logo">
+        <h1 class="hero-title">About CarHub</h1>
+        <p class="hero-subtitle">Your Premier Automotive Destination</p>
+        <p class="hero-description">
+            Welcome to CarHub, where automotive dreams become reality. We are passionate about connecting car enthusiasts 
+            with exceptional vehicles, providing unparalleled service, and creating unforgettable experiences in the world of luxury automobiles.
+        </p>
+        <div class="hero-cta">
+            <a href="{{ url_for('cars') }}" class="hero-btn">Explore Our Collection</a>
+        </div>
+    </div>
+    
+    <!-- Content Cards -->
+    <div class="content-grid">
+        <div class="content-card">
+            <span class="card-icon">🚗</span>
+            <h3 class="card-title">Premium Car Collection</h3>
+            <p class="card-description">
+                Discover our exclusive collection of luxury and exotic vehicles. From supercars to classic automobiles, 
+                each vehicle in our inventory is handpicked for its exceptional quality, performance, and heritage.
+            </p>
+        </div>
+        
+        <div class="content-card">
+            <span class="card-icon">🔧</span>
+            <h3 class="card-title">Expert Service Team</h3>
+            <p class="card-description">
+                Our certified technicians and automotive specialists bring decades of experience to ensure your vehicle 
+                receives the highest level of care and maintenance, preserving its performance and value.
+            </p>
+        </div>
+        
+        <div class="content-card">
+            <span class="card-icon">💎</span>
+            <h3 class="card-title">Luxury Experience</h3>
+            <p class="card-description">
+                Experience automotive luxury like never before. From personalized consultations to white-glove delivery, 
+                we provide a premium service that matches the caliber of our exceptional vehicles.
+            </p>
+        </div>
+    </div>
+
+    <!-- Our Commitments -->
+    <div class="commitments-section">
+        <h2 class="commitments-title">Our Commitments</h2>
+        <div class="commitments-grid">
+            <div class="commitment-card">
+                <span class="commitment-icon">🏆</span>
+                <h3 class="commitment-title">Quality Assurance</h3>
+                <p class="commitment-description">
+                    Every vehicle undergoes rigorous inspection and certification to ensure it meets our exacting standards 
+                    for performance, safety, and aesthetic excellence.
+                </p>
+            </div>
+            
+            <div class="commitment-card">
+                <span class="commitment-icon">🤝</span>
+                <h3 class="commitment-title">Customer First</h3>
+                <p class="commitment-description">
+                    Your satisfaction is our priority. We build lasting relationships through transparent communication, 
+                    honest pricing, and exceptional after-sales support.
+                </p>
+            </div>
+            
+            <div class="commitment-card">
+                <span class="commitment-icon">🌍</span>
+                <h3 class="commitment-title">Global Network</h3>
+                <p class="commitment-description">
+                    Access to an extensive international network of dealers, collectors, and enthusiasts, ensuring we can 
+                    find or source the perfect vehicle for your unique requirements.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Future Scope -->
+    <div class="future-scope">
+        <h2 class="scope-title">Future Vision</h2>
+        <p class="scope-description">
+            CarHub is continuously evolving to shape the future of automotive retail. We're investing in cutting-edge technology, 
+            sustainable practices, and innovative services to enhance your automotive journey.
+        </p>
+        
+        <div class="scope-features">
+            <div class="scope-feature">
+                <span class="scope-feature-icon">🔮</span>
+                <h4 class="scope-feature-title">Virtual Showroom</h4>
+                <p class="scope-feature-description">Immersive AR/VR experiences for remote vehicle viewing</p>
+            </div>
+            
+            <div class="scope-feature">
+                <span class="scope-feature-icon">⚡</span>
+                <h4 class="scope-feature-title">Electric Future</h4>
+                <p class="scope-feature-description">Expanding our collection to include premium electric vehicles</p>
+            </div>
+            
+            <div class="scope-feature">
+                <span class="scope-feature-icon">🤖</span>
+                <h4 class="scope-feature-title">AI Concierge</h4>
+                <p class="scope-feature-description">Personalized vehicle recommendations powered by AI</p>
+            </div>
+            
+            <div class="scope-feature">
+                <span class="scope-feature-icon">🌱</span>
+                <h4 class="scope-feature-title">Sustainability</h4>
+                <p class="scope-feature-description">Carbon-neutral operations and eco-friendly practices</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Testimonials -->
+    <div class="testimonials-section">
+        <h2 class="testimonial-title">What Our Customers Say</h2>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    CarHub exceeded all my expectations. The team's expertise and attention to detail made purchasing 
+                    my dream car an unforgettable experience. Truly exceptional service!
+                </p>
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">MR</div>
+                </div>
+                <div class="testimonial-author">Michael Rodriguez</div>
+                <div class="testimonial-role">Lamborghini Huracán Owner</div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    The quality of vehicles and level of service at CarHub is unmatched. They helped me find the perfect 
+                    vintage Porsche and handled every detail with professionalism.
+                </p>
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">SC</div>
+                </div>
+                <div class="testimonial-author">Sarah Chen</div>
+                <div class="testimonial-role">Classic Car Collector</div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    From browsing to delivery, CarHub made the entire process seamless. Their knowledge and passion 
+                    for automotive excellence is evident in everything they do.
+                </p>
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">DT</div>
+                </div>
+                <div class="testimonial-author">David Thompson</div>
+                <div class="testimonial-role">Ferrari 488 Owner</div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    From browsing to delivery, CarHub made the entire process seamless. Their knowledge and passion 
+                    for automotive excellence is evident in everything they do.
+                </p>
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">DT</div>
+                </div>
+                <div class="testimonial-author">David Thompson</div>
+                <div class="testimonial-role">Ferrari 488 Owner</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+        <h2 class="cta-title">Ready to Find Your Dream Car?</h2>
+        <p class="cta-description">
+            Join thousands of satisfied customers who have found their perfect vehicle with CarHub. 
+            Let us help you discover the car of your dreams today.
+        </p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('cars') }}" class="btn btn-primary">Browse Our Collection</a>
+            <a href="#contact" class="btn btn-secondary">Contact Us Today</a>
+        </div>
+    </div>
+    
+    <!-- FAQ Section -->
+    <div class="faq-section" id="faq">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <p class="faq-description">
+            Find answers to the most common questions about CarHub, our services, and the car buying process.
+        </p>
+        
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What types of vehicles do you offer?</span>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>CarHub specializes in premium and luxury vehicles, including supercars, sports cars, classic automobiles, and high-end SUVs. Our collection features brands like Lamborghini, Ferrari, Porsche, BMW, Mercedes-Benz, Aston Martin, McLaren, and many more. We carefully curate our inventory to ensure we offer only the finest vehicles that meet our strict quality standards.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do you offer financing options?</span>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, we provide comprehensive financing solutions tailored to your needs. We work with leading financial institutions to offer competitive rates and flexible payment terms. Our finance specialists will help you find the best financing option that fits your budget and preferences, whether you're looking for traditional auto loans, lease options, or specialized luxury vehicle financing.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is your return and warranty policy?</span>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>We offer a comprehensive 7-day return policy for your peace of mind. If you're not completely satisfied with your purchase, you can return the vehicle within 7 days of delivery. All our vehicles come with detailed inspection reports and any applicable manufacturer warranties. We also offer extended warranty options and service packages to protect your investment long-term.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I schedule a test drive?</span>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely! We encourage test drives for all our vehicles. You can schedule a test drive by contacting us directly or using our online booking system. Our experienced team will coordinate a convenient time for you to experience the vehicle firsthand. For high-value vehicles, we may require pre-qualification and valid insurance verification.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do you provide vehicle history reports?</span>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, transparency is fundamental to our business. We provide comprehensive vehicle history reports for all our cars, including detailed maintenance records, accident history (if any), ownership history, and any modifications. Our multi-point inspection process ensures that every vehicle meets our high standards before being offered for sale.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do you accept trade-ins?</span>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, we accept trade-ins on qualifying vehicles. Our appraisal team will assess your current vehicle and provide a fair market valuation that can be applied toward your new purchase. We handle all the paperwork and make the trade-in process as seamless as possible. Contact us to schedule a trade-in evaluation.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What about delivery and shipping?</span>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>We offer both local delivery and nationwide shipping services. For local deliveries within 50 miles, we provide complimentary white-glove delivery service. For longer distances, we work with trusted transport companies that specialize in luxury and exotic vehicles. All shipments are fully insured and tracked throughout the delivery process.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I stay updated on new arrivals?</span>
+                    <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>Join our VIP list to receive exclusive previews of new arrivals, special events, and member-only offers. You can sign up for our newsletter on our website, follow us on social media, or speak with one of our specialists about setting up personalized alerts for specific makes, models, or criteria that interest you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Form Section -->
+    <div class="feedback-section" id="feedback">
+        <h2 class="feedback-title">Share Your Feedback</h2>
+        <p class="feedback-description">
+            We value your opinion and are constantly striving to improve. Please take a moment to share your thoughts and help us serve you better.
+        </p>
+
+        <!-- Display Success/Error Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'error' }}">
+                        {{ message }}
+                        <button type="button" class="close-alert">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('about') }}" class="feedback-form">
+            <div class="form-group">
+                <label for="name" class="form-label">Name *</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="rating" class="form-label">Overall Rating *</label>
+                <div class="rating-container">
+                    <span class="rating-star" data-rating="1">★</span>
+                    <span class="rating-star" data-rating="2">★</span>
+                    <span class="rating-star" data-rating="3">★</span>
+                    <span class="rating-star" data-rating="4">★</span>
+                    <span class="rating-star" data-rating="5">★</span>
+                </div>
+                <input type="hidden" id="rating" name="rating" value="0" required>
+                <div class="rating-error">Please select a rating</div>
+            </div>
+
+            <div class="form-group">
+                <label for="message" class="form-label">Your Feedback *</label>
+                <textarea id="message" name="message" class="form-control" rows="6" maxlength="1000" 
+                         placeholder="Tell us about your experience with CarHub..." required></textarea>
+                <div class="char-counter">
+                    <span id="char-count">0</span>/1000 characters
+                </div>
+            </div>
+
+            <button type="submit" id="submit-feedback" class="submit-btn">
+                <div class="btn-content">
+                    <span class="btn-text">Submit Feedback</span>
+                    <div class="btn-loading">
+                        <div class="loading-spinner"></div>
+                        <span>Submitting...</span>
+                    </div>
+                </div>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+// Enhanced JavaScript for form functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // FAQ Accordion functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        const icon = item.querySelector('.faq-icon');
+        
+        question.addEventListener('click', function() {
+            const isOpen = item.classList.contains('active');
+            
+            // Close all other FAQ items
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                    const otherAnswer = otherItem.querySelector('.faq-answer');
+                    const otherIcon = otherItem.querySelector('.faq-icon');
+                    otherAnswer.style.maxHeight = '0';
+                    otherIcon.textContent = '+';
+                }
+            });
+            
+            // Toggle current item
+            if (isOpen) {
+                item.classList.remove('active');
+                answer.style.maxHeight = '0';
+                icon.textContent = '+';
+            } else {
+                item.classList.add('active');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                icon.textContent = '−';
+            }
+        });
+    });
+    
+    const stars = document.querySelectorAll('.rating-star');
+    const ratingInput = document.getElementById('rating');
+    const ratingError = document.querySelector('.rating-error');
+    const messageTextarea = document.getElementById('message');
+    const charCount = document.getElementById('char-count');
+    const form = document.querySelector('.feedback-form');
+    const submitBtn = document.getElementById('submit-feedback');
+    const btnText = document.querySelector('.btn-text');
+    const btnLoading = document.querySelector('.btn-loading');
+    
+    // Star rating functionality
+    stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-rating');
+            ratingInput.value = rating;
+            if (ratingError) ratingError.style.display = 'none';
+            ratingInput.classList.remove('error');
+            
+            // Reset all stars
+            stars.forEach(s => s.classList.remove('active'));
+            
+            // Highlight selected stars
+            for (let i = 0; i <= index; i++) {
+                stars[i].classList.add('active');
+            }
+        });
+        
+        // Hover effect
+        star.addEventListener('mouseenter', function() {
+            stars.forEach(s => s.style.color = 'rgba(255, 255, 255, 0.3)');
+            for (let i = 0; i <= index; i++) {
+                stars[i].style.color = 'var(--accent-cyan)';
+            }
+        });
+    });
+    
+    // Reset hover effect
+    const ratingContainer = document.querySelector('.rating-container');
+    if (ratingContainer) {
+        ratingContainer.addEventListener('mouseleave', function() {
+            const currentRating = ratingInput.value;
+            stars.forEach((star, index) => {
+                if (index < currentRating) {
+                    star.style.color = 'var(--accent-cyan)';
+                } else {
+                    star.style.color = 'rgba(255, 255, 255, 0.3)';
+                }
+            });
+        });
+    }
+    
+    // Character counter
+    if (messageTextarea && charCount) {
+        messageTextarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.textContent = length;
+            
+            if (length > 950) {
+                charCount.style.color = '#e74c3c';
+            } else {
+                charCount.style.color = 'var(--text-muted)';
+            }
+        });
+    }
+    
+    // Form validation
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Check rating
+            if (ratingInput.value === '0' || ratingInput.value === '') {
+                if (ratingError) ratingError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Check required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('error');
+                    isValid = false;
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Show loading state
+            if (submitBtn && btnText && btnLoading) {
+                submitBtn.disabled = true;
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'flex';
+            }
+        });
+    }
+    
+    // Close alert messages
+    document.querySelectorAll('.close-alert').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.parentElement.style.opacity = '0';
+            this.parentElement.style.transform = 'translateY(-20px)';
+            setTimeout(() => this.parentElement.remove(), 300);
+        });
+    });
+    
+    // Auto-hide success messages after 5 seconds
+    setTimeout(() => {
+        const successAlerts = document.querySelectorAll('.alert-success');
+        successAlerts.forEach(alert => {
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-20px)';
+            setTimeout(() => alert.remove(), 300);
+        });
+    }, 5000);
+});
+</script>
+{% endblock %}

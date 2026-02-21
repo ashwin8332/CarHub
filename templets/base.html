@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CarHub{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme-animation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme-templates.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='light-mode-enhancements.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='partner-light-theme.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Profile Avatar Styles */
+        .profile-avatar-img,
+        .dropdown-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            border: 2px solid rgba(124, 77, 255, 0.4);
+        }
+        
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(124, 77, 255, 0.3);
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+        
+        .profile-avatar i.fa-user-circle {
+            font-size: 40px;
+            color: #fff;
+            line-height: 1;
+        }
+        
+        .dropdown-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            margin-right: 12px;
+            flex-shrink: 0;
+            box-shadow: 0 3px 10px rgba(124, 77, 255, 0.4);
+        }
+        
+        .dropdown-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+        
+        .dropdown-avatar i.fa-user-circle {
+            font-size: 50px;
+            color: #fff;
+            line-height: 1;
+        }
+        
+        /* Admin Badge Style */
+        .badge.admin {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        /* Profile Dropdown Enhanced Styles */
+        .profile-dropdown {
+            position: relative;
+        }
+        
+        .profile-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: rgba(20, 20, 40, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(124, 77, 255, 0.4);
+            border-radius: 12px;
+            min-width: 300px;
+            max-width: 320px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(124, 77, 255, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10000;
+        }
+        
+        .profile-dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid rgba(124, 77, 255, 0.3);
+            background: linear-gradient(135deg, rgba(124, 77, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+        }
+        
+        .dropdown-user-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .dropdown-name {
+            display: block;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .dropdown-email {
+            display: block;
+            color: #b3b3ff;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: rgba(124, 77, 255, 0.2);
+            margin: 5px 0;
+        }
+        
+        .dropdown-section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px 8px 16px;
+            color: #ffd700;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .dropdown-menu-items {
+            list-style: none;
+            padding: 5px 0;
+            margin: 0;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #e0e6ff;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(124, 77, 255, 0.2);
+            color: #fff;
+            padding-left: 24px;
+        }
+        
+        .dropdown-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .admin-items {
+            background: rgba(255, 215, 0, 0.03);
+        }
+        
+        .admin-item {
+            color: #ffd700;
+        }
+        
+        .admin-item:hover {
+            background: rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+            padding-left: 24px;
+        }
+        
+        .logout-item {
+            color: #ff6b6b;
+            border-top: 1px solid rgba(124, 77, 255, 0.2);
+            margin-top: 5px;
+        }
+        
+        .logout-item:hover {
+            background: rgba(255, 107, 107, 0.15);
+            color: #ff6b6b;
+            padding-left: 24px;
+        }
+        
+        /* Profile Trigger */
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            background: rgba(124, 77, 255, 0.1);
+            border: 1px solid rgba(124, 77, 255, 0.2);
+            max-width: 250px;
+        }
+        
+        .profile-trigger:hover {
+            background: rgba(124, 77, 255, 0.2);
+            border-color: rgba(124, 77, 255, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(124, 77, 255, 0.3);
+        }
+        
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .profile-name {
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+        
+        .dropdown-arrow {
+            font-size: 10px;
+            color: #b3b3ff;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        /* Navigation adjustments for profile */
+        .main-nav ul {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .main-nav ul li {
+            position: relative;
+        }
+        
+        /* Responsive profile name */
+        @media (max-width: 1400px) {
+            .profile-name {
+                max-width: 120px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .profile-name {
+                max-width: 100px;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .profile-name {
+                display: none;
+            }
+            .profile-trigger {
+                max-width: 60px;
+                padding: 8px;
+            }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="theme-premium">
+    <!-- Navigation Header -->
+    <header class="main-header nav-premium">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="CarHub Logo">
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('cars') }}">Shop Cars</a></li>
+                <li><a href="{{ url_for('inventory') }}">Inventory</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+                <li><a href="{{ url_for('video') }}">Video Gallery</a></li>
+                <li><a href="{{ url_for('about') }}">About Us</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li class="theme-toggle-container">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">
+                        <i class="fas fa-sun light-icon"></i>
+                        <i class="fas fa-moon dark-icon"></i>
+                    </button>
+                </li>
+                {% if current_user.is_authenticated %}
+                    <li class="profile-dropdown">
+                        <div class="profile-trigger" onclick="toggleProfileDropdown()">
+                            <div class="profile-info">
+                                <div class="profile-avatar">
+                                    {% if current_user.profile_picture %}
+                                        {% if current_user.profile_picture.startswith('http') %}
+                                            <img src="{{ current_user.profile_picture }}" alt="{{ current_user.username }}" class="profile-avatar-img">
+                                        {% else %}
+                                            <img src="{{ url_for('static', filename=current_user.profile_picture) }}" alt="{{ current_user.username }}" class="profile-avatar-img">
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="fas fa-user-circle"></i>
+                                    {% endif %}
+                                </div>
+                                <span class="profile-name">
+                                    {% if current_user.get_full_name() and current_user.get_full_name() != current_user.username %}
+                                        {{ current_user.get_full_name() }}
+                                    {% else %}
+                                        {{ current_user.username }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="profile-dropdown-menu" id="profileDropdown">
+                            <div class="dropdown-header">
+                                <div class="dropdown-avatar">
+                                    {% if current_user.profile_picture %}
+                                        {% if current_user.profile_picture.startswith('http') %}
+                                            <img src="{{ current_user.profile_picture }}" alt="{{ current_user.username }}" class="dropdown-avatar-img">
+                                        {% else %}
+                                            <img src="{{ url_for('static', filename=current_user.profile_picture) }}" alt="{{ current_user.username }}" class="dropdown-avatar-img">
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="fas fa-user-circle"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="dropdown-user-info">
+                                    <span class="dropdown-name">
+                                        {% if current_user.get_full_name() and current_user.get_full_name() != current_user.username %}
+                                            {{ current_user.get_full_name() }}
+                                        {% else %}
+                                            {{ current_user.username }}
+                                        {% endif %}
+                                    </span>
+                                    <span class="dropdown-email">{{ current_user.email }}</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <ul class="dropdown-menu-items">
+                                <li>
+                                    <a href="{{ url_for('profile') }}" class="dropdown-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('dashboard') }}" class="dropdown-item">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('my_orders') }}" class="dropdown-item">
+                                        <i class="fas fa-shopping-bag"></i>
+                                        <span>My Orders</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            {% if current_user.email == 'admin@carhub.com' %}
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-section-header">
+                                <i class="fas fa-crown"></i>
+                                <span>Admin Panel</span>
+                            </div>
+                            <ul class="dropdown-menu-items admin-items">
+                                <li>
+                                    <a href="{{ url_for('admin_panel') }}" class="dropdown-item admin-item">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('admin_users') }}" class="dropdown-item admin-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>Users</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('admin_orders') }}" class="dropdown-item admin-item">
+                                        <i class="fas fa-receipt"></i>
+                                        <span>Orders</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('admin_activities') }}" class="dropdown-item admin-item">
+                                        <i class="fas fa-activity"></i>
+                                        <span>📊Activities</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            {% endif %}
+                            <div class="dropdown-divider"></div>
+                            <ul class="dropdown-menu-items">
+                                <li>
+                                    <a href="{{ url_for('logout') }}" class="dropdown-item logout-item">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('sign_up') }}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                        {{ message }}
+                        <button type="button" class="close" onclick="this.parentElement.style.display='none'">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="main-footer footer-premium">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-brand">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="CarHub Logo" class="footer-logo">
+                    <h3 class="footer-title">CarHub</h3>
+                </div>
+                <p class="footer-description">
+                    Your premier destination for <span class="text-gold">luxury</span> and <span class="text-gold">performance</span> vehicles.<br>
+                    Experience automotive excellence with our curated collection of <span class="text-navy">premium cars</span> and exceptional service.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('cars') }}">Shop Cars</a></li>
+                    <li><a href="{{ url_for('inventory') }}">Inventory</a></li>
+                    <li><a href="{{ url_for('services') }}">Services</a></li>
+                    <li><a href="{{ url_for('video') }}">Video Gallery</a></li>
+                    <li><a href="{{ url_for('about') }}">About Us</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Services</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('services') }}">Car Sales</a></li>
+                    <li><a href="{{ url_for('services') }}">Financing</a></li>
+                    <li><a href="{{ url_for('services') }}">Insurance</a></li>
+                    <li><a href="{{ url_for('services') }}">Maintenance</a></li>
+                    <li><a href="{{ url_for('services') }}">Trade-In</a></li>
+                    <li><a href="{{ url_for('services') }}">Customization</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Luxury Drive, Premium District<br>Automotive City, AC 12345</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@carhub.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Mon-Sat: 9AM-8PM<br>Sunday: 10AM-6PM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p>&copy; 2025 CarHub. All Rights Reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Auto-hide flash messages after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.style.display = 'none';
+                    }, 300);
+                }, 5000);
+            });
+            
+            // Theme initialization is now handled by theme-toggle.js
+        });
+
+        // Theme initialization is now handled by theme-toggle.js
+        
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        });
+
+        // Profile dropdown functionality
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            const arrow = document.querySelector('.dropdown-arrow');
+            
+            if (dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                dropdown.classList.add('active');
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileTrigger = document.querySelector('.profile-trigger');
+            
+            if (dropdown && !profileTrigger.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+                const arrow = document.querySelector('.dropdown-arrow');
+                if (arrow) {
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+        });
+    </script>
+
+    <!-- CarHub AI Chatbot Widget -->
+    {% include 'chat_widget.html' %}
+
+    <!-- Theme Scripts -->
+    <script src="{{ url_for('static', filename='theme-toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='theme-fixer.js') }}"></script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

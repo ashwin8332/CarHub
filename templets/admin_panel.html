@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - CarHub{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="header-content">
+            <h1>🛠️ Admin Panel</h1>
+            <p>Welcome, {{ current_user.username }}! Manage your CarHub platform</p>
+        </div>
+        <div class="admin-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back to Site</a>
+        </div>
+    </div>
+
+    <!-- Dashboard Stats -->
+    <div class="stats-grid">
+        <div class="stat-card users">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+                <h3>{{ stats.total_users }}</h3>
+                <p>Total Users</p>
+                <span class="stat-change">+{{ stats.new_users_this_week }} this week</span>
+            </div>
+            <a href="{{ url_for('admin_users') }}" class="stat-link">Manage Users →</a>
+        </div>
+
+        <div class="stat-card orders">
+            <div class="stat-icon">🛒</div>
+            <div class="stat-content">
+                <h3>{{ stats.total_orders }}</h3>
+                <p>Total Orders</p>
+                <span class="stat-value">${{ "{:,.2f}".format(stats.total_revenue) }} revenue</span>
+            </div>
+            <a href="{{ url_for('admin_orders') }}" class="stat-link">View Orders →</a>
+        </div>
+
+        <div class="stat-card finance">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+                <h3>{{ stats.total_finance_apps }}</h3>
+                <p>Finance Applications</p>
+                <span class="stat-value">Financing requests</span>
+            </div>
+        </div>
+
+        <div class="stat-card activities">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <h3>{{ stats.recent_activities|length }}</h3>
+                <p>Recent Activities</p>
+                <span class="stat-value">Last 10 actions</span>
+            </div>
+            <a href="{{ url_for('admin_activities') }}" class="stat-link">View All →</a>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="admin-section">
+        <h2>Quick Actions</h2>
+        <div class="actions-grid">
+            <a href="{{ url_for('admin_users') }}" class="action-card">
+                <div class="action-icon">👥</div>
+                <h3>User Management</h3>
+                <p>View, search, and manage user accounts</p>
+            </a>
+
+            <a href="{{ url_for('admin_orders') }}" class="action-card">
+                <div class="action-icon">📦</div>
+                <h3>Order Management</h3>
+                <p>Track orders, payments, and transactions</p>
+            </a>
+
+            <a href="{{ url_for('admin_activities') }}" class="action-card">
+                <div class="action-icon">🔍</div>
+                <h3>Activity Logs</h3>
+                <p>Monitor user activities and system logs</p>
+            </a>
+
+            <a href="{{ url_for('cars') }}" class="action-card">
+                <div class="action-icon">🚗</div>
+                <h3>Car Inventory</h3>
+                <p>Manage vehicle listings and details</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Activity Feed -->
+    <div class="admin-section">
+        <h2>Recent Activity</h2>
+        <div class="activity-feed">
+            {% for activity in stats.recent_activities %}
+            <div class="activity-item">
+                <div class="activity-meta">
+                    <span class="activity-type">{{ activity.activity_type|title }}</span>
+                    <span class="activity-time">{{ activity.created_at.strftime('%m/%d %H:%M') }}</span>
+                </div>
+                <div class="activity-description">{{ activity.description }}</div>
+                {% if activity.user %}
+                <div class="activity-user">
+                    <a href="{{ url_for('admin_user_detail', user_id=activity.user_id) }}">{{ activity.user.username }}</a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--background-dark, #0a0a1a);
+    color: var(--text-light, #e0e6ff);
+    min-height: 100vh;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(124, 77, 255, 0.3);
+}
+
+.header-content h1 {
+    color: var(--accent-purple, #7c4dff);
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.header-content p {
+    color: var(--text-light, #b3baff);
+    font-size: 1.1rem;
+    margin: 0.5rem 0 0 0;
+}
+
+.admin-actions .btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary {
+    background: rgba(124, 77, 255, 0.2);
+    color: var(--accent-purple, #7c4dff);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.btn-secondary:hover {
+    background: rgba(124, 77, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: rgba(35, 35, 91, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-purple, #7c4dff), var(--accent-cyan, #00bcd4));
+}
+
+.stat-card.users::before { background: linear-gradient(90deg, #4caf50, #8bc34a); }
+.stat-card.orders::before { background: linear-gradient(90deg, #ff9800, #f57c00); }
+.stat-card.finance::before { background: linear-gradient(90deg, #9c27b0, #e91e63); }
+.stat-card.activities::before { background: linear-gradient(90deg, #2196f3, #03a9f4); }
+
+.stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.stat-content h3 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--accent-cyan, #00bcd4);
+}
+
+.stat-content p {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-light, #b3baff);
+}
+
+.stat-change {
+    color: #4caf50;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.stat-value {
+    color: var(--accent-purple, #7c4dff);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.stat-link {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    color: var(--accent-purple, #7c4dff);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.stat-link:hover {
+    color: var(--accent-cyan, #00bcd4);
+}
+
+/* Admin Sections */
+.admin-section {
+    margin-bottom: 3rem;
+}
+
+.admin-section h2 {
+    color: var(--accent-purple, #7c4dff);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+/* Actions Grid */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.action-card {
+    background: rgba(35, 35, 91, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(124, 77, 255, 0.3);
+    border-color: rgba(124, 77, 255, 0.4);
+}
+
+.action-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.action-card h3 {
+    color: var(--accent-cyan, #00bcd4);
+    margin-bottom: 0.5rem;
+}
+
+.action-card p {
+    color: var(--text-light, #b3baff);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Activity Feed */
+.activity-feed {
+    background: rgba(35, 35, 91, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(124, 77, 255, 0.1);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.activity-type {
+    background: rgba(124, 77, 255, 0.3);
+    color: var(--accent-purple, #7c4dff);
+    padding: 0.2rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.activity-time {
+    color: var(--text-light, #b3baff);
+    font-size: 0.8rem;
+}
+
+.activity-description {
+    color: var(--text-light, #e0e6ff);
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.activity-user a {
+    color: var(--accent-cyan, #00bcd4);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.activity-user a:hover {
+    color: var(--accent-purple, #7c4dff);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 1rem;
+    }
+    
+    .admin-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Custom Scrollbar for Activity Feed */
+.activity-feed::-webkit-scrollbar {
+    width: 8px;
+}
+
+.activity-feed::-webkit-scrollbar-track {
+    background: rgba(124, 77, 255, 0.1);
+    border-radius: 4px;
+}
+
+.activity-feed::-webkit-scrollbar-thumb {
+    background: rgba(124, 77, 255, 0.4);
+    border-radius: 4px;
+}
+
+.activity-feed::-webkit-scrollbar-thumb:hover {
+    background: rgba(124, 77, 255, 0.6);
+}
+</style>
+{% endblock %}

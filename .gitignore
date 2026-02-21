@@ -1,0 +1,125 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+<<<<<<< HEAD
+# Flask
+instance/
+.webassets-cache
+flask_session/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Uploads
+static/uploads/
+uploads/
+
+# Tests and Coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Personal development files
+debug_*.py
+test_*.py
+*.egg
+MANIFEST
+=======
+# Large media files
+*.mp4
+*.glb
+uploads/
+static/uploads/
+static/videos/
+>>>>>>> origin/main
+
+# Flask
+instance/
+.webassets-cache
+
+# Environment variables - NEVER COMMIT THESE!
+.env
+<<<<<<< HEAD
+=======
+.env.*
+!.env.example
+>>>>>>> origin/main
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log

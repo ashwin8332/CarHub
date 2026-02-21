@@ -1,0 +1,605 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - CarHub{% endblock %}
+
+{% block content %}
+<div class="edit-profile-container">
+    <div class="edit-header">
+        <h1>
+            <span class="header-icon">✏️</span>
+            Edit Your Profile
+        </h1>
+        <p class="header-subtitle">Complete your profile to unlock all CarHub features</p>
+        <div class="completion-indicator">
+            <div class="completion-bar">
+                <div class="completion-fill" data-width="{{ user.get_profile_completion_percentage() }}"></div>
+            </div>
+            <span class="completion-text">{{ user.get_profile_completion_percentage() }}% Complete</span>
+        </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="edit-form">
+        {{ form.hidden_tag() }}
+        
+        <!-- Personal Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon">👤</span>
+                    Personal Information
+                </h2>
+                <span class="section-required">Required fields marked with *</span>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.username.label(class="form-label required") }}
+                    {{ form.username(class="form-input") }}
+                    <small class="form-help">Your unique username (4-20 characters)</small>
+                    {% if form.username.errors %}
+                        <div class="form-error">{{ form.username.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.email.label(class="form-label required") }}
+                    {{ form.email(class="form-input", readonly=true) }}
+                    <small class="form-help">Email cannot be changed</small>
+                    {% if form.email.errors %}
+                        <div class="form-error">{{ form.email.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.first_name.label(class="form-label") }}
+                    {{ form.first_name(class="form-input") }}
+                    {% if form.first_name.errors %}
+                        <div class="form-error">{{ form.first_name.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.last_name.label(class="form-label") }}
+                    {{ form.last_name(class="form-input") }}
+                    {% if form.last_name.errors %}
+                        <div class="form-error">{{ form.last_name.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.phone.label(class="form-label") }}
+                    {{ form.phone(class="form-input", placeholder="(555) 123-4567") }}
+                    {% if form.phone.errors %}
+                        <div class="form-error">{{ form.phone.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.date_of_birth.label(class="form-label") }}
+                    {{ form.date_of_birth(class="form-input") }}
+                    {% if form.date_of_birth.errors %}
+                        <div class="form-error">{{ form.date_of_birth.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.gender.label(class="form-label") }}
+                    {{ form.gender(class="form-select") }}
+                    {% if form.gender.errors %}
+                        <div class="form-error">{{ form.gender.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group full-width">
+                    {{ form.occupation.label(class="form-label") }}
+                    {{ form.occupation(class="form-input", placeholder="Software Engineer, Teacher, etc.") }}
+                    {% if form.occupation.errors %}
+                        <div class="form-error">{{ form.occupation.errors[0] }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon">📍</span>
+                    Address Information
+                </h2>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    {{ form.address.label(class="form-label") }}
+                    {{ form.address(class="form-input", placeholder="123 Main Street, Apt 4B") }}
+                    {% if form.address.errors %}
+                        <div class="form-error">{{ form.address.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.city.label(class="form-label") }}
+                    {{ form.city(class="form-input", placeholder="New York") }}
+                    {% if form.city.errors %}
+                        <div class="form-error">{{ form.city.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.state.label(class="form-label") }}
+                    {{ form.state(class="form-input", placeholder="NY") }}
+                    {% if form.state.errors %}
+                        <div class="form-error">{{ form.state.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.zip_code.label(class="form-label") }}
+                    {{ form.zip_code(class="form-input", placeholder="10001") }}
+                    {% if form.zip_code.errors %}
+                        <div class="form-error">{{ form.zip_code.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.country.label(class="form-label") }}
+                    {{ form.country(class="form-input", placeholder="United States") }}
+                    {% if form.country.errors %}
+                        <div class="form-error">{{ form.country.errors[0] }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- About Me Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon">📝</span>
+                    About Me
+                </h2>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    {{ form.bio.label(class="form-label") }}
+                    {{ form.bio(class="form-textarea", placeholder="Tell us about yourself, your interests, and what brings you to CarHub...") }}
+                    <small class="form-help">Share your story and automotive interests (max 500 characters)</small>
+                    {% if form.bio.errors %}
+                        <div class="form-error">{{ form.bio.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.preferred_contact_method.label(class="form-label") }}
+                    {{ form.preferred_contact_method(class="form-select") }}
+                    {% if form.preferred_contact_method.errors %}
+                        <div class="form-error">{{ form.preferred_contact_method.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.profile_picture.label(class="form-label") }}
+                    {{ form.profile_picture(class="form-file") }}
+                    <small class="form-help">Upload a profile picture (JPG, PNG, max 5MB)</small>
+                    {% if form.profile_picture.errors %}
+                        <div class="form-error">{{ form.profile_picture.errors[0] }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <a href="{{ url_for('profile') }}" class="btn-cancel">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn-save">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.edit-profile-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-top: 120px;
+    background: linear-gradient(135deg, #283673 0%, #5b2a8c 100%);
+    min-height: 100vh;
+}
+
+.edit-header {
+    background: linear-gradient(135deg, #5261a7 0%, #663c90 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(80, 78, 78, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.edit-header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #dcd9d9;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.header-icon {
+    font-size: 2rem;
+}
+
+.header-subtitle {
+    font-size: 1.1rem;
+    color: #dedada;
+    margin-bottom: 1.5rem;
+}
+
+.completion-indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.completion-bar {
+    flex: 1;
+    height: 10px;
+    background: #3c215e;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.completion-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.completion-text {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #d7d0d0;
+    min-width: 80px;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-section {
+    background: linear-gradient(135deg, #5261a7 0%, #663c90 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f0e9e9;
+    margin: 0;
+}
+.section-icon {
+    font-size: 1.25rem;
+}
+
+.section-required {
+    font-size: 0.8rem;
+    color: #d4d0d0;
+    font-style: italic;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #d7d2d2;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.form-label.required::after {
+    content: " *";
+    color: #e74c3c;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    outline: none;
+}
+
+.form-input[readonly] {
+    background: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+.form-file {
+    padding: 0.5rem;
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    background: #638ab1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-file:hover {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.form-help {
+    font-size: 0.8rem;
+    color: #dcd7d7;
+    margin-top: 0.25rem;
+}
+
+.form-error {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(231, 76, 60, 0.1);
+    border-radius: 4px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2rem;
+    background: rgba(86, 39, 162, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.btn-cancel,
+.btn-save {
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+    color: white;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* Flash Messages */
+.flash-messages {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 400px;
+}
+
+.flash-message {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease;
+}
+
+.flash-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.flash-info {
+    background: #cce7ff;
+    color: #004085;
+    border: 1px solid #b0d4f1;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .edit-profile-container {
+        padding: 1rem;
+        padding-top: 100px;
+    }
+    
+    .edit-header h1 {
+        font-size: 2rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .completion-indicator {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-cancel,
+    .btn-save {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-section {
+        padding: 1rem;
+    }
+    
+    .edit-header {
+        padding: 1.5rem;
+    }
+}
+</style>
+
+<script>
+// Character counter for bio textarea
+document.addEventListener('DOMContentLoaded', function() {
+    // Set completion bar width dynamically
+    const completionFill = document.querySelector('.completion-fill');
+    if (completionFill) {
+        const width = completionFill.getAttribute('data-width');
+        completionFill.style.width = width + '%';
+    }
+    
+    const bioTextarea = document.getElementById('bio');
+    if (bioTextarea) {
+        const maxLength = 500;
+        const counter = document.createElement('small');
+        counter.className = 'form-help char-counter';
+        counter.style.textAlign = 'right';
+        
+        function updateCounter() {
+            const currentLength = bioTextarea.value.length;
+            counter.textContent = `${currentLength}/${maxLength} characters`;
+            counter.style.color = currentLength > maxLength ? '#e74c3c' : '#666';
+        }
+        
+        bioTextarea.addEventListener('input', updateCounter);
+        bioTextarea.parentElement.appendChild(counter);
+        updateCounter();
+    }
+    
+    // Auto-dismiss flash messages
+    const flashMessages = document.querySelectorAll('.flash-message');
+    flashMessages.forEach(message => {
+        setTimeout(() => {
+            message.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => message.remove(), 300);
+        }, 5000);
+    });
+});
+
+// Add slideOut animation
+const style = document.createElement('style');
+style.textContent = `
+@keyframes slideOut {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}

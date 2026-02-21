@@ -1,0 +1,761 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - CarHub{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-banner">
+            <div class="profile-avatar">
+                {% if user.profile_picture %}
+                    <img src="{{ url_for('static', filename=user.profile_picture) }}" alt="Profile Picture" class="avatar-image">
+                {% else %}
+                    <div class="avatar-circle">
+                        <span class="avatar-text">{{ (user.first_name[0] + user.last_name[0]) if user.first_name and user.last_name else user.username[0].upper() }}</span>
+                    </div>
+                {% endif %}
+                <div class="status-indicator"></div>
+            </div>
+            <div class="profile-info">
+                <h1>{{ user.get_full_name() }}</h1>
+                <p class="profile-subtitle">CarHub Member since {{ user.created_at.strftime('%B %Y') }}</p>
+                <div class="member-badge">
+                    <span class="badge-icon">⭐</span>
+                    <span>{% if user.is_verified %}Verified Member{% else %}Member{% endif %}</span>
+                </div>
+                <div class="profile-completion">
+                    <div class="completion-bar">
+                        <div class="completion-fill" data-width="{{ user.get_profile_completion_percentage() }}"></div>
+                    </div>
+                    <span class="completion-text">{{ user.get_profile_completion_percentage() }}% Complete</span>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <a href="{{ url_for('edit_profile') }}" class="edit-profile-btn">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% if user %}
+    <div class="profile-content">
+        <!-- Personal Information Card -->
+        <div class="profile-section">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon">👤</span>
+                    Personal Information
+                </h2>
+                <a href="{{ url_for('edit_profile') }}" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>First Name</label>
+                    <p>{{ user.first_name if user.first_name else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Last Name</label>
+                    <p>{{ user.last_name if user.last_name else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Username</label>
+                    <p>{{ user.username }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Email Address</label>
+                    <p>{{ user.email }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Phone Number</label>
+                    <p>{{ user.phone if user.phone else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Date of Birth</label>
+                    <p>{{ user.date_of_birth.strftime('%B %d, %Y') if user.date_of_birth else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Gender</label>
+                    <p>{{ user.gender.title() if user.gender else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Occupation</label>
+                    <p>{{ user.occupation if user.occupation else 'Not provided' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Information Card -->
+        <div class="profile-section">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon">�</span>
+                    Address Information
+                </h2>
+                <a href="{{ url_for('edit_profile') }}" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+            </div>
+            <div class="info-grid">
+                <div class="info-item full-width">
+                    <label>Address</label>
+                    <p>{{ user.address if user.address else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>City</label>
+                    <p>{{ user.city if user.city else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>State</label>
+                    <p>{{ user.state if user.state else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>ZIP Code</label>
+                    <p>{{ user.zip_code if user.zip_code else 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Country</label>
+                    <p>{{ user.country if user.country else 'Not provided' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bio and Preferences Card -->
+        <div class="profile-section">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon">📝</span>
+                    About Me
+                </h2>
+                <a href="{{ url_for('edit_profile') }}" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+            </div>
+            <div class="info-grid">
+                <div class="info-item full-width">
+                    <label>Bio</label>
+                    <p class="bio-text">{{ user.bio if user.bio else 'No bio provided yet. Tell us about yourself!' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Preferred Contact</label>
+                    <p>{{ user.preferred_contact_method.title() if user.preferred_contact_method else 'Email' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Member Since</label>
+                    <p>{{ user.created_at.strftime('%B %d, %Y') }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Last Updated</label>
+                    <p>{{ user.profile_updated_at.strftime('%B %d, %Y') if user.profile_updated_at else 'Never' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Account Type</label>
+                    <p>{% if user.is_google_user() %}Google Account{% else %}Standard Account{% endif %}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Statistics Card -->
+        <div class="profile-section">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon">�</span>
+                    Account Overview
+                </h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">{{ user.orders|length if user.orders else 0 }}</div>
+                    <div class="stat-label">Orders Placed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ user.get_profile_completion_percentage() }}%</div>
+                    <div class="stat-label">Profile Complete</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{% if user.is_verified %}✅{% else %}❌{% endif %}</div>
+                    <div class="stat-label">Account Verified</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ user.last_login.strftime('%m/%d') if user.last_login else 'N/A' }}</div>
+                    <div class="stat-label">Last Login</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="profile-section">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon">⚡</span>
+                    Quick Actions
+                </h2>
+            </div>
+            <div class="actions-grid">
+                <a href="{{ url_for('cars') }}" class="action-card">
+                    <div class="action-icon">🚗</div>
+                    <h4>Browse Cars</h4>
+                    <p>Explore our premium collection</p>
+                </a>
+                <a href="#" class="action-card">
+                    <div class="action-icon">❤️</div>
+                    <h4>My Favorites</h4>
+                    <p>View your saved vehicles</p>
+                </a>
+                <a href="{{ url_for('finance') }}" class="action-card">
+                    <div class="action-icon">💰</div>
+                    <h4>Finance Options</h4>
+                    <p>Explore financing plans</p>
+                </a>
+                <a href="#" class="action-card">
+                    <div class="action-icon">💬</div>
+                    <h4>Contact Support</h4>
+                    <p>Get help and assistance</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="profile-navigation">
+        <a href="{{ url_for('dashboard') }}" class="nav-btn primary">
+            <span class="nav-icon">🏠</span>
+            Back to Dashboard
+        </a>
+        <a href="{{ url_for('index') }}" class="nav-btn secondary">
+            <span class="nav-icon">🌟</span>
+            Explore CarHub
+        </a>
+    </div>
+    {% else %}
+        <div class="error-section">
+            <div class="error-icon">⚠️</div>
+            <h2>Profile Not Available</h2>
+            <p>User information could not be loaded at this time.</p>
+            <a href="{{ url_for('login') }}" class="nav-btn primary">Sign In</a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-top: 120px;
+    background: linear-gradient(135deg, #282870 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: rgba(51, 31, 133, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.profile-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    position: relative;
+    padding: 1rem 0;
+    justify-content: center;
+    padding-left: 50px; 
+}
+
+.profile-avatar {
+    position: relative;
+    flex-shrink: 0;
+    margin-left: 40px; 
+}
+.profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: -40px; 
+}
+.avatar-image, .avatar-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.15),
+        0 6px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.avatar-image {
+    object-fit: cover;
+}
+
+.avatar-circle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.avatar-image:hover, .avatar-circle:hover {
+    transform: scale(1.08);
+    box-shadow: 
+        0 14px 28px rgba(0, 0, 0, 0.25), 
+        0 10px 10px rgba(0, 0, 0, 0.1);
+}
+.avatar-text {
+    font-size: 2.8rem; /* Increased for larger avatar */
+    font-weight: 800; /* Made the text bolder for prominence */
+    color: rgba(255, 255, 255, 0.95);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    line-height: 1; /* This is the key change to ensure perfect vertical centering */
+}
+/*.avatar-image {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 12px 28px rgba(102, 126, 234, 0.3), 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 16px 32px rgba(102, 126, 234, 0.4), 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-circle {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 12px 28px rgba(102, 126, 234, 0.3), 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar-circle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 16px 32px rgba(102, 126, 234, 0.4), 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-text {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+*/
+.status-indicator {
+    /*position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    border: 3px solid rgba(49, 113, 165, 0.95);
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite;
+    */
+    display: none;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profile-info h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #3a5bee 0%, #743eaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.1rem;
+    line-height: 1.05;
+}
+
+.profile-subtitle {
+    font-size: 1.2rem;
+    color: #fffbfb;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.member-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.profile-completion {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.1rem;
+}
+
+.completion-bar {
+    flex: 1;
+    height: 8px;
+    background: #fffafa;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.completion-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.completion-text {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #cdc9c9;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+.edit-profile-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.edit-profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+.profile-content {
+    display: grid;
+    gap: 2rem;
+}
+
+.profile-section {
+    background: rgba(29, 19, 77, 0.95);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e9e2e2;
+    margin: 0;
+}
+
+.section-icon {
+    font-size: 1.25rem;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.info-item label {
+    font-weight: bold;
+    color: #cbc5c5;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.bio-text {
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #22186d, #3c1174);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #dad3d3;
+    font-weight: 500;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.action-card {
+    background: rgba(102, 126, 234, 0.1);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.action-card:hover {
+    transform: translateY(-3px);
+    background: rgba(102, 126, 234, 0.2);
+    color: inherit;
+}
+
+.action-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.action-card h4 {
+    color: #667eea;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.action-card p {
+    color: #666;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.profile-navigation {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.nav-btn.primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.nav-btn.secondary {
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+}
+
+.error-section {
+    text-align: center;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.error-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.error-section h2 {
+    color: #e74c3c;
+    margin-bottom: 1rem;
+}
+
+.error-section p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 1rem;
+        padding-top: 100px;
+    }
+    
+    .profile-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .profile-actions {
+        margin-left: 0;
+        align-items: center;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-navigation {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+
+<script>
+// Set completion bar width dynamically
+document.addEventListener('DOMContentLoaded', function() {
+    const completionFill = document.querySelector('.completion-fill');
+    if (completionFill) {
+        const width = completionFill.getAttribute('data-width');
+        completionFill.style.width = width + '%';
+    }
+});
+</script>
+{% endblock %}

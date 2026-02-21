@@ -1,0 +1,364 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Sign Up - CarHub{% endblock %}
+
+{% block content %}
+<style>
+body {
+    background: radial-gradient(ellipse at top left, #23235b 0%, #0a0a1a 100%);
+    color: #e0e6ff;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    filter: brightness(0.3);
+}
+
+.signup-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.signup-card {
+    background: rgba(35, 35, 91, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+    0 0 25px rgba(124, 77, 255, 0.25),
+    0 0 45px rgba(124, 77, 255, 0.12),
+    inset 0 0 10px rgba(124, 77, 255, 0.12),
+    0 1px 6px rgba(24, 24, 40, 0.5);
+    border-radius: 22px;
+    box-shadow: 0 12px 40px 0 #7c4dff33, 0 1.5px 8px #18182899;
+    border: 2px solid #7c4dff33;
+    padding: 2rem 2rem;
+    max-width:  550px;
+    width: 100%;
+    z-index: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.signup-card h1 {
+    color: #07b0b3;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-align: center;
+    text-shadow: 0 2px 18px #23235b80, 0 1px 0 #7c4dff44;
+}
+
+.signup-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.form-control {
+    background: #181828;
+    border: 2px solid #7c4dff44;
+    border-radius: 12px;
+    padding: 0.6rem 0.8rem;
+    color: #e0e6ff;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+    box-shadow: 0 2px 8px #7c4dff11;
+    margin-bottom: 0.1rem;
+}
+
+.form-control:focus {
+    border: 2px solid #a084ff;
+    background: #23235b;
+}
+
+.form-group label {
+    color: #a084ff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    margin-left: 0.2rem;
+}
+
+.btn-primary {
+    width: 100%;
+    background: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+    border: none;
+    padding: 0.65rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px #7c4dff22;
+    margin-top: 0.3rem;
+    margin-bottom: 0.2rem;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(90deg, #a084ff 80%, #23235b 100%);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 1.1rem;
+    margin-bottom: 0.7rem;
+}
+
+.login-link p {
+    color: #b3baff;
+    font-size: 1.01rem;
+    margin-bottom: 0.2rem;
+}
+
+.login-link a {
+    color: #7c4dff;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s;
+    font-size: 0.9rem;
+}
+
+.login-link a:hover {
+    color: #a084ff;
+    text-decoration: underline;
+}
+
+/* Form Validation */
+.error-messages {
+    margin-top: 0.25rem;
+}
+
+.error-text {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 0.2rem;
+}
+
+.form-control.is-invalid {
+    border-color: #ff6b6b;
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+.password-requirements {
+    background: #181828;
+    border: 1px solid #7c4dff44;
+    border-radius: 8px;
+    padding: 0.8rem;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.password-requirements h4 {
+    color: #a084ff;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.password-requirements ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: #b3baff;
+}
+
+.password-requirements li {
+    margin-bottom: 0.2rem;
+}
+
+@media (max-width: 600px) {
+    .signup-card {
+        padding: 1.2rem 0.7rem;
+        max-width: 98vw;
+    }
+    .signup-card h1 {
+        font-size: 1.8rem;
+    }
+}
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 25px rgba(124, 77, 255, 0.25),
+      0 0 45px rgba(124, 77, 255, 0.12),
+      inset 0 0 10px rgba(124, 77, 255, 0.12),
+      0 1px 6px rgba(24, 24, 40, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 35px rgba(124, 77, 255, 0.35),
+      0 0 60px rgba(124, 77, 255, 0.2),
+      inset 0 0 15px rgba(124, 77, 255, 0.18),
+      0 2px 8px rgba(24, 24, 40, 0.65);
+  }
+}
+</style>
+
+<!-- Background Video -->
+<video autoplay muted loop playsinline class="bg-video">
+  <source src="{{ url_for('static', filename='car.mp4') }}" type="video/mp4" />
+</video>
+
+<div class="signup-container">
+    <div class="signup-card">
+        <h1>Create Account</h1>
+        
+        <!-- Navigation back to home -->
+        <div style="text-align: center; margin-bottom: 1rem;">
+            <a href="{{ url_for('index') }}" style="color: #a084ff; text-decoration: none; font-size: 0.9rem;">
+                ← Back to Home
+            </a>
+        </div>
+        
+        <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control", placeholder="Choose a username") }}
+                {% if form.username.errors %}
+                    <div class="error-messages">
+                        {% for error in form.username.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control", placeholder="Enter your email") }}
+                {% if form.email.errors %}
+                    <div class="error-messages">
+                        {% for error in form.email.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control", placeholder="Create a password", id="password") }}
+                {% if form.password.errors %}
+                    <div class="error-messages">
+                        {% for error in form.password.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="password-requirements">
+                    <h4>Password Requirements:</h4>
+                    <ul>
+                        <li>At least 8 characters long</li>
+                        <li>Contains uppercase letter</li>
+                        <li>Contains lowercase letter</li>
+                        <li>Contains at least one number</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form.password2.label(class="form-label") }}
+                {{ form.password2(class="form-control", placeholder="Confirm your password", id="password2") }}
+                {% if form.password2.errors %}
+                    <div class="error-messages">
+                        {% for error in form.password2.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            {{ form.submit(class="btn-primary") }}
+        </form>
+        
+        <div class="login-link">
+            <p>Already have an account?</p>
+            <a href="{{ url_for('login') }}">Sign In</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// Real-time password validation
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('password');
+    const confirmField = document.getElementById('password2');
+    
+    if (passwordField) {
+        passwordField.addEventListener('input', function() {
+            validatePassword(this.value);
+        });
+    }
+    
+    if (confirmField) {
+        confirmField.addEventListener('input', function() {
+            validatePasswordMatch();
+        });
+    }
+});
+
+function validatePassword(password) {
+    const requirements = document.querySelector('.password-requirements ul');
+    if (!requirements) return;
+    
+    const checks = [
+        { regex: /.{8,}/, text: 'At least 8 characters long' },
+        { regex: /[A-Z]/, text: 'Contains uppercase letter' },
+        { regex: /[a-z]/, text: 'Contains lowercase letter' },
+        { regex: /[0-9]/, text: 'Contains at least one number' }
+    ];
+    
+    requirements.innerHTML = '';
+    checks.forEach(check => {
+        const li = document.createElement('li');
+        li.textContent = check.text;
+        li.style.color = check.regex.test(password) ? '#28a745' : '#b3baff';
+        requirements.appendChild(li);
+    });
+}
+
+function validatePasswordMatch() {
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('password2').value;
+    const confirmField = document.getElementById('password2');
+    
+    if (confirm && password !== confirm) {
+        confirmField.style.borderColor = '#ff6b6b';
+    } else if (confirm) {
+        confirmField.style.borderColor = '#28a745';
+    }
+}
+</script>
+{% endblock %}

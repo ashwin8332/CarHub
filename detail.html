@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KHELWAPAS - Pro Grade Cricket Bat</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-cyan: #22d3ee;
+            --primary-cyan-dark: #0891b2;
+            --secondary-green: #4ade80;
+            --secondary-green-dark: #16a34a;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #f472b6;
+            --bg-primary: #1a1f3a;
+            --bg-secondary: #2d1b69;
+            --bg-card: rgba(45, 27, 105, 0.4);
+            --bg-glass: rgba(34, 211, 238, 0.05);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(34, 211, 238, 0.15);
+            --border-glow: rgba(34, 211, 238, 0.3);
+            --shadow-cyan: 0 25px 50px -12px rgba(34, 211, 238, 0.25);
+            --shadow-purple: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
+            --gradient-primary: linear-gradient(135deg, #1a1f3a 0%, #2d1b69 50%, #1a1f3a 100%);
+            --gradient-card: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(74, 222, 128, 0.05) 100%);
+            --gradient-button: linear-gradient(135deg, #22d3ee, #4ade80);
+            --gradient-accent: linear-gradient(135deg, #8b5cf6, #f472b6);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(34, 211, 238, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(74, 222, 128, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--gradient-button);
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--gradient-accent);
+            top: 60%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+
+        .shape-3 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #22d3ee, #8b5cf6);
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
+            33% { transform: translateY(-30px) rotate(120deg); opacity: 0.15; }
+            66% { transform: translateY(15px) rotate(240deg); opacity: 0.08; }
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--primary-cyan);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--secondary-green);
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Image Gallery Section */
+        .image-gallery {
+            position: relative;
+        }
+
+        .main-image-wrapper {
+            position: relative;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: var(--shadow-cyan);
+        }
+
+        .main-image-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-card);
+            border-radius: 24px;
+            z-index: 1;
+        }
+
+        .main-image-wrapper:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 35px 80px -15px rgba(34, 211, 238, 0.4);
+            transform: translateY(-2px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 20px;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 10px 30px rgba(34, 211, 238, 0.2));
+        }
+
+        .main-image:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 15px 40px rgba(34, 211, 238, 0.3));
+        }
+
+        .image-indicator {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(26, 31, 58, 0.8);
+            color: var(--primary-cyan);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            z-index: 3;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .thumbnail {
+            height: 120px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-glass);
+            transition: all 0.3s ease;
+            border-radius: 14px;
+        }
+
+        .thumbnail.active {
+            border-color: var(--primary-cyan);
+            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.2), var(--shadow-cyan);
+            transform: translateY(-4px);
+        }
+
+        .thumbnail.active::before {
+            background: rgba(34, 211, 238, 0.1);
+        }
+
+        .thumbnail:hover:not(.active) {
+            border-color: var(--secondary-green);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 222, 128, 0.2);
+        }
+
+        /* Product Information Section */
+        .product-info {
+            padding-top: 1rem;
+        }
+
+        .product-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(74, 222, 128, 0.1);
+            color: var(--secondary-green);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .product-category {
+            color: var(--primary-cyan);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-button);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .current-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-button);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .original-price {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .savings {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.75rem 1.25rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid;
+            backdrop-filter: blur(10px);
+        }
+
+        .grade-badge {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+            color: #fbbf24;
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .assured-badge {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 197, 94, 0.2));
+            color: var(--secondary-green);
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+
+        .product-description {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .description-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .specifications-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .spec-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-card);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .spec-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-cyan);
+            border-color: var(--border-glow);
+        }
+
+        .spec-card:hover::before {
+            opacity: 1;
+        }
+
+        .spec-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .spec-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .purchase-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-purple);
+        }
+
+        .quantity-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quantity-label {
+            font-weight: 500;
+            color: var(--primary-cyan);
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            background: rgba(26, 31, 58, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+        }
+
+        .quantity-btn:hover {
+            background: var(--gradient-button);
+            color: white;
+        }
+
+        .quantity-input {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            text-align: center;
+            width: 60px;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-button);
+            color: white;
+            box-shadow: var(--shadow-cyan);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(34, 211, 238, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gradient-accent);
+            color: white;
+            box-shadow: var(--shadow-purple);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-card);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-cyan);
+            border-color: var(--border-glow);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: var(--primary-cyan);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-text {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .related-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .related-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: var(--gradient-button);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .related-item {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .related-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-card);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .related-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-cyan);
+            border-color: var(--border-glow);
+        }
+
+        .related-item:hover::before {
+            opacity: 1;
+        }
+
+        .related-image {
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            background-color: rgba(34, 211, 238, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+
+        .related-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .related-price {
+            background: var(--gradient-button);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 1.125rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .product-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .specifications-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .product-title {
+                font-size: 2rem;
+            }
+            
+            .current-price {
+                font-size: 2rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .thumbnail-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .thumbnail {
+                height: 100px;
+            }
+            
+            .main-image-wrapper {
+                height: 400px;
+                padding: 2rem;
+            }
+            
+            .purchase-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .badge-container {
+                flex-direction: column;
+            }
+            
+            .price-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .quantity-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Glowing text animation */
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px rgba(34, 211, 238, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(34, 211, 238, 0.8), 0 0 30px rgba(74, 222, 128, 0.5); }
+        }
+
+        .glow-text {
+            animation: glow 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="#" onclick="goBack()">← Back</a>
+            <span>/</span>
+            <a href="#">Cricket Equipment</a>
+            <span>/</span>
+            <span>Pro Grade Cricket Bat</span>
+        </nav>
+
+        <!-- Main Product Layout -->
+        <div class="product-layout">
+            <!-- Image Gallery -->
+            <div class="image-gallery loading">
+                <div class="main-image-wrapper">
+                    <div class="image-indicator">1 / 4</div>
+                    <div class="main-image" id="mainImage"></div>
+                </div>
+                <div class="thumbnail-grid">
+                    <div class="thumbnail active" data-index="1" onclick="changeImage(1, this)"></div>
+                    <div class="thumbnail" data-index="2" onclick="changeImage(2, this)"></div>
+                    <div class="thumbnail" data-index="3" onclick="changeImage(3, this)"></div>
+                    <div class="thumbnail" data-index="4" onclick="changeImage(4, this)"></div>
+                </div>
+            </div>
+
+            <!-- Product Information -->
+            <div class="product-info loading">
+                <div class="product-status glow-text">
+                    🟢 In Stock - Ready to Ship
+                </div>
+
+                <div class="product-category">Cricket Equipment</div>
+                <h1 class="product-title">Pro Grade Cricket Bat</h1>
+                
+                <div class="price-container">
+                    <span class="current-price">₹12,000</span>
+                    <span class="original-price">₹20,000</span>
+                    <span class="savings">Save 40%</span>
+                </div>
+
+                <div class="badge-container">
+                    <div class="badge grade-badge">
+                        ⭐ Grade A Quality
+                    </div>
+                    <div class="badge assured-badge">
+                        ✅ KHELWAPAS Assured
+                    </div>
+                </div>
+
+                <div class="product-description">
+                    <h3 class="section-title">
+                        📋 Product Description
+                    </h3>
+                    <p class="description-text">
+                        Premium English Willow cricket bat in pristine condition. Meticulously crafted for professional and aspiring cricketers, featuring exceptional balance, superior grains, and optimal weight distribution. This Grade A bat delivers outstanding performance with a clean hitting surface and zero damage.
+                    </p>
+                </div>
+
+                <h3 class="section-title">⚙️ Specifications</h3>
+                <div class="specifications-grid">
+                    <div class="spec-card">
+                        <div class="spec-label">Brand</div>
+                        <div class="spec-value">SG (Sanspareils Greenlands)</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-label">Material</div>
+                        <div class="spec-value">English Willow</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-label">Weight</div>
+                        <div class="spec-value">1180g (2lb 9oz)</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-label">Size</div>
+                        <div class="spec-value">Full Size (Short Handle)</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🚚</div>
+                        <div class="feature-title">Free Shipping</div>
+                        <div class="feature-text">On orders above ₹5,000</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <div class="feature-title">Easy Returns</div>
+                        <div class="feature-text">7-day return policy</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <div class="feature-title">Warranty</div>
+                        <div class="feature-text">1-year manufacturer warranty</div>
+                    </div>
+                </div>
+
+                <div class="purchase-section">
+                    <div class="quantity-section">
+                        <span class="quantity-label">Quantity:</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="decreaseQuantity()">−</button>
+                            <input type="number" class="quantity-input" value="1" id="quantity" min

@@ -1,0 +1,461 @@
+{% extends "base.html" %}
+
+{% block title %}Activity Logs - Admin Panel{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(120deg, #29165f 0%, #2e3499 100%);
+    }
+    .admin-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 32px 16px;
+        background: #150954;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(60, 72, 120, 0.12);
+    }
+    .admin-header {
+        background:  #161f46 ;
+        color: rgb(76, 67, 197);
+        padding: 36px 32px 28px 32px;
+        border-radius: 15px;
+        margin-bottom: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 16px rgba(102,126,234,0.08);
+    }
+    .header-content h1 {
+        margin: 0 0 10px 0;
+        font-size: 2.5em;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+    .header-content p {
+        margin: 0;
+        opacity: 0.92;
+        font-size: 1.15em;
+        font-weight: 500;
+    }
+    .admin-actions .btn {
+        background: rgba(255,255,255,0.18);
+        color: rgb(176, 161, 232);
+        padding: 14px 32px;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.1em;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+        transition: all 0.2s;
+    }
+    .admin-actions .btn:hover {
+        background: rgb(8, 8, 70);
+        transform: translateY(-2px) scale(1.04);
+    }
+    .filter-section {
+        background: #2e1f79;
+        padding: 28px 24px;
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.06);
+        margin-bottom: 32px;
+    }
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+        align-items: center;
+    }
+    .filter-group label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #e1e3e6;
+        font-size: 1.08em;
+    }
+    .filter-select {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        background: #a79abd;
+        font-size: 1em;
+        font-weight: 500;
+        transition: border-color 0.2s;
+    }
+    .filter-select:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+    .current-filter {
+        background: #667eea;
+        color: white;
+        padding: 8px 18px;
+        border-radius: 20px;
+        font-size: 1em;
+        font-weight: 700;
+        margin-right: 10px;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+    }
+    .clear-filter {
+        color: #dc3545;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1em;
+        margin-left: 8px;
+    }
+    .clear-filter:hover {
+        text-decoration: underline;
+    }
+    .activities-section {
+        background: #2b2982;
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.06);
+        overflow: hidden;
+        padding: 16px 0 0 0;
+    }
+    .activities-table table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1.05em;
+    }
+    .activities-table th {
+        background: #292e92;
+        padding: 22px 16px;
+        text-align: left;
+        font-weight: 800;
+        color: #dbdde0;
+        border-bottom: 2px solid #d1d5db;
+        font-size: 1em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .activities-table td {
+        padding: 22px 16px;
+        border-bottom: 1px solid #e2e8f0;
+        vertical-align: top;
+        background: #381c76;
+    }
+    .activities-table tr:hover {
+        background: #f4f6fb;
+        transition: background 0.2s;
+    }
+    .time-info strong {
+        display: block;
+        color: #e7e8ea;
+        font-size: 1em;
+        margin-bottom: 4px;
+        font-weight: 700;
+    }
+    .time {
+        color: #667eea;
+        font-size: 0.98em;
+        font-weight: 600;
+    }
+    .user-details strong {
+        display: block;
+        color: #dcdfe5;
+        margin-bottom: 4px;
+        font-weight: 700;
+    }
+    .user-email {
+        color: #e3e5e8;
+        font-size: 0.98em;
+        margin-bottom: 8px;
+    }
+    .user-link {
+        color: #e3e5e9;
+        text-decoration: none;
+        font-size: 0.98em;
+        font-weight: 700;
+        margin-top: 4px;
+        display: inline-block;
+    }
+    .user-link:hover {
+        text-decoration: underline;
+        color: #764ba2;
+    }
+    .anonymous {
+        color: #e3e4e6;
+        font-style: italic;
+        font-size: 1em;
+    }
+    .activity-badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 1em;
+        font-weight: 700;
+        display: inline-block;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+    }
+    .activity-login { background: #d4edda; color: #155724; }
+    .activity-logout { background: #f8d7da; color: #721c24; }
+    .activity-login_failed { background: #f5c6cb; color: #721c24; }
+    .activity-view_car { background: #d1ecf1; color: #0c5460; }
+    .activity-order_placed { background: #fff3cd; color: #856404; }
+    .activity-profile_update { background: #e2e3e5; color: #383d41; }
+    .activity-signup { background: #d4edda; color: #155724; }
+    .activity-description {
+        color: #e4e5e8;
+        line-height: 1.5;
+        font-size: 1.05em;
+        font-weight: 500;
+    }
+    .tech-details {
+        font-size: 0.98em;
+        color: #dee0e4;
+    }
+    .tech-detail {
+        margin-bottom: 8px;
+    }
+    .tech-detail .label {
+        color: #667eea;
+        font-weight: 700;
+        margin-right: 5px;
+    }
+    .tech-detail .value {
+        color: #dee2e7;
+        font-weight: 600;
+    }
+    .pagination-section {
+        padding: 28px 0 28px 0;
+        background: #eff0f4;
+        border-top: 1px solid #d1d5db;
+        border-radius: 0 0 15px 15px;
+    }
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .page-btn {
+        background: #90a0eb;
+        color: white;
+        padding: 12px 28px;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.08em;
+        transition: background 0.2s;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+    }
+    .page-btn:hover {
+        background: #764ba2;
+    }
+    .page-info {
+        color: #4a5568;
+        font-size: 1.08em;
+        font-weight: 700;
+    }
+    .no-activities {
+        padding: 60px 20px;
+        text-align: center;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.06);
+        margin: 32px 0;
+    }
+    .empty-state h3 {
+        color: #667eea;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        font-weight: 800;
+    }
+    .empty-state p {
+        color: #4a5568;
+        margin-bottom: 25px;
+        font-size: 1.08em;
+    }
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+        padding: 14px 32px;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.08em;
+        display: inline-block;
+        transition: background 0.2s;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+    }
+    .btn-secondary:hover {
+        background: #495057;
+    }
+    @media (max-width: 900px) {
+        .admin-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 20px;
+        }
+        .filter-grid {
+            grid-template-columns: 1fr;
+        }
+        .activities-table {
+            overflow-x: auto;
+        }
+        .pagination {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+</style>
+
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="header-content">
+            <h1>📊 Activity Logs</h1>
+            <p>Monitor user activities and system events</p>
+        </div>
+        <div class="admin-actions">
+            <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">← Admin Panel</a>
+        </div>
+    </div>
+
+    <div class="filter-section">
+        <form method="GET" class="filter-form">
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label>Activity Type:</label>
+                    <select name="type" onchange="this.form.submit()" class="filter-select">
+                        <option value="all" {{ 'selected' if activity_type == 'all' else '' }}>All Activities</option>
+                        <option value="login" {{ 'selected' if activity_type == 'login' else '' }}>Login</option>
+                        <option value="logout" {{ 'selected' if activity_type == 'logout' else '' }}>Logout</option>
+                        <option value="login_failed" {{ 'selected' if activity_type == 'login_failed' else '' }}>Failed Login</option>
+                        <option value="view_car" {{ 'selected' if activity_type == 'view_car' else '' }}>Car Views</option>
+                        <option value="order_placed" {{ 'selected' if activity_type == 'order_placed' else '' }}>Orders</option>
+                        <option value="profile_update" {{ 'selected' if activity_type == 'profile_update' else '' }}>Profile Updates</option>
+                    </select>
+                </div>
+                {% if user_id %}
+                <div class="filter-group">
+                    <label>Current Filter:</label>
+                    <span class="current-filter">User ID: {{ user_id }}</span>
+                    <a href="{{ url_for('admin_activities') }}" class="clear-filter">Clear Filter</a>
+                </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <div class="activities-section">
+        {% if activities.items %}
+            <div class="activities-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>User</th>
+                            <th>Activity</th>
+                            <th>Description</th>
+                            <th>Technical Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in activities.items %}
+                        <tr>
+                            <td>
+                                <div class="time-info">
+                                    <strong>{{ activity.created_at.strftime('%m/%d/%Y') }}</strong>
+                                    <div class="time">{{ activity.created_at.strftime('%I:%M:%S %p') }}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="user-info">
+                                    {% if activity.user %}
+                                    <div class="user-details">
+                                        <strong>{{ activity.user.username }}</strong>
+                                        <div class="user-email">{{ activity.user.email }}</div>
+                                        <a href="{{ url_for('admin_user_detail', user_id=activity.user.id) }}" class="user-link">View Profile →</a>
+                                    </div>
+                                    {% else %}
+                                    <span class="anonymous">System/Anonymous</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="activity-type">
+                                    <span class="activity-badge activity-{{ activity.activity_type }}">
+                                        {% if activity.activity_type == 'login' %}
+                                            🔓 Login
+                                        {% elif activity.activity_type == 'logout' %}
+                                            🔒 Logout
+                                        {% elif activity.activity_type == 'login_failed' %}
+                                            ❌ Failed Login
+                                        {% elif activity.activity_type == 'view_car' %}
+                                            👁 Car View
+                                        {% elif activity.activity_type == 'order_placed' %}
+                                            🛒 Order
+                                        {% elif activity.activity_type == 'profile_update' %}
+                                            👤 Profile Update
+                                        {% elif activity.activity_type == 'signup' %}
+                                            ✍️ Sign Up
+                                        {% else %}
+                                            📋 {{ activity.activity_type|title }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="activity-description">
+                                    {{ activity.description }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tech-details">
+                                    {% if activity.ip_address %}
+                                    <div class="tech-detail">
+                                        <span class="label">IP:</span>
+                                        <span class="value">{{ activity.ip_address }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if activity.user_agent %}
+                                    <div class="tech-detail">
+                                        <span class="label">Browser:</span>
+                                        <span class="value" title="{{ activity.user_agent }}">
+                                            {% if 'Chrome' in activity.user_agent %}
+                                                🌐 Chrome
+                                            {% elif 'Firefox' in activity.user_agent %}
+                                                🦊 Firefox
+                                            {% elif 'Safari' in activity.user_agent %}
+                                                🧭 Safari
+                                            {% elif 'Edge' in activity.user_agent %}
+                                                🔷 Edge
+                                            {% else %}
+                                                🖥 {{ activity.user_agent.split('/')[0] }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-section">
+                <div class="pagination">
+                    {% if activities.has_prev %}
+                        <a href="{{ url_for('admin_activities', page=activities.prev_num, type=activity_type, user_id=user_id if user_id else None) }}" class="page-btn">← Previous</a>
+                    {% endif %}
+                    <div class="page-info">
+                        Page {{ activities.page }} of {{ activities.pages }} 
+                        ({{ activities.total }} activities)
+                    </div>
+                    {% if activities.has_next %}
+                        <a href="{{ url_for('admin_activities', page=activities.next_num, type=activity_type, user_id=user_id if user_id else None) }}" class="page-btn">Next →</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="no-activities">
+                <div class="empty-state">
+                    <h3>📭 No Activities Found</h3>
+                    <p>No user activities match the current filters.</p>
+                    <a href="{{ url_for('admin_activities') }}" class="btn btn-secondary">Clear Filters</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

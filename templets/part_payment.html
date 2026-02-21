@@ -1,0 +1,428 @@
+{% extends "base.html" %}
+
+{% block title %}Part Payment - CarHub{% endblock %}
+
+{% block extra_head %}
+<style>
+    .payment-container {
+        max-width: 1200px;
+        margin: 120px auto 60px;
+        padding: 0 20px;
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .payment-header h1 {
+        font-size: 2.5rem;
+        color: #fff;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .payment-header p {
+        color: #b3b3ff;
+        font-size: 1.1rem;
+    }
+
+    .payment-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    .part-summary {
+        background: rgba(20, 20, 40, 0.6);
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        border-radius: 15px;
+        padding: 30px;
+        backdrop-filter: blur(10px);
+    }
+
+    .part-summary h2 {
+        color: #7c4dff;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid rgba(124, 77, 255, 0.3);
+    }
+
+    .part-info {
+        margin-bottom: 20px;
+    }
+
+    .part-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(124, 77, 255, 0.1);
+    }
+
+    .part-info-label {
+        color: #b3b3ff;
+        font-weight: 500;
+    }
+
+    .part-info-value {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .quantity-selector {
+        margin: 25px 0;
+        padding: 20px;
+        background: rgba(124, 77, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .quantity-selector label {
+        color: #fff;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .quantity-input {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .quantity-input button {
+        width: 40px;
+        height: 40px;
+        background: #7c4dff;
+        border: none;
+        color: #fff;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .quantity-input button:hover {
+        background: #6a3de8;
+        transform: scale(1.05);
+    }
+
+    .quantity-input input {
+        width: 80px;
+        height: 40px;
+        text-align: center;
+        font-size: 1.1rem;
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        background: rgba(20, 20, 40, 0.8);
+        color: #fff;
+        border-radius: 8px;
+    }
+
+    .price-total {
+        margin-top: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, rgba(124, 77, 255, 0.2), rgba(124, 77, 255, 0.1));
+        border-radius: 10px;
+        border: 2px solid rgba(124, 77, 255, 0.4);
+    }
+
+    .price-total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .price-total-label {
+        color: #b3b3ff;
+        font-size: 1rem;
+    }
+
+    .price-total-value {
+        color: #fff;
+        font-size: 1rem;
+    }
+
+    .price-total-final {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 2px solid rgba(124, 77, 255, 0.4);
+    }
+
+    .price-total-final .price-total-label {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .price-total-final .price-total-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #7c4dff;
+    }
+
+    .payment-form {
+        background: rgba(20, 20, 40, 0.6);
+        border: 1px solid rgba(124, 77, 255, 0.3);
+        border-radius: 15px;
+        padding: 30px;
+        backdrop-filter: blur(10px);
+    }
+
+    .payment-form h2 {
+        color: #7c4dff;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid rgba(124, 77, 255, 0.3);
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        background: rgba(20, 20, 40, 0.8);
+        border: 2px solid rgba(124, 77, 255, 0.3);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #7c4dff;
+        box-shadow: 0 0 15px rgba(124, 77, 255, 0.3);
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .form-group small {
+        color: #b3b3ff;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #7c4dff, #6a3de8);
+        border: none;
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(124, 77, 255, 0.5);
+    }
+
+    .secure-badge {
+        text-align: center;
+        margin-top: 20px;
+        color: #b3b3ff;
+        font-size: 0.9rem;
+    }
+
+    .secure-badge i {
+        color: #7c4dff;
+        margin-right: 5px;
+    }
+
+    @media (max-width: 968px) {
+        .payment-content {
+            grid-template-columns: 1fr;
+        }
+
+        .payment-header h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-header">
+        <h1><i class="fas fa-shopping-cart"></i> Complete Your Purchase</h1>
+        <p>Secure checkout for automotive parts</p>
+    </div>
+
+    <div class="payment-content">
+        <!-- Part Summary -->
+        <div class="part-summary">
+            <h2><i class="fas fa-cog"></i> Part Summary</h2>
+            
+            <div class="part-info">
+                <div class="part-info-row">
+                    <span class="part-info-label">Part Name:</span>
+                    <span class="part-info-value">{{ part.name }}</span>
+                </div>
+                <div class="part-info-row">
+                    <span class="part-info-label">Brand:</span>
+                    <span class="part-info-value">{{ part.brand }}</span>
+                </div>
+                <div class="part-info-row">
+                    <span class="part-info-label">Part Number:</span>
+                    <span class="part-info-value">{{ part.part_number }}</span>
+                </div>
+                <div class="part-info-row">
+                    <span class="part-info-label">Category:</span>
+                    <span class="part-info-value">{{ part.category }}</span>
+                </div>
+                <div class="part-info-row">
+                    <span class="part-info-label">Availability:</span>
+                    <span class="part-info-value">{{ part.status }}</span>
+                </div>
+                <div class="part-info-row">
+                    <span class="part-info-label">Unit Price:</span>
+                    <span class="part-info-value">{{ part.price }}</span>
+                </div>
+            </div>
+
+            <div class="quantity-selector">
+                <label for="quantity"><i class="fas fa-sort-numeric-up"></i> Quantity:</label>
+                <div class="quantity-input">
+                    <button type="button" onclick="decreaseQuantity()"><i class="fas fa-minus"></i></button>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="10" onchange="updateTotal()">
+                    <button type="button" onclick="increaseQuantity()"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="price-total">
+                <div class="price-total-row">
+                    <span class="price-total-label">Unit Price:</span>
+                    <span class="price-total-value" id="unit-price">{{ part.price }}</span>
+                </div>
+                <div class="price-total-row">
+                    <span class="price-total-label">Quantity:</span>
+                    <span class="price-total-value" id="quantity-display">1</span>
+                </div>
+                <div class="price-total-row price-total-final">
+                    <span class="price-total-label">Total Amount:</span>
+                    <span class="price-total-value" id="total-price">{{ part.price }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="payment-form">
+            <h2><i class="fas fa-credit-card"></i> Payment Details</h2>
+            
+            <form method="POST" id="payment-form">
+                {{ form.hidden_tag() }}
+                
+                <!-- Hidden quantity field -->
+                <input type="hidden" name="quantity" id="hidden-quantity" value="1">
+                
+                <div class="form-group">
+                    {{ form.billing_name.label }}
+                    {{ form.billing_name(class="form-control") }}
+                    {% if form.billing_name.errors %}
+                        <small style="color: #ff6b6b;">{{ form.billing_name.errors[0] }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.billing_email.label }}
+                    {{ form.billing_email(class="form-control") }}
+                    {% if form.billing_email.errors %}
+                        <small style="color: #ff6b6b;">{{ form.billing_email.errors[0] }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.billing_phone.label }}
+                    {{ form.billing_phone(class="form-control") }}
+                    {% if form.billing_phone.errors %}
+                        <small style="color: #ff6b6b;">{{ form.billing_phone.errors[0] }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.billing_address.label }}
+                    {{ form.billing_address(class="form-control", rows="3") }}
+                    <small>This will be used as your shipping address</small>
+                    {% if form.billing_address.errors %}
+                        <small style="color: #ff6b6b;">{{ form.billing_address.errors[0] }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.payment_method.label }}
+                    {{ form.payment_method(class="form-control") }}
+                    {% if form.payment_method.errors %}
+                        <small style="color: #ff6b6b;">{{ form.payment_method.errors[0] }}</small>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-lock"></i> Complete Purchase
+                </button>
+
+                <div class="secure-badge">
+                    <i class="fas fa-shield-alt"></i> Secure SSL Encrypted Payment
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const unitPrice = parseFloat('{{ part.price }}'.replace('$', '').replace(',', ''));
+    
+    function updateTotal() {
+        const quantity = parseInt(document.getElementById('quantity').value) || 1;
+        const total = unitPrice * quantity;
+        
+        document.getElementById('quantity-display').textContent = quantity;
+        document.getElementById('total-price').textContent = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('hidden-quantity').value = quantity;
+    }
+    
+    function increaseQuantity() {
+        const input = document.getElementById('quantity');
+        const currentValue = parseInt(input.value) || 1;
+        if (currentValue < 10) {
+            input.value = currentValue + 1;
+            updateTotal();
+        }
+    }
+    
+    function decreaseQuantity() {
+        const input = document.getElementById('quantity');
+        const currentValue = parseInt(input.value) || 1;
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+            updateTotal();
+        }
+    }
+    
+    // Initialize total on page load
+    updateTotal();
+</script>
+{% endblock %}

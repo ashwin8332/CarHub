@@ -1,0 +1,1001 @@
+{% extends "base.html" %}
+
+{% block title %}Video Gallery - CarHub{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+/* Enhanced Violet Blue & Black Theme */
+body {
+    background: radial-gradient(ellipse at top left, #23235b 0%, #0a0a1a 100%);
+    color: #e0e6ff;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.video-container {
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
+    max-width: 1400px;
+    margin: 32px auto 0 auto;
+    background: linear-gradient(120deg, #23235b 60%, #181828 100%);
+    border-radius: 22px;
+    box-shadow: 0 12px 40px 0 #7c4dff33, 0 1.5px 8px #18182899;
+    border: 2px solid #7c4dff33;
+}
+
+.video-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    position: relative;
+    padding-bottom: 1.7rem;
+}
+
+.video-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 4px;
+    background: linear-gradient(90deg, #7c4dff 0%, #23235b 100%);
+    border-radius: 4px;
+    box-shadow: 0 2px 12px #7c4dff55;
+}
+
+.video-header h1 {
+    color: #a084ff;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 18px #23235b80, 0 1px 0 #7c4dff44;
+}
+
+.video-header p {
+    color: #b3baff;
+    font-size: 1.22rem;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    margin-bottom: 0.5rem;
+}
+
+.top-search-box {
+    margin: 2rem auto 0;
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 4px 18px #7c4dff22, 0 1px 2px #23235b44;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #181828;
+    border: 2px solid #7c4dff44;
+    transition: box-shadow 0.3s;
+    position: relative;
+    margin: 0 auto;
+}
+
+.search-container .search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a084ff;
+    font-size: 1.3rem;
+    pointer-events: none;
+    opacity: 0.85;
+    transition: color 0.2s;
+    z-index: 2;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 1.1rem 1.7rem 1.1rem 2.8rem;
+    border: none;
+    border-radius: 32px 0 0 32px;
+    font-size: 1.08rem;
+    outline: none;
+    background: #181828;
+    color: #e0e6ff;
+    transition: background 0.2s;
+    box-shadow: none;
+    width: 100%;
+    min-width: 0;
+}
+
+.search-container button {
+    padding: 1.1rem 2.1rem;
+    background: linear-gradient(90deg, #7c4dff 60%, #23235b 100%);
+    color: white;
+    border: none;
+    border-radius: 0 32px 32px 0;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.2s, transform 0.15s;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px #7c4dff22;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 100%;
+}
+
+@media (max-width: 600px) {
+    .top-search-box, .search-container {
+        max-width: 100%;
+        width: 100%;
+    }
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+        min-width: 0;
+    }
+    .search-container .search-icon {
+        left: 16px;
+        top: 22px;
+        font-size: 1.1rem;
+    }
+    .search-container input {
+        border-radius: 32px;
+        margin-bottom: 10px;
+        padding-left: 2.5rem;
+    }
+    .search-container button {
+        border-radius: 32px;
+        width: 100%;
+        justify-content: center;
+        min-width: 0;
+    }
+}
+
+.video-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 32px;
+    margin-top: 32px;
+}
+
+.video-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #23235b 60%, #181828 100%);
+    box-shadow: 0 6px 24px #7c4dff22, 0 1.5px 8px #18182899;
+    transition: transform 0.25s, box-shadow 0.25s, border 0.25s;
+    cursor: pointer;
+    border: 2px solid #2e2e6f33;
+    position: relative;
+    min-height: 340px;
+}
+
+.video-card:hover {
+    transform: translateY(-10px) scale(1.035);
+    box-shadow: 0 16px 40px #7c4dff44, 0 2px 12px #23235b99;
+    border-color: #a084ff;
+}
+
+.thumbnail {
+    position: relative;
+    overflow: hidden;
+    height: 170px;
+    background: #181828;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s, filter 0.25s;
+    filter: brightness(0.93) contrast(1.12) saturate(1.1);
+    border-bottom: 2px solid #7c4dff33;
+}
+
+.video-card:hover .thumbnail img {
+    transform: scale(1.09) rotate(-1deg);
+    filter: brightness(1.03) contrast(1.18) saturate(1.2);
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #a084ff 60%, #7c4dff 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 2px 16px #7c4dff55;
+    z-index: 2;
+}
+
+.video-card:hover .play-button {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.12);
+}
+
+.play-button i {
+    color: #fff;
+    font-size: 26px;
+    margin-left: 4px;
+}
+
+.video-duration {
+    position: absolute;
+    bottom: 12px;
+    right: 14px;
+    background: #23235bcc;
+    color: #fff;
+    padding: 3px 14px;
+    border-radius: 7px;
+    font-size: 0.93rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 6px #7c4dff22;
+}
+
+.card-content {
+    padding: 18px 16px 14px 16px;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    height: 180px;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.card-title {
+    margin: 0 0 10px;
+    font-size: 1.18rem;
+    color: #e0e6ff;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 8px #23235b44;
+}
+
+.card-description {
+    margin: 0 0 12px;
+    font-size: 1.08rem;
+    color: #e0e6ff;
+    line-height: 1.7;
+    background: rgba(44, 44, 84, 0.18);
+    border-radius: 8px;
+    padding: 12px 14px;
+    min-height: 70px;
+    max-height: 120px;
+    overflow-y: auto;
+    text-overflow: initial;
+    display: block;
+    box-shadow: 0 1px 6px #7c4dff11;
+    transition: background 0.2s, color 0.2s;
+    scrollbar-width: thin;
+    scrollbar-color: #7c4dff #23235b;
+}
+
+.card-description::-webkit-scrollbar {
+    width: 6px;
+    background: #23235b;
+    border-radius: 8px;
+}
+.card-description::-webkit-scrollbar-thumb {
+    background: #7c4dff88;
+    border-radius: 8px;
+}
+
+.video-card:hover .card-description {
+    background: rgba(124, 77, 255, 0.13);
+    color: #a084ff;
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.97rem;
+    color: #a2a8d3;
+    margin-top: 8px;
+}
+
+.views {
+    color: #a2a8d3;
+    font-weight: 600;
+}
+
+.state-tag {
+    background: linear-gradient(90deg, #7c4dff33 60%, #23235b 100%);
+    border-radius: 15px;
+    padding: 3px 12px;
+    font-size: 0.86rem;
+    text-transform: capitalize;
+    color: #a084ff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 4px #7c4dff22;
+}
+
+.no-results {
+    text-align: center;
+    padding: 48px 20px;
+    background: #23235bcc;
+    border-radius: 12px;
+    margin: 24px 0;
+    grid-column: 1 / -1;
+    font-size: 1.2rem;
+    color: #b3baff;
+    box-shadow: 0 2px 12px #7c4dff22;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 0;
+    color: #e0e6ff;
+}
+
+.spinner {
+    width: 54px;
+    height: 54px;
+    border: 5px solid #7c4dff33;
+    border-left-color: #a084ff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-state p {
+    margin-top: 18px;
+    color: #e0e6ff;
+    font-size: 1.13rem;
+    letter-spacing: 0.2px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Modal styles */
+.video-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0a1ae6;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    width: 82%;
+    max-width: 850px;
+    background: linear-gradient(135deg, #23235b 60%, #181828 100%);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px #7c4dff44;
+    color: #e0e6ff;
+    animation: modalPop 0.3s;
+}
+
+@keyframes modalPop {
+    from { transform: scale(0.95); opacity: 0.7; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 26px;
+    border-bottom: 1.5px solid #7c4dff44;
+    background: linear-gradient(90deg, #7c4dff 80%, #23235b 100%);
+    color: #fff;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.close-modal {
+    font-size: 32px;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.3s, opacity 0.2s;
+    font-weight: 700;
+}
+
+.close-modal:hover {
+    color: #a084ff;
+    opacity: 0.8;
+}
+
+.modal-body {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    background: #181828;
+}
+
+.modal-body iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0 0 18px 18px;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .video-list {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+    .modal-content {
+        width: 98%;
+    }
+}
+
+@media (max-width: 768px) {
+    .video-container {
+        padding: 1rem;
+    }
+    .video-header h1 {
+        font-size: 2.1rem;
+    }
+    .video-list {
+        grid-template-columns: 1fr;
+    }
+    .modal-content {
+        width: 99%;
+    }
+    .modal-title {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-list {
+        grid-template-columns: 1fr;
+    }
+    .video-header h1 {
+        font-size: 1.3rem;
+    }
+    .video-header p {
+        font-size: 0.9rem;
+    }
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+    }
+    .search-container .search-icon {
+        left: 16px;
+        top: 22px;
+        font-size: 1.1rem;
+    }
+    .search-container input {
+        border-radius: 32px;
+        margin-bottom: 10px;
+        padding-left: 2.5rem;
+    }
+    .search-container button {
+        border-radius: 32px;
+        width: 100%;
+        justify-content: center;
+    }
+    .modal-header {
+        padding: 12px 10px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="video-container">
+    <div class="video-header">
+        <h1 style="color:linear-gradient(135deg, #1c2dae 0%, #8b5fb8 100%);; text-shadow:0 2px 18px #00e6d055, 0 1px 0 #7c4dff44;">
+            Explore World's Best Cars
+        </h1>
+        <p>Uncover Hidden Roads and Iconic Landscapes with the Perfect Drive</p>
+        <!-- Keep only the search box -->
+        <div class="top-search-box">
+            <div class="search-container">
+                <span class="search-icon">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" placeholder="Search cars names, models, ...">
+                <button title="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading state -->
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading videos...</p>
+    </div>
+    
+    <!-- Video listing -->
+    <div class="video-list">
+        <!-- Video cards will be added here -->
+    </div>
+</div>
+
+<!-- Video Modal -->
+<div id="videoModal" class="video-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Video Title</h2>
+            <span class="close-modal" onclick="closeVideoModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <iframe id="videoIframe" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the video page
+    initVideoPage();
+});
+
+// Function to initialize the video page
+function initVideoPage() {
+    const videoContainer = document.querySelector('.video-list');
+    const loadingState = document.querySelector('.loading-state');
+    const searchInput = document.querySelector('.search-container input');
+    const searchButton = document.querySelector('.search-container button');
+    
+    // Show loading state
+    if (loadingState) loadingState.style.display = 'flex';
+    
+    // Get video data
+    getVideoData().then(videos => {
+        // Store videos for search functionality
+        const allVideos = [...videos];
+        
+        // Hide loading state after a short delay for animation
+        setTimeout(() => {
+            if (loadingState) loadingState.style.display = 'none';
+            
+            // Add video cards with a slight delay between each for a nice animation
+            videos.forEach((video, index) => {
+                setTimeout(() => {
+                    const card = createVideoCard(video);
+                    videoContainer.appendChild(card);
+                    
+                    // If this is the last card, trigger lazy loading
+                    if (index === videos.length - 1) {
+                        setTimeout(() => {
+                            lazyLoadImages();
+                        }, 300);
+                    }
+                }, index * 50); // Reduced from 80ms to 50ms
+            });
+            
+            // Setup search functionality only (no filters)
+            if (searchInput && searchButton) {
+                // Search on button click
+                searchButton.addEventListener('click', function() {
+                    const searchTerm = searchInput.value.trim().toLowerCase();
+                    searchVideos(searchTerm, allVideos, videoContainer);
+                });
+                
+                // Search on Enter key
+                searchInput.addEventListener('keyup', function(event) {
+                    if (event.key === 'Enter') {
+                        const searchTerm = searchInput.value.trim().toLowerCase();
+                        searchVideos(searchTerm, allVideos, videoContainer);
+                    }
+                });
+            }
+        }, 800);
+    }).catch(error => {
+        console.error('Error loading video data:', error);
+        
+        // Hide loading state and show error message
+        if (loadingState) loadingState.style.display = 'none';
+        
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'error-message';
+        errorMsg.innerHTML = '<p>Failed to load videos. Please try again later.</p>';
+        videoContainer.appendChild(errorMsg);
+    });
+}
+
+// Lazy loading for images
+function lazyLoadImages() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy-load');
+                    imageObserver.unobserve(img);
+                }
+            });
+        });
+
+        const lazyImages = document.querySelectorAll('img.lazy-load');
+        lazyImages.forEach(img => {
+            imageObserver.observe(img);
+        });
+    } else {
+        // Fallback for browsers that don't support IntersectionObserver
+        const lazyImages = document.querySelectorAll('img.lazy-load');
+        lazyImages.forEach(img => {
+            img.src = img.dataset.src;
+            img.classList.remove('lazy-load');
+        });
+    }
+}
+
+// Function to get video data (simulated)
+function getVideoData() {
+    return new Promise((resolve) => {
+        // Simulate API delay
+        setTimeout(() => {
+            const videos = [
+                {
+                    id: 'wIYOeAbO83Y',
+                    title: 'BUGATTI CENTODIECI',
+                    description: 'Famous for their Nagara-style architectural symbolism and erotic sculptures.',
+                    duration: '1:10',
+                    views: '313.4K',
+                    state: 'BUGATTI',
+                    categories: ['luxury', 'speed', 'design', 'architecture'],
+                    date: 'November 22, 2024',
+                    youtubeId: 'wIYOeAbO83Y'
+                },
+                {
+                    id: '5ox0AkD122U',
+                    title: 'Hyundai Ioniq 5 N',
+                    description: 'A high-performance all-electric crossover delivering 600+ hp, simulated gearshifts, and immersive engine-like sound for an EV that is truly fun to drive.',
+                    duration: '5:30',
+                    views: '1.4M',
+                    state: 'Hyundai',
+                    categories: ['electric', 'Tech-Driven Innovation', 'off-road'],
+                    date: 'Dec 20, 2022',
+                    youtubeId: '5ox0AkD122U'
+                },
+                {
+                    id: 'PkkV1vLHUvQ',
+                    title: 'BUGATTI Chiron',
+                    description: 'The Bugatti Chiron is an ultra-luxury hypercar boasting a quad-turbo W16 engine and a top speed over 420 km/h.',
+                    duration: '2:23',
+                    views: '101M',
+                    state: 'BUGATTI',
+                    categories: ['luxury', 'model', 'speed'],
+                    date: 'January 10, 2024',
+                    youtubeId: 'PkkV1vLHUvQ'
+                },
+                {
+                    id: 'ySVM1BYkEso',
+                    title: 'Jeep Wrangler',
+                    description: 'The Jeep Wrangler is a legendary off-road SUV with iconic style and 4x4 power.',
+                    duration: '2:20',
+                    views: '3.4M',
+                    state: 'Jeep',
+                    categories: ['luxury', 'model', 'speed'],
+                    date: 'April 5, 2025',
+                    youtubeId: 'ySVM1BYkEso'
+                },
+                {
+                    id: 'InI-4QFOA-M',
+                    title: 'BMW 7 Series M750e',
+                    description: 'The BMW 7 Series M750e xDrive is a luxury plug-in hybrid sedan combining 489 hp performance with cutting-edge tech, electric efficiency, and refined M styling.',
+                    duration: '8:15',
+                    views: '2.3M',
+                    state: 'BMW',
+                    categories: ['luxury', 'design', 'Speed'],
+                    date: 'Jun 10, 2022',
+                    youtubeId: 'InI-4QFOA-M'
+                },
+                {
+                    id: 'tk5B4GSbgD4',
+                    title: 'McLaren 765LT',
+                    description: 'A track-focused supercar with extreme performance, lightweight design, and blistering speed.',
+                    duration: '1:05',
+                    views: '1.1M',
+                    state: 'McLaren',
+                    categories: ['lightweight', 'speed', 'design'],
+                    date: 'March 3, 2023',
+                    youtubeId: 'tk5B4GSbgD4'
+                },
+                {
+                    id: 'QU32Wpk8v3w',
+                    title: 'LAND ROVER NEW DEFENDER',
+                    description: 'A rugged yet refined SUV built for ultimate off-road capability and modern adventure.',
+                    duration: '1:30',
+                    views: '4.1M',
+                    state: 'LAND ROVER',
+                    categories: ['luxury', 'off-road', 'adventure'],
+                    date: 'Feb 17, 2020',
+                    youtubeId: 'QU32Wpk8v3w'
+                },
+                {
+                    id: 'sitXeGjm4Mc',
+                    title: 'Lamborghini Revuelto',
+                    description: 'A revolutionary V12 plug-in hybrid supercar combining electrified power with Lamborghini\'s bold design.',
+                    duration: '2:50',
+                    views: '7.6M',
+                    state: 'Lamborghini',
+                    categories: ['Hypercar', 'Luxury', 'Performance'],
+                    date: 'March 29, 2023',
+                    youtubeId: 'sitXeGjm4Mc'
+                },
+                {
+                    id: 'WQP4SLQf5Hc',
+                    title: 'Rolls-Royce Phantom',
+                    description: 'The ultimate expression of luxury, craftsmanship, and silent V12 power in a flagship sedan.',
+                    duration: '21:45',
+                    views: '2.5M',
+                    state: 'Rolls-Royce',
+                    categories: ['luxury', 'sedan', 'performance'],
+                    date: 'January 15, 2024',
+                    youtubeId: 'WQP4SLQf5Hc'
+                },
+                {
+                    id: 'cvu2AxwfOUI',
+                    title: 'KOENIGSEGG Sadairs Spear',
+                    description: 'An imagined hypercar blending Koenigsegg\'s cutting-edge aerodynamics with a futuristic identity.',
+                    duration: '6:52',
+                    views: '1.2M',
+                    state: 'Koenigsegg',
+                    categories: ['hypercar', 'design', 'speed'],
+                    date: 'Jun 15, 2025',
+                    youtubeId: 'cvu2AxwfOUI'
+                },
+                {
+                    id: 'fawUGYXBtHY',
+                    title: 'Toyota Camry Reveal',
+                    description: 'A refined midsize sedan offering reliability, comfort, and modern tech for everyday driving.',
+                    duration: '6:49',
+                    views: '966K',
+                    state: 'Toyota',
+                    categories: ['sedan', 'reliability', 'comfort'],
+                    date: 'Nov 5, 2024',
+                    youtubeId: 'fawUGYXBtHY'
+                },
+                {
+                    id: 'D7Zv2kSBagc',
+                    title: 'Ferrari 296 GTB',
+                    description: 'A plug-in hybrid V6 Ferrari that redefines agility, power, and Italian passion in a compact form.',
+                    duration: '1:49',
+                    views: '3.2M',
+                    state: 'Ferrari',
+                    categories: ['Performance', 'Mid-Engine', 'Sports Car'],
+                    date: 'Jul 30, 2021',
+                    youtubeId: 'D7Zv2kSBagc'
+                },
+                {
+                    id: 'E9vSMqkzMZc',
+                    title: 'Maruti Suzuki',
+                    description: 'India\'s most trusted automaker known for reliable, affordable, and fuel-efficient cars.',
+                    duration: '2:30',
+                    views: '2.3K',
+                    state: 'Maruti Suzuki',
+                    categories: ['Budget-Friendly', 'Compact', 'Fuel-Efficient'],
+                    date: 'Feb 20, 2025',
+                    youtubeId: 'E9vSMqkzMZc'
+                },
+                {
+                    id: 'brCQRLXAzV0',
+                    title: 'Rolls Royce Amethyst Droptail',
+                    description: 'A bespoke open-top luxury roadster crafted with ultra-rare materials and exclusive elegance.',
+                    duration: '10:30',
+                    views: '184K',
+                    state: 'Rolls Royce',
+                    categories: ['luxury', 'bespoke', 'design'],
+                    date: 'Aug 15, 2024',
+                    youtubeId: 'brCQRLXAzV0'
+                },
+                {
+                    id: 'N22JfNHiC1k',
+                    title: 'SSC Tuatara',
+                    description: 'An American hypercar engineered for top-speed dominance and extreme aerodynamics.',
+                    duration: '8:01',
+                    views: '6.5M',
+                    state: 'SSC',
+                    categories: ['Speed Record', 'Hypercar', 'Performance'],
+                    date: 'Sep 10, 2023',
+                    youtubeId: 'N22JfNHiC1k'
+                },
+                {
+                    id: 'MLcf6BfG9eU',
+                    title: 'Huracán Sterrato',
+                    description: 'Lamborghini\'s off-road-ready supercar blending rugged design with V10 performance.',
+                    duration: '2:04',
+                    views: '9.1M',
+                    state: 'Lamborghini',
+                    categories: ['limited edition', 'off-road', 'performance'],
+                    date: 'Jan 20, 2023',
+                    youtubeId: 'MLcf6BfG9eU'
+                },
+                {
+                    id: 'l0TLgCZAwns',
+                    title: 'Lamborghini Temerario',
+                    description: 'Lamborghini next-gen V8 hybrid supercar, succeeding the Huracan with electrified power and sharp styling.',
+                    duration: '2:18',
+                    views: '850K',
+                    state: 'Lamborghini',
+                    categories: ['Hybrid Supercar', 'Performance', 'Design'],
+                    date: 'Jan 15, 2025',
+                    youtubeId: 'l0TLgCZAwns'
+                },
+                {
+                    id: 'JhA9-JYLFyo',
+                    title: 'Tesla',
+                    description: 'Tesla latest electric vehicle, showcasing cutting-edge technology and sustainable performance.',
+                    duration: '3:45',
+                    views: '1.2M',
+                    state: 'Tesla',
+                    categories: ['luxury', 'electric', 'performance'],
+                    date: 'May 10, 2025',
+                    youtubeId: 'JhA9-JYLFyo'
+                },
+                {
+                    id: '6EYjw1kKNOI',
+                    title: 'Mahindra BE 6',
+                    description: 'The Mahindra BE 6 is an electric SUV that combines rugged design with advanced EV technology, offering a spacious interior and off-road capabilities.',
+                    duration: '5:30',
+                    views: '500K',
+                    state: 'Mahindra',
+                    categories: ['electric', 'SUV', 'off-road'],
+                    date: 'Feb 15, 2025',
+                    youtubeId: '6EYjw1kKNOI'
+                },
+                {
+                    id: 'KA4_weXQ84M',
+                    title: 'Mercedes GLC 300',
+                    description: 'The Mercedes GLC 300 is a premium midsize SUV offering a refined blend of luxury, performance, and advanced technology, powered by a turbocharged 2.0L engine with mild hybrid support.',
+                    duration: '6:15',
+                    views: '81.1K',
+                    state: 'Mercedes',
+                    categories: ['luxury', 'design'],
+                    date: 'Apr 17, 2025',
+                    youtubeId: 'KA4_weXQ84M'
+                }
+            ];
+            resolve(videos);
+        }, 1500);
+    });
+}
+
+// Function to create video card
+function createVideoCard(video) {
+    const card = document.createElement('div');
+    card.className = 'video-card';
+    card.setAttribute('data-categories', video.categories.join(','));
+    card.setAttribute('data-state', video.state || '');
+    
+    // Format state name for display by replacing hyphens with spaces
+    const formattedState = (video.state || '').replace(/-/g, ' ');
+    
+    card.innerHTML = `
+        <div class="thumbnail">
+            <img class="lazy-load" src="https://via.placeholder.com/640x360.png?text=Loading..." data-src="https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg" alt="${video.title}">
+            <div class="play-button">
+                <i class="fas fa-play"></i>
+            </div>
+            <div class="video-duration">
+                <i class="far fa-clock"></i> ${video.duration || '3:45'}
+            </div>
+        </div>
+        <div class="card-content">
+            <h3 class="card-title">${video.title}</h3>
+            <p class="card-description">${video.description}</p>
+            <div class="card-meta">
+                <span class="state-tag">${formattedState}</span>
+                <span class="views">${video.views || '1.2K'} views</span>
+            </div>
+        </div>
+    `;
+    
+    // Add click event to play video
+    card.addEventListener('click', function() {
+        openVideoPlayer(video.youtubeId, video.title);
+    });
+    
+    return card;
+}
+
+// Function to open video player
+function openVideoPlayer(videoId, videoTitle) {
+    const modal = document.getElementById('videoModal');
+    const iframe = document.getElementById('videoIframe');
+    const modalTitle = document.querySelector('.modal-title');
+    
+    if (modal && iframe) {
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        if (modalTitle) modalTitle.textContent = videoTitle;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+    }
+}
+
+// Close video modal
+function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    const iframe = document.getElementById('videoIframe');
+    
+    if (modal && iframe) {
+        iframe.src = '';
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // Re-enable scrolling
+    }
+}
+
+// When the user clicks anywhere outside of the modal content, close it
+window.onclick = function(event) {
+    const modal = document.getElementById('videoModal');
+    if (event.target === modal) {
+        closeVideoModal();
+    }
+}
+
+// Simple search function without filtering
+function searchVideos(searchTerm, videos, container) {
+    // Clear the container
+    container.innerHTML = '';
+    
+    // Filter videos based on search term
+    const filteredVideos = videos.filter(video => 
+        video.title.toLowerCase().includes(searchTerm) || 
+        video.description.toLowerCase().includes(searchTerm) ||
+        (video.state && video.state.toLowerCase().includes(searchTerm))
+    );
+    
+    // Display filtered videos
+    if (filteredVideos.length === 0) {
+        const noResults = document.createElement('div');
+        noResults.className = 'no-results';
+        noResults.innerHTML = '<p>No videos match your search. Try different keywords.</p>';
+        container.appendChild(noResults);
+    } else {
+        filteredVideos.forEach(video => {
+            const card = createVideoCard(video);
+            container.appendChild(card);
+        });
+        // Reinitialize lazy loading
+        lazyLoadImages();
+    }
+}
+</script>
+{% endblock %}

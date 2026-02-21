@@ -1,0 +1,1113 @@
+{% extends "base.html" %}
+
+{% block title %}CarHub - Your Automotive Destination{% endblock %}
+
+{% block extra_head %}
+<style>
+/* Enhanced Global Animations and Effects */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --premium-gold: #d4af37;
+    --neon-blue: #00d4ff;
+    --electric-purple: #8b5cf6;
+    --space-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --hero-gradient: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(22, 33, 62, 0.6) 100%);
+}
+
+/* Advanced Scroll Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes videoEnhance {
+    0% {
+        filter: brightness(1.5) contrast(1.8) saturate(1.5);
+    }
+    50% {
+        filter: brightness(2.0) contrast(2.2) saturate(2.0);
+    }
+    100% {
+        filter: brightness(1.8) contrast(2.0) saturate(1.8);
+    }
+}
+
+@keyframes heroVideoEnhance {
+    0% {
+        filter: brightness(0.6) contrast(1.2) saturate(1.1);
+    }
+    50% {
+        filter: brightness(0.9) contrast(1.5) saturate(1.4);
+    }
+    100% {
+        filter: brightness(0.85) contrast(1.4) saturate(1.3);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+        text-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 0 0 60px rgba(124, 77, 255, 0.6);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Animation Classes */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-on-scroll.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animate-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-left.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-right.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-zoom {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-zoom.animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.background-media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.background-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85) contrast(1.4) saturate(1.3);
+    transition: all 0.5s ease;
+    animation: heroVideoEnhance 3s ease-in-out;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--hero-gradient);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    color: white;
+    max-width: 900px;
+    padding: 0 2rem;
+    animation: fadeInUp 1.2s ease-out;
+}
+
+.hero-content h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, #ffffff, #e0e0ff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    letter-spacing: 3px;
+    line-height: 1.1;
+    animation: glow 3s ease-in-out infinite;
+}
+
+.hero-content .tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 300;
+    margin-bottom: 3rem;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    animation: fadeInUp 1.5s ease-out 0.3s both;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 1.8s ease-out 0.6s both;
+}
+
+.cta-buttons .btn {
+    padding: 18px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    color: white;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(124, 77, 255, 0.4);
+}
+
+/* Enhanced Video Background Cards */
+.usp-showcase {
+    padding: 100px 0;
+    text-align: center;
+    background: var(--background-dark);
+}
+
+.usp-text-block {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.usp-text-block h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.usp-showcase-merged {
+    position: relative;
+    height: 500px;
+    margin: 60px 30px;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.merged-content-block {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+.merged-background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    filter: brightness(1.8) contrast(2.0) saturate(1.8);
+    transition: all 0.6s ease;
+    animation: videoEnhance 3s ease-in-out;
+}
+
+.merged-overlay {
+    display: none;
+}
+
+.merged-text-container {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: white;
+    padding: 4rem 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    backdrop-filter: none;
+    transition: all 0.4s ease;
+}
+
+.merged-text-container h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    margin-bottom: 25px;
+    text-shadow: 
+        3px 3px 8px rgba(0, 0, 0, 0.95),
+        0 0 30px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(124, 77, 255, 0.6);
+    background: linear-gradient(45deg, #ffffff, #e0e0ff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.merged-text-container p {
+    font-size: 1.3rem;
+    line-height: 1.7;
+    margin-bottom: 35px;
+    text-shadow: 
+        1px 1px 3px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(0, 0, 0, 0.5);
+    color: #f0f0f0;
+    font-weight: 400;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.merged-text-container .btn {
+    padding: 18px 35px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 3px solid transparent;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.merged-text-container .btn-dark {
+    background: linear-gradient(45deg, #7c4dff, #b084ff, #9c6fff);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.merged-text-container .btn-dark:hover {
+    background: linear-gradient(45deg, #6a3de8, #9c6fff, #b084ff);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        0 12px 35px rgba(124, 77, 255, 0.5),
+        inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Service Section */
+.service-usp-section {
+    padding: 100px 0;
+    background: var(--background-dark);
+    text-align: center;
+}
+
+.service-usp-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.service-usp-content h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Customer Reviews Section */
+.customer-reviews-section {
+    padding: 120px 0;
+    background: var(--background-dark);
+}
+
+.reviews-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.reviews-container h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #7c4dff, #b084ff, #9c6fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.reviews-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-light);
+    margin-bottom: 4rem;
+    opacity: 0.8;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.review-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.review-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(124, 77, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(124, 77, 255, 0.2);
+}
+
+.review-stars {
+    margin-bottom: 20px;
+}
+
+.review-stars span {
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+.review-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-light);
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.reviewer-avatar {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.reviewer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.reviewer-details h4 {
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.reviewer-details span {
+    color: var(--accent-cyan);
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.reviews-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 60px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+    min-width: 150px;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(124, 77, 255, 0.3);
+}
+
+.stat-item h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent-cyan);
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-item p {
+    color: var(--text-light);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+/* Final CTA Section */
+.final-cta {
+    padding: 100px 0;
+    background: var(--background-dark);
+    text-align: center;
+}
+
+.final-cta h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    margin-bottom: 3rem;
+    background: linear-gradient(45deg, #7c4dff, #b084ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Enhanced hover effects */
+.merged-content-block:hover .merged-background-video {
+    transform: scale(1.03);
+    filter: brightness(2.2) contrast(2.5) saturate(2.2);
+    transition: all 0.4s ease;
+}
+
+.merged-content-block:hover .merged-overlay {
+    display: none;
+}
+
+.merged-content-block:hover .merged-text-container {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+    transition: all 0.4s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .merged-text-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    
+    .merged-text-container h2 {
+        font-size: 2.8rem;
+    }
+    
+    .reviews-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    
+    .reviews-stats {
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .usp-showcase-merged {
+        margin: 40px 15px;
+    }
+    
+    .merged-content-block {
+        height: 450px;
+    }
+    
+    .merged-text-container {
+        padding: 35px 25px;
+        max-width: 500px;
+    }
+    
+    .merged-text-container h2 {
+        font-size: 2.3rem;
+        letter-spacing: 1px;
+    }
+    
+    .merged-text-container p {
+        font-size: 1.1rem;
+    }
+    
+    .merged-text-container .btn {
+        padding: 15px 28px;
+        font-size: 1rem;
+    }
+    
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .reviews-stats {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    
+    .hero-content {
+        padding: 0 1.5rem;
+    }
+    
+    .merged-text-container {
+        padding: 2.5rem 1.5rem;
+        margin: 0 1rem;
+    }
+    
+    .usp-showcase-merged {
+        margin: 2rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content {
+        padding: 0 1rem;
+    }
+    
+    .merged-content-block {
+        height: 450px;
+    }
+    
+    .merged-text-container {
+        padding: 2rem 1rem;
+        margin: 0 0.5rem;
+    }
+    
+    .stat-item h3 {
+        font-size: 2.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="hero-section animate-on-scroll">
+        <div class="background-media">
+            <video autoplay loop muted playsinline src="{{ url_for('static', filename='intropagevd.mp4') }}"></video>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>WHERE EVERY JOURNEY BEGINS</h1>
+            <p class="tagline">DISCOVER, ACQUIRE, EXCEL.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('cars') }}" class="btn btn-primary">EXPLORE INVENTORY</a>
+                <a href="#sell" class="btn btn-secondary">SELL YOUR CAR</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Welcome Message for Logged In Users -->
+    {% if session.user_id %}
+    <section class="animate-on-scroll" style="background: var(--background-dark); padding: 40px; text-align: center;">
+        <h2 style="color: var(--accent-cyan); margin-bottom: 20px;">Welcome back, {{ session.username }}!</h2>
+        <p style="color: var(--text-light); font-size: 1.2rem;">Ready to explore our premium car collection?</p>
+    </section>
+    {% endif %}
+
+    <section class="usp-showcase animate-on-scroll" id="buy">
+        <div class="usp-text-block centered-text">
+            <h2>YOUR NEXT DRIVING EXPERIENCE.</h2>
+            <p class="padded-bottom">Curated selection of new and pre-owned vehicles. Unbeatable prices, unmatched quality.</p>
+            <a href="{{ url_for('cars') }}" class="btn btn-dark">VIEW ALL CARS</a>
+        </div>
+    </section>
+
+   <section class="usp-showcase-merged animate-zoom" id="sell">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline src="{{ url_for('static', filename='Sellingintropage.mp4') }}" class="merged-background-video"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>SEAMLESS SELLING. MAXIMIZED VALUE.</h2>
+                <p>Effortlessly sell your vehicle. Best market prices guaranteed, smooth transactions.</p>
+                <a href="{{ url_for('about') }}" class="btn btn-dark">GET AN OFFER</a>
+            </div>
+        </div>
+    </section>
+
+   <section class="usp-showcase-merged animate-zoom" id="service">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline src="{{ url_for('static', filename='Moderncarsintropage.mp4') }}" class="merged-background-video"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>PRECISION SERVICE. PEAK PERFORMANCE.</h2>
+                <p>Expert service scheduling for optimal vehicle health. Convenience, reliability, excellence.</p>
+                <a href="{{ url_for('about') }}" class="btn btn-dark">BOOK SERVICE</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="usp-showcase-merged animate-zoom" id="vintage">
+        <div class="merged-content-block">
+            <video autoplay loop muted playsinline src="{{ url_for('static', filename='Classicintropage.mp4') }}" class="merged-background-video"></video>
+            <div class="merged-overlay"></div>
+            <div class="merged-text-container">
+                <h2>TIMELESS BEAUTY. RARE FINDS.</h2>
+                <p>Step back in time with our exquisite collection of vintage automobiles. Each classic car is a piece of history, meticulously inspected and ready for a new legacy.</p>
+                <a href="{{ url_for('cars') }}" class="btn btn-dark">EXPLORE VINTAGE COLLECTION</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="service-usp-section animate-on-scroll">
+        <div class="service-usp-content">
+            <h3>THE BEST CARE FOR YOUR VEHICLE</h3>
+            <p class="large">Our certified technicians provide top-notch maintenance and repair services using state-of-the-art equipment. Trust us to keep your car running smoothly.</p>
+            <a href="{{ url_for('about') }}" class="btn btn-primary large-btn">SCHEDULE YOUR SERVICE</a>
+        </div>
+    </section>
+
+    <!-- Customer Reviews Section -->
+    <section class="customer-reviews-section animate-on-scroll">
+        <div class="reviews-container">
+            <h2>WHAT OUR CUSTOMERS SAY</h2>
+            <p class="reviews-subtitle">Real experiences from satisfied customers</p>
+            
+            <div class="reviews-grid">
+                <div class="review-card animate-left">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Exceptional service and quality vehicles. The team at CarHub made my car buying experience seamless and enjoyable. Highly recommend!"</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer1.jpg') }}" alt="Sarah Johnson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">SJ</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Sarah Johnson</h4>
+                            <span>Tesla Model 3 Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-on-scroll">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Found my dream Lamborghini here! The 3D model viewing feature is incredible - I could examine every detail before visiting. Outstanding customer service."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer2.jpg') }}" alt="Michael Chen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">MC</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Michael Chen</h4>
+                            <span>Lamborghini Revuelto Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-right">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Professional, transparent, and trustworthy. They helped me sell my old car and find the perfect upgrade. The entire process was smooth and fair."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer3.jpg') }}" alt="Emily Rodriguez" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">ER</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Emily Rodriguez</h4>
+                            <span>BMW M2 Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-left">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"The vintage car collection is extraordinary! Purchased a classic Rolls Royce and the restoration quality is museum-grade. Truly passionate team."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer4.jpg') }}" alt="James Wilson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">JW</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>James Wilson</h4>
+                            <span>Rolls Royce Ghost Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-on-scroll">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Best automotive experience ever! The staff is knowledgeable, prices are competitive, and the after-sales service is exceptional. Will definitely return."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer5.jpg') }}" alt="Lisa Thompson" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">LT</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>Lisa Thompson</h4>
+                            <span>Mercedes Maybach Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card animate-right">
+                    <div class="review-stars">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="review-text">"Innovative technology meets traditional service excellence. The virtual car tours saved me time, and the financing options were flexible and fair."</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            <img src="{{ url_for('static', filename='customer6.jpg') }}" alt="David Kumar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="avatar-placeholder">DK</div>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>David Kumar</h4>
+                            <span>Aston Martin Owner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reviews-stats animate-on-scroll">
+                <div class="stat-item">
+                    <h3>4.9/5</h3>
+                    <p>Average Rating</p>
+                </div>
+                <div class="stat-item">
+                    <h3>2,500+</h3>
+                    <p>Happy Customers</p>
+                </div>
+                <div class="stat-item">
+                    <h3>98%</h3>
+                    <p>Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta animate-on-scroll">
+        <h3>THE FUTURE OF AUTOMOTIVE AWAITS.</h3>
+        {% if not session.user_id %}
+            <a href="{{ url_for('sign_up') }}" class="btn btn-primary">JOIN CARHUB TODAY</a>
+        {% else %}
+            <a href="{{ url_for('cars') }}" class="btn btn-primary">EXPLORE CARS</a>
+        {% endif %}
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 CarHub. All Rights Reserved.</p>
+</footer>
+
+<script>
+    // Enhanced Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                // Add staggered animation for child elements
+                const children = entry.target.querySelectorAll('.review-card, .stat-item');
+                children.forEach((child, index) => {
+                    setTimeout(() => {
+                        child.style.animationDelay = `${index * 0.1}s`;
+                        child.classList.add('animate');
+                    }, index * 100);
+                });
+            }
+        });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right, .animate-zoom').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Enhanced video visibility on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const allVideos = document.querySelectorAll('video');
+        allVideos.forEach(video => {
+            // Force video visibility
+            video.style.opacity = '1';
+            video.style.display = 'block';
+            video.style.visibility = 'visible';
+            
+            video.addEventListener('loadeddata', function() {
+                // Ensure video is playing smoothly
+                this.style.opacity = '1';
+                this.style.filter = this.classList.contains('merged-background-video') 
+                    ? 'brightness(1.8) contrast(2.0) saturate(1.8)' 
+                    : 'brightness(0.85) contrast(1.4) saturate(1.3)';
+                console.log('Video loaded:', this.src);
+            });
+            
+            video.addEventListener('error', function() {
+                console.error('Video failed to load:', this.src);
+            });
+            
+            // Force video to play
+            video.play().catch(e => console.log('Video autoplay prevented:', e));
+        });
+    });
+
+    // Enhanced scroll effect
+    window.addEventListener('scroll', function() {
+        const scrolled = window.scrollY;
+        const parallaxElements = document.querySelectorAll('.merged-background-video');
+        
+        parallaxElements.forEach(element => {
+            const speed = 0.5;
+            element.style.transform = `translateY(${scrolled * speed}px) scale(1.1)`;
+        });
+
+        // Header scroll effect
+        if (scrolled > 50) {
+            document.body.classList.add('scrolled');
+        } else {
+            document.body.classList.remove('scrolled');
+        }
+    });
+
+    // Enhanced button interactions
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+        
+        btn.addEventListener('mousedown', function() {
+            this.style.transform = 'translateY(-1px) scale(1.02)';
+        });
+        
+        btn.addEventListener('mouseup', function() {
+            this.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Dynamic stats counter animation
+    function animateCounters() {
+        const counters = document.querySelectorAll('.stat-item h3');
+        
+        counters.forEach(counter => {
+            const target = counter.textContent;
+            const numericValue = parseFloat(target.replace(/[^\d.]/g, ''));
+            
+            if (!isNaN(numericValue)) {
+                let current = 0;
+                const increment = numericValue / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= numericValue) {
+                        current = numericValue;
+                        clearInterval(timer);
+                    }
+                    
+                    if (target.includes('/')) {
+                        counter.textContent = current.toFixed(1) + '/5';
+                    } else if (target.includes('+')) {
+                        counter.textContent = Math.floor(current).toLocaleString() + '+';
+                    } else if (target.includes('%')) {
+                        counter.textContent = Math.floor(current) + '%';
+                    }
+                }, 20);
+            }
+        });
+    }
+
+    // Trigger counter animation when stats section is visible
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    });
+
+    const statsSection = document.querySelector('.reviews-stats');
+    if (statsSection) {
+        statsObserver.observe(statsSection);
+    }
+</script>
+{% endblock %}
